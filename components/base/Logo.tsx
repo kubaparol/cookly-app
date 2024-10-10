@@ -6,7 +6,7 @@ export default function Logo() {
       className={`${lusitana.className} flex flex-row items-center leading-none`}
     >
       {/* <GlobeAltIcon className="h-12 w-12 rotate-[15deg]" /> */}
-      <p className="text-[44px]">Cookly</p>
+      <p className="text-[32px] md:text-[36px]">Cookly</p>
     </div>
   );
 }
