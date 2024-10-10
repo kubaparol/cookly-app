@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "@/styles/globals.css";
 import { inter } from "@/constants";
 
 export const metadata: Metadata = {
