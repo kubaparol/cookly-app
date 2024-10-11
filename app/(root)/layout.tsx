@@ -1,16 +1,12 @@
-import Footer from "@/components/base/Footer";
-import Header from "@/components/base/Header";
+import HomeLayout from "@/components/layouts/HomeLayout";
+import { ReactNode } from "react";
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <div className="flex h-screen flex-col">
-      <Header />
-      <main className="flex-1">{children}</main>
-      <Footer />
-    </div>
-  );
+interface RootLayoutProps {
+  readonly children: ReactNode;
+}
+
+export default function RootLayout(props: RootLayoutProps) {
+  const { children } = props;
+
+  return <HomeLayout>{children}</HomeLayout>;
 }
