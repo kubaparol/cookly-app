@@ -16,17 +16,18 @@ export default function SidebarItem(props: SidebarItemProps) {
   const isActive = pathname === link.url;
 
   const commonProps: ButtonProps = {
-    size: "lg",
     variant: isActive ? "default" : "ghost",
     className: cn(
-      "w-full gap-4 justify-start rounded-sm text-center justify-center min-w-44",
+      "w-full gap-2 justify-start rounded-sm text-center min-w-44",
       isActive && "pointer-events-none"
     ),
   };
 
+  const Icon = link.icon;
+
   const content = (
     <>
-      {link.icon}
+      <Icon className="size-5" />
       {link.label}
     </>
   );

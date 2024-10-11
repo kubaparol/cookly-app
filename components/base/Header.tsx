@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import Logo from "./Logo";
 import { ProjectUrls } from "@/constants";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignOutButton } from "@clerk/nextjs";
 
 export default function Header() {
   return (
@@ -12,17 +12,19 @@ export default function Header() {
       </Link>
 
       <SignedIn>
-        <div className="flex items-center gap-8">
-          <UserButton />
-
+        <div className="flex items-center gap-4">
           <Button asChild>
-            <Link href={ProjectUrls.dashboard}>Go to panel</Link>
+            <Link href={ProjectUrls.dashboard}>Go to dashboard</Link>
           </Button>
+
+          <SignOutButton>
+            <Button variant="outline">Sign Out</Button>
+          </SignOutButton>
         </div>
       </SignedIn>
 
       <SignedOut>
-        <Button asChild size="lg">
+        <Button asChild>
           <Link href={ProjectUrls.signIn}>Login</Link>
         </Button>
       </SignedOut>

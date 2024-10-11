@@ -8,4 +8,5 @@ export const ProjectUrls = Object.freeze({
 
   // app
   dashboard: "/dashboard",
+  recipes: "/recipes",
 });
