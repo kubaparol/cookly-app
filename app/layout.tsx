@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { inter } from "@/constants";
+import { ClerkProvider } from "@clerk/nextjs";
+import { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: {
@@ -10,14 +12,18 @@ export const metadata: Metadata = {
   description: "Cookly is a recipe sharing platform.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+interface RootLayoutProps {
+  readonly children: ReactNode;
+}
+
+export default function RootLayout(props: RootLayoutProps) {
+  const { children } = props;
+
   return (
-    <html lang="en">
-      <body className={`${inter.className} antialiased`}>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={`${inter.className} antialiased`}>{children}</body>
+      </html>
+    </ClerkProvider>
   );
 }

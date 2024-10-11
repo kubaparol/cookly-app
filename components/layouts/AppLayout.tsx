@@ -8,6 +8,7 @@ import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { ProjectUrls } from "@/constants/urls";
 import Logo from "../base/Logo";
 import Sidebar from "../base/Sidebar";
+import { SignedIn, UserButton } from "@clerk/nextjs";
 
 interface AppLayoutProps {
   readonly children: ReactNode;
@@ -41,9 +42,9 @@ export default function AppLayout(props: AppLayoutProps) {
             <Logo />
           </Link>
 
-          {/* <SignedIn>
+          <SignedIn>
             <UserButton afterSignOutUrl="/" />
-          </SignedIn> */}
+          </SignedIn>
         </div>
       </header>
 
