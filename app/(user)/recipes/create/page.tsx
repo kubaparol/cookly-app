@@ -1,3 +1,4 @@
+import RecipeForm from "@/components/forms/RecipeForm";
 import { Button } from "@/components/ui/button";
 import { appPageTitles, ProjectUrls } from "@/constants";
 import { ArrowLeft } from "lucide-react";
@@ -10,13 +11,15 @@ export const metadata: Metadata = {
 
 export default function CreateRecipePage() {
   return (
-    <section>
-      <Button asChild variant="link">
+    <section className="grid gap-6">
+      <Button asChild variant="link" className="w-fit">
         <Link href={ProjectUrls.recipes} className="gap-3 px-0">
           <ArrowLeft className="size-5" />
           Back to recipes
         </Link>
       </Button>
+
+      <RecipeForm type="Create" />
     </section>
   );
 }
