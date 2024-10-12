@@ -28,7 +28,7 @@ export default function Sidebar(props: SidebarProps) {
       </ul>
 
       <div className="mt-auto">
-        <Separator className="my-4" />
+        <Separator className="my-2" />
 
         <ul className="grid gap-2">
           {bottomItems.map((link, index) => (

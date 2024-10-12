@@ -9,4 +9,5 @@ export const ProjectUrls = Object.freeze({
   // app
   dashboard: "/dashboard",
   recipes: "/recipes",
+  createRecipe: "/recipes/create",
 });

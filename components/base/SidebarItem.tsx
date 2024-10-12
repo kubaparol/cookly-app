@@ -13,13 +13,13 @@ export default function SidebarItem(props: SidebarItemProps) {
   const { link, className, ...rest } = props;
   const pathname = usePathname();
 
-  const isActive = pathname === link.url;
+  const isActive = link.url && pathname.startsWith(link.url);
 
   const commonProps: ButtonProps = {
     variant: isActive ? "default" : "ghost",
     className: cn(
       "w-full gap-2 justify-start rounded-sm text-center min-w-44",
-      isActive && "pointer-events-none"
+      isActive && "pointer-events-none bg-primary/35"
     ),
   };
 
