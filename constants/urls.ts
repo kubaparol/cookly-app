@@ -11,3 +11,5 @@ export const ProjectUrls = Object.freeze({
   recipes: "/recipes",
   createRecipe: "/recipes/create",
 });
+
+export type ProjectUrlType = (typeof ProjectUrls)[keyof typeof ProjectUrls];

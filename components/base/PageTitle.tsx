@@ -1,9 +1,12 @@
-interface PageTitleProps {
-  title: string;
-}
+import { appPageTitles, ProjectUrlType } from "@/constants";
+import { usePathname } from "next/navigation";
 
-export default function PageTitle(props: PageTitleProps) {
-  const { title } = props;
+export default function PageTitle() {
+  const pathname = usePathname();
 
-  return <h1 className="mb-4 text-xl md:text-2xl">{title}</h1>;
+  const title = appPageTitles[pathname as ProjectUrlType];
+
+  if (!title) return null;
+
+  return <h1 className="text-xl md:text-2xl pl-3 hidden md:block">{title}</h1>;
 }

@@ -8,6 +8,8 @@ import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { ProjectUrls } from "@/constants/urls";
 import Logo from "../base/Logo";
 import Sidebar from "../base/Sidebar";
+import { Separator } from "@radix-ui/react-separator";
+import PageTitle from "../base/PageTitle";
 
 interface AppLayoutProps {
   readonly children: ReactNode;
@@ -22,7 +24,7 @@ export default function AppLayout(props: AppLayoutProps) {
   return (
     <>
       <header className="border-b">
-        <div className="wrapper !max-w-full flex items-center gap-4 justify-between">
+        <div className="wrapper !max-w-full flex items-center gap-4 justify-between md:justify-start">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger className="md:hidden">
               <Menu />
@@ -37,9 +39,17 @@ export default function AppLayout(props: AppLayoutProps) {
             </SheetContent>
           </Sheet>
 
-          <Link href={ProjectUrls.home} title="Cookly Home">
-            <Logo />
-          </Link>
+          <div className="flex gap-2">
+            <div className="md:min-w-44">
+              <Link href={ProjectUrls.home} title="Cookly Home">
+                <Logo />
+              </Link>
+            </div>
+
+            <Separator className="w-1 bg-primary hidden md:block" />
+
+            <PageTitle />
+          </div>
         </div>
       </header>
 
