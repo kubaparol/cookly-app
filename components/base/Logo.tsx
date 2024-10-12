@@ -1,11 +1,10 @@
-import { lusitana } from "@/constants";
+import { rugeBoogie } from "@/constants";
 
 export default function Logo() {
   return (
     <div
-      className={`${lusitana.className} flex flex-row items-center leading-none`}
+      className={`${rugeBoogie.className} flex flex-row items-center leading-none gap-1`}
     >
-      {/* <GlobeAltIcon className="h-12 w-12 rotate-[15deg]" /> */}
       <p className="text-[32px] md:text-[36px]">Cookly</p>
     </div>
   );

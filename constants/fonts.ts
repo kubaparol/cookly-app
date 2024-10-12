@@ -1,10 +1,10 @@
-import { Inter, Lusitana } from "next/font/google";
+import { Inter, Ruge_Boogie } from "next/font/google";
 
 export const inter = Inter({
   subsets: ["latin"],
 });
 
-export const lusitana = Lusitana({
+export const rugeBoogie = Ruge_Boogie({
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400"],
 });
