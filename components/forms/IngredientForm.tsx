@@ -83,9 +83,9 @@ export default function IngredientForm(props: IngredientFormProps) {
           name="quantity"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Number</FormLabel>
+              <FormLabel>Quantity</FormLabel>
               <FormControl>
-                <Input type="number" {...field} placeholder="100" />
+                <Input type="number" {...field} placeholder="e.g., 100" />
               </FormControl>
 
               <FormMessage />
@@ -105,7 +105,7 @@ export default function IngredientForm(props: IngredientFormProps) {
                   defaultValue={field.value}
                 >
                   <SelectTrigger>
-                    <SelectValue {...field} placeholder="ml" />
+                    <SelectValue {...field} placeholder="e.g., ml" />
                   </SelectTrigger>
 
                   <SelectContent>
@@ -141,7 +141,7 @@ export default function IngredientForm(props: IngredientFormProps) {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Olive Oil" />
+                <Input {...field} placeholder="e.g., Olive Oil" />
               </FormControl>
 
               <FormMessage />
