@@ -64,17 +64,19 @@ interface RecipeFormProps {
 export default function RecipeForm(props: RecipeFormProps) {
   const { type } = props;
 
-  const [isAddIngredientModalOpen, setIsAddIngredientModalOpen] =
-    useState(false);
-  const [ingredientToEdit, setIngredientToEdit] =
-    useState<IngredientFormValues | null>(null);
-  const [ingredientIdToDelete, setIngredientIdToDelete] = useState<
-    string | null
-  >(null);
+  const [itemToAdd, setItemToAdd] = useState<"ingredient" | "step" | null>(
+    null
+  );
 
-  const [isAddStepModalOpen, setIsAddStepModalOpen] = useState(false);
-  const [stepToEdit, setStepToEdit] = useState<StepFormValues | null>(null);
-  const [stepIdToDelete, setStepIdToDelete] = useState<string | null>(null);
+  const [itemToEdit, setItemToEdit] = useState<{
+    item: IngredientFormValues | StepFormValues;
+    type: "ingredient" | "step";
+  } | null>(null);
+
+  const [itemIdToDelete, setItemIdToDelete] = useState<{
+    id: string;
+    type: "ingredient" | "step";
+  } | null>(null);
 
   const form = useForm<RecipeFormValues>({
     resolver: zodResolver(recipeFormSchema),
@@ -90,74 +92,89 @@ export default function RecipeForm(props: RecipeFormProps) {
     console.log(values);
   };
 
-  const ingredientFormSubmitHandler = (values: IngredientFormValues) => {
+  const itemFormSubmitHandler = (
+    values: IngredientFormValues | StepFormValues
+  ) => {
     // add new
-    if (isAddIngredientModalOpen) {
-      form.setValue("ingredients", [...form.getValues().ingredients, values]);
+    if (itemToAdd === "ingredient") {
+      form.setValue("ingredients", [
+        ...form.getValues().ingredients,
+        values as IngredientFormValues,
+      ]);
       form.trigger("ingredients");
-      setIsAddIngredientModalOpen(false);
+      setItemToAdd(null);
 
       return;
     }
 
-    // edit
-    const ingredients = form.getValues().ingredients;
-    const ingredientToUpdateIndex = ingredients.findIndex(
-      (i) => i.id === values.id
-    );
+    if (itemToEdit?.type === "ingredient") {
+      const ingredients = form.getValues().ingredients;
+      const ingredientToUpdateIndex = ingredients.findIndex(
+        (i) => i.id === values.id
+      );
 
-    if (ingredientToUpdateIndex !== -1) {
-      const updatedIngredients = [...ingredients];
-      updatedIngredients[ingredientToUpdateIndex] = values;
+      if (ingredientToUpdateIndex !== -1) {
+        const updatedIngredients = [...ingredients];
+        updatedIngredients[ingredientToUpdateIndex] =
+          values as IngredientFormValues;
+        form.setValue("ingredients", updatedIngredients);
+        setItemToEdit(null);
+
+        return;
+      }
+    }
+
+    // edit
+    if (itemToAdd === "step") {
+      form.setValue("steps", [
+        ...form.getValues().steps,
+        values as StepFormValues,
+      ]);
+      form.trigger("steps");
+      setItemToAdd(null);
+
+      return;
+    }
+
+    if (itemToEdit?.type === "step") {
+      const steps = form.getValues().steps;
+      const stepToUpdateIndex = steps.findIndex((i) => i.id === values.id);
+
+      if (stepToUpdateIndex !== -1) {
+        const updatedSteps = [...steps];
+        updatedSteps[stepToUpdateIndex] = values as StepFormValues;
+        form.setValue("steps", updatedSteps);
+        setItemToEdit(null);
+
+        return;
+      }
+    }
+  };
+
+  const deleteItem = () => {
+    if (itemIdToDelete?.type === "ingredient") {
+      const ingredients = form.getValues().ingredients;
+      const updatedIngredients = ingredients.filter(
+        (i) => i.id !== itemIdToDelete.id
+      );
       form.setValue("ingredients", updatedIngredients);
-      setIngredientToEdit(null);
 
-      return;
-    }
-  };
-
-  const stepFormSubmitHandler = (values: StepFormValues) => {
-    // add new
-    if (isAddStepModalOpen) {
-      form.setValue("steps", [...form.getValues().steps, values]);
-      form.trigger("steps");
-      setIsAddStepModalOpen(false);
-
-      return;
+      if (form.formState.isSubmitted) {
+        form.trigger("ingredients");
+      }
     }
 
-    // edit
-    const steps = form.getValues().steps;
-    const stepToUpdateIndex = steps.findIndex((i) => i.id === values.id);
-
-    if (stepToUpdateIndex !== -1) {
-      const updatedSteps = [...steps];
-      updatedSteps[stepToUpdateIndex] = values;
+    if (itemIdToDelete?.type === "step") {
+      const steps = form.getValues().steps;
+      const updatedSteps = steps.filter((i) => i.id !== itemIdToDelete?.id);
       form.setValue("steps", updatedSteps);
-      setStepToEdit(null);
 
-      return;
+      if (form.formState.isSubmitted) {
+        form.trigger("steps");
+      }
     }
-  };
 
-  const deleteIngredient = (id: string) => {
-    const ingredients = form.getValues().ingredients;
-    const updatedIngredients = ingredients.filter((i) => i.id !== id);
-    form.setValue("ingredients", updatedIngredients);
-
-    if (form.formState.isSubmitted) {
-      form.trigger("ingredients");
-    }
-  };
-
-  const deleteStep = (id: string) => {
-    const steps = form.getValues().steps;
-    const updatedSteps = steps.filter((i) => i.id !== id);
-    form.setValue("steps", updatedSteps);
-
-    if (form.formState.isSubmitted) {
-      form.trigger("steps");
-    }
+    setItemIdToDelete(null);
   };
 
   const isSubmitting = form.formState.isSubmitting;
@@ -244,7 +261,12 @@ export default function RecipeForm(props: RecipeFormProps) {
                                       type="button"
                                       size="icon"
                                       variant="outline"
-                                      onClick={() => setIngredientToEdit(field)}
+                                      onClick={() =>
+                                        setItemToEdit({
+                                          item: field,
+                                          type: "ingredient",
+                                        })
+                                      }
                                     >
                                       <Pencil className="size-4" />
                                     </Button>
@@ -263,7 +285,10 @@ export default function RecipeForm(props: RecipeFormProps) {
                                       size="icon"
                                       variant="outline"
                                       onClick={() =>
-                                        setIngredientIdToDelete(field.id)
+                                        setItemIdToDelete({
+                                          id: field.id,
+                                          type: "ingredient",
+                                        })
                                       }
                                     >
                                       <X className="size-4" />
@@ -283,7 +308,7 @@ export default function RecipeForm(props: RecipeFormProps) {
                   <Button
                     size="sm"
                     type="button"
-                    onClick={() => setIsAddIngredientModalOpen(true)}
+                    onClick={() => setItemToAdd("ingredient")}
                     className="w-fit gap-2"
                   >
                     Add Ingredient
@@ -316,14 +341,63 @@ export default function RecipeForm(props: RecipeFormProps) {
                   {field.value.length > 0 && (
                     <ul className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                       {field.value.map((field, index) => (
-                        <li key={index}>{field.description}</li>
+                        <li key={index}>
+                          {field.description}
+                          <div className="flex items-center gap-1">
+                            <TooltipProvider delayDuration={0}>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    type="button"
+                                    size="icon"
+                                    variant="outline"
+                                    onClick={() =>
+                                      setItemToEdit({
+                                        item: field,
+                                        type: "step",
+                                      })
+                                    }
+                                  >
+                                    <Pencil className="size-4" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Edit</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+
+                            <TooltipProvider delayDuration={0}>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    type="button"
+                                    size="icon"
+                                    variant="outline"
+                                    onClick={() =>
+                                      setItemIdToDelete({
+                                        id: field.id,
+                                        type: "step",
+                                      })
+                                    }
+                                  >
+                                    <X className="size-4" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Delete</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
+                        </li>
                       ))}
                     </ul>
                   )}
                   <Button
                     size="sm"
                     type="button"
-                    onClick={() => setIsAddStepModalOpen(true)}
+                    onClick={() => setItemToAdd("step")}
                     className="w-fit gap-2"
                   >
                     Add Step
@@ -349,48 +423,70 @@ export default function RecipeForm(props: RecipeFormProps) {
       </Form>
 
       <AlertDialog
-        open={isAddIngredientModalOpen || ingredientToEdit !== null}
-        onOpenChange={(open) => setIsAddIngredientModalOpen(open)}
+        open={!!itemToAdd || !!itemToEdit}
+        onOpenChange={() => {
+          setItemToAdd(null);
+          setItemToEdit(null);
+        }}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {isAddIngredientModalOpen ? "Add" : "Edit"} Ingredient
+              {itemToAdd ? "Add" : "Edit"} {itemToAdd || itemToEdit?.type}
             </AlertDialogTitle>
 
             <AlertDialogDescription>
-              {isAddIngredientModalOpen
-                ? "Add an ingredient to the recipe"
-                : "Edit the ingredient"}
+              {itemToAdd
+                ? `Add an ${itemToAdd} to the recipe`
+                : `Edit the ${itemToEdit?.type}`}
             </AlertDialogDescription>
           </AlertDialogHeader>
 
-          <IngredientForm
-            leftButton={{
-              variant: "outline",
-              onClick: () => {
-                setIsAddIngredientModalOpen(false);
-                setIngredientToEdit(null);
-              },
-            }}
-            defaultValues={ingredientToEdit || undefined}
-            onFormSubmit={ingredientFormSubmitHandler}
-          />
+          {(itemToAdd === "ingredient" ||
+            itemToEdit?.type === "ingredient") && (
+            <IngredientForm
+              leftButton={{
+                variant: "outline",
+                onClick: () => {
+                  setItemToAdd(null);
+                  setItemToEdit(null);
+                },
+              }}
+              defaultValues={
+                (itemToEdit?.item as IngredientFormValues) || undefined
+              }
+              onFormSubmit={itemFormSubmitHandler}
+            />
+          )}
+
+          {(itemToAdd === "step" || itemToEdit?.type === "step") && (
+            <StepForm
+              leftButton={{
+                variant: "outline",
+                onClick: () => {
+                  setItemToAdd(null);
+                  setItemToEdit(null);
+                },
+              }}
+              defaultValues={(itemToEdit?.item as StepFormValues) || undefined}
+              onFormSubmit={itemFormSubmitHandler}
+            />
+          )}
         </AlertDialogContent>
       </AlertDialog>
 
       <AlertDialog
-        open={ingredientIdToDelete !== null}
-        onOpenChange={() => setIngredientIdToDelete(null)}
+        open={itemIdToDelete !== null}
+        onOpenChange={() => setItemIdToDelete(null)}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              You&apos;re about to delete an ingredient
+              You&apos;re about to delete an {itemIdToDelete?.type}
             </AlertDialogTitle>
 
             <AlertDialogDescription>
-              Are you sure you want to delete this ingredient?
+              Are you sure you want to delete this {itemIdToDelete?.type}?
             </AlertDialogDescription>
           </AlertDialogHeader>
 
@@ -399,78 +495,7 @@ export default function RecipeForm(props: RecipeFormProps) {
               <Button variant="outline">Cancel</Button>
             </AlertDialogCancel>
             <AlertDialogAction asChild>
-              <Button
-                variant="destructive"
-                onClick={() => {
-                  deleteIngredient(ingredientIdToDelete!);
-                  setIngredientIdToDelete(null);
-                }}
-              >
-                Delete
-              </Button>
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <AlertDialog
-        open={isAddStepModalOpen || stepToEdit !== null}
-        onOpenChange={(open) => setIsAddStepModalOpen(open)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {isAddStepModalOpen ? "Add" : "Edit"} Step
-            </AlertDialogTitle>
-
-            <AlertDialogDescription>
-              {isAddStepModalOpen
-                ? "Add an step to the recipe"
-                : "Edit the step"}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-
-          <StepForm
-            leftButton={{
-              variant: "outline",
-              onClick: () => {
-                setIsAddStepModalOpen(false);
-                setStepToEdit(null);
-              },
-            }}
-            defaultValues={stepToEdit || undefined}
-            onFormSubmit={stepFormSubmitHandler}
-          />
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <AlertDialog
-        open={stepIdToDelete !== null}
-        onOpenChange={() => setStepIdToDelete(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              You&apos;re about to delete an step
-            </AlertDialogTitle>
-
-            <AlertDialogDescription>
-              Are you sure you want to delete this step?
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-
-          <AlertDialogFooter>
-            <AlertDialogCancel asChild>
-              <Button variant="outline">Cancel</Button>
-            </AlertDialogCancel>
-            <AlertDialogAction asChild>
-              <Button
-                variant="destructive"
-                onClick={() => {
-                  deleteStep(stepIdToDelete!);
-                  setStepIdToDelete(null);
-                }}
-              >
+              <Button variant="destructive" onClick={deleteItem}>
                 Delete
               </Button>
             </AlertDialogAction>
