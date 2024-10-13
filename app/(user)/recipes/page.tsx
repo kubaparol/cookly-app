@@ -1,11 +1,8 @@
-import Pagination from "@/components/base/Pagination";
 import Search from "@/components/base/Search";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { appPageTitles, ProjectUrls } from "@/constants";
-import { Clock9, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -27,8 +24,8 @@ export default function RecipesPage() {
       </header>
 
       <div className="grid gap-10">
-        <ul className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-x-8 gap-y-16">
-          {mock.map((m) => (
+        {/* <ul className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-x-8 gap-y-16">
+          {[].map((m) => (
             <li key={m.id} className="bg-muted rounded-xl">
               <header className="pb-2 grid gap-6">
                 <Image
@@ -52,133 +49,10 @@ export default function RecipesPage() {
               </footer>
             </li>
           ))}
-        </ul>
+        </ul> */}
 
-        <Pagination totalPages={10} className="mx-auto" />
+        {/* <Pagination totalPages={10} className="mx-auto" /> */}
       </div>
     </section>
   );
 }
-
-const mock = [
-  {
-    id: 1,
-    name: "Special Salad Chicken",
-    image: "https://picsum.photos/id/112/400",
-    rating: {
-      value: Math.floor(Math.random() * 5) + 1,
-      count: Math.floor(Math.random() * 100),
-    },
-    cookTime: Math.floor(Math.random() * 60),
-  },
-  {
-    id: 2,
-    name: "Noodle Chicken",
-    image: "https://picsum.photos/id/222/400",
-    rating: {
-      value: Math.floor(Math.random() * 5) + 1,
-      count: Math.floor(Math.random() * 100),
-    },
-    cookTime: Math.floor(Math.random() * 60),
-  },
-  {
-    id: 3,
-    name: "Special Salad Chicken",
-    image: "https://picsum.photos/id/331/400",
-    rating: {
-      value: Math.floor(Math.random() * 5) + 1,
-      count: Math.floor(Math.random() * 100),
-    },
-    cookTime: Math.floor(Math.random() * 60),
-  },
-  {
-    id: 4,
-    name: "Special Salad Chicken",
-    image: "https://picsum.photos/id/234/400",
-    rating: {
-      value: Math.floor(Math.random() * 5) + 1,
-      count: Math.floor(Math.random() * 100),
-    },
-    cookTime: Math.floor(Math.random() * 60),
-  },
-  {
-    id: 5,
-    name: "Special Salad Chicken",
-    image: "https://picsum.photos/id/985/400",
-    rating: {
-      value: Math.floor(Math.random() * 5) + 1,
-      count: Math.floor(Math.random() * 100),
-    },
-    cookTime: Math.floor(Math.random() * 60),
-  },
-  {
-    id: 6,
-    name: "Special Salad Chicken",
-    image: "https://picsum.photos/id/26/400",
-    rating: {
-      value: Math.floor(Math.random() * 5) + 1,
-      count: Math.floor(Math.random() * 100),
-    },
-    cookTime: Math.floor(Math.random() * 60),
-  },
-  {
-    id: 7,
-    name: "Special Salad Chicken",
-    image: "https://picsum.photos/id/71/400",
-    rating: {
-      value: Math.floor(Math.random() * 5) + 1,
-      count: Math.floor(Math.random() * 100),
-    },
-    cookTime: Math.floor(Math.random() * 60),
-  },
-  {
-    id: 8,
-    name: "Special Salad Chicken",
-    image: "https://picsum.photos/id/84/400",
-    rating: {
-      value: Math.floor(Math.random() * 5) + 1,
-      count: Math.floor(Math.random() * 100),
-    },
-    cookTime: Math.floor(Math.random() * 60),
-  },
-  {
-    id: 9,
-    name: "Special Salad Chicken",
-    image: "https://picsum.photos/id/92/400",
-    rating: {
-      value: Math.floor(Math.random() * 5) + 1,
-      count: Math.floor(Math.random() * 100),
-    },
-    cookTime: Math.floor(Math.random() * 60),
-  },
-  {
-    id: 10,
-    name: "Special Salad Chicken",
-    image: "https://picsum.photos/id/101/400",
-    rating: {
-      value: Math.floor(Math.random() * 5) + 1,
-      count: Math.floor(Math.random() * 100),
-    },
-    cookTime: Math.floor(Math.random() * 60),
-  },
-  {
-    id: 11,
-    name: "Special Salad Chicken",
-    image: "https://picsum.photos/id/932/400",
-    rating: {
-      value: Math.floor(Math.random() * 5) + 1,
-      count: Math.floor(Math.random() * 100),
-    },
-    cookTime: Math.floor(Math.random() * 60),
-  },
-  {
-    id: 12,
-    name: "Special Salad Chicken",
-    image: "https://picsum.photos/id/121/400",
-    rating: {
-      value: Math.floor(Math.random() * 5) + 1,
-      count: Math.floor(Math.random() * 100),
-    },
-    cookTime: Math.floor(Math.random() * 60),
-  },
-];
