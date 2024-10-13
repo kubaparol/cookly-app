@@ -82,7 +82,7 @@ export default function RecipeForm(props: RecipeFormProps) {
     resolver: zodResolver(recipeFormSchema),
     defaultValues: {
       title: "",
-      description: "",
+      description: undefined,
       ingredients: [],
       steps: [],
     },
@@ -339,60 +339,71 @@ export default function RecipeForm(props: RecipeFormProps) {
                   )}
 
                   {field.value.length > 0 && (
-                    <ul className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <ol className="grid gap-4">
                       {field.value.map((field, index) => (
                         <li key={index}>
-                          {field.description}
-                          <div className="flex items-center gap-1">
-                            <TooltipProvider delayDuration={0}>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <Button
-                                    type="button"
-                                    size="icon"
-                                    variant="outline"
-                                    onClick={() =>
-                                      setItemToEdit({
-                                        item: field,
-                                        type: "step",
-                                      })
-                                    }
-                                  >
-                                    <Pencil className="size-4" />
-                                  </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>Edit</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
+                          <Badge
+                            variant="secondary"
+                            className="flex gap-3 justify-between"
+                          >
+                            <p className="text-sm font-light">
+                              <span className="font-semibold">
+                                {index + 1}.
+                              </span>{" "}
+                              {field.description}
+                            </p>
 
-                            <TooltipProvider delayDuration={0}>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <Button
-                                    type="button"
-                                    size="icon"
-                                    variant="outline"
-                                    onClick={() =>
-                                      setItemIdToDelete({
-                                        id: field.id,
-                                        type: "step",
-                                      })
-                                    }
-                                  >
-                                    <X className="size-4" />
-                                  </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>Delete</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          </div>
+                            <div className="flex items-center gap-1">
+                              <TooltipProvider delayDuration={0}>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      type="button"
+                                      size="icon"
+                                      variant="outline"
+                                      onClick={() =>
+                                        setItemToEdit({
+                                          item: field,
+                                          type: "step",
+                                        })
+                                      }
+                                    >
+                                      <Pencil className="size-4" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>Edit</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+
+                              <TooltipProvider delayDuration={0}>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      type="button"
+                                      size="icon"
+                                      variant="outline"
+                                      onClick={() =>
+                                        setItemIdToDelete({
+                                          id: field.id,
+                                          type: "step",
+                                        })
+                                      }
+                                    >
+                                      <X className="size-4" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>Delete</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            </div>
+                          </Badge>
                         </li>
                       ))}
-                    </ul>
+                    </ol>
                   )}
                   <Button
                     size="sm"
