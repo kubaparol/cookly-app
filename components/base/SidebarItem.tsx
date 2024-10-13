@@ -13,7 +13,7 @@ export default function SidebarItem(props: SidebarItemProps) {
   const { link, className, ...rest } = props;
   const pathname = usePathname();
 
-  const isActive = link.url && pathname.startsWith(link.url);
+  const isActive = pathname === link.url;
 
   const commonProps: ButtonProps = {
     variant: isActive ? "default" : "ghost",
