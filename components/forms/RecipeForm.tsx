@@ -38,6 +38,8 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import StepForm, { StepFormSchema, StepFormValues } from "./StepForm";
+import FileUploader from "../base/FileUploader";
+import { useUploadThing } from "@/app/lib/uploadthing";
 
 const recipeFormSchema = z.object({
   title: z
@@ -49,6 +51,7 @@ const recipeFormSchema = z.object({
     .min(10, "Description must be at least 10 characters")
     .max(500, "Description must be at most 500 characters")
     .optional(),
+  imageUrl: z.string().min(1, "Image is required"),
   ingredients: z
     .array(ingredientFormSchema)
     .min(1, "At least one ingredient is required"),
@@ -63,6 +66,8 @@ interface RecipeFormProps {
 
 export default function RecipeForm(props: RecipeFormProps) {
   const { type } = props;
+
+  const [files, setFiles] = useState<File[]>([]);
 
   const [itemToAdd, setItemToAdd] = useState<"ingredient" | "step" | null>(
     null
@@ -83,13 +88,26 @@ export default function RecipeForm(props: RecipeFormProps) {
     defaultValues: {
       title: "",
       description: undefined,
+      imageUrl: "",
       ingredients: [],
       steps: [],
     },
   });
 
-  const onSubmit = (values: RecipeFormValues) => {
-    console.log(values);
+  const { startUpload } = useUploadThing("imageUploader");
+
+  const onSubmit = async (values: RecipeFormValues) => {
+    let uploadedImageUrl = values.imageUrl;
+
+    if (files.length > 0) {
+      const uploadedImages = await startUpload(files);
+
+      if (!uploadedImages) return;
+
+      uploadedImageUrl = uploadedImages[0].url;
+    }
+
+    console.log({ ...values, imageUrl: uploadedImageUrl });
   };
 
   const itemFormSubmitHandler = (
@@ -192,6 +210,7 @@ export default function RecipeForm(props: RecipeFormProps) {
                   <span className="text-red-500 text-[18px]">*</span>
                   Title
                 </FormLabel>
+
                 <FormControl>
                   <Input
                     {...field}
@@ -225,6 +244,28 @@ export default function RecipeForm(props: RecipeFormProps) {
 
           <FormField
             control={form.control}
+            name="imageUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <span className="text-red-500 text-[18px]">*</span>
+                  Image
+                </FormLabel>
+
+                <FormControl>
+                  <FileUploader
+                    imageUrl={field.value}
+                    onFieldChange={field.onChange}
+                    setFiles={setFiles}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="ingredients"
             render={({ field }) => (
               <FormItem className="w-fulls">
@@ -233,7 +274,7 @@ export default function RecipeForm(props: RecipeFormProps) {
                   Ingredients
                 </FormLabel>
 
-                <div className="border p-4 rounded-lg grid gap-5">
+                <div className="border p-4 rounded-lg grid gap-5 shadow-sm">
                   {field.value.length === 0 && (
                     <p className="text-muted-foreground text-sm italic">
                       No ingredients added
@@ -331,7 +372,7 @@ export default function RecipeForm(props: RecipeFormProps) {
                   Steps
                 </FormLabel>
 
-                <div className="border p-4 rounded-lg grid gap-5">
+                <div className="border p-4 rounded-lg grid gap-5 shadow-sm">
                   {field.value.length === 0 && (
                     <p className="text-muted-foreground text-sm italic">
                       No steps added
