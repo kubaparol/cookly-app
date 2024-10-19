@@ -2,12 +2,14 @@
 
 import { CreateUserParams, UpdateUserParams } from "@/types";
 import { handleError } from "@/utils";
+import { db } from "../drizzle";
+import { users } from "../schema/users";
 
 export async function createUser(user: CreateUserParams) {
   try {
-    console.log(user);
+    const newUser = db.insert(users).values(user);
 
-    return JSON.parse(JSON.stringify(user));
+    return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
     handleError(error);
   }
