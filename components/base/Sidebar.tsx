@@ -16,17 +16,19 @@ export default function Sidebar(props: SidebarProps) {
     <nav
       {...rest}
       className={cn(
-        "md:p-2 grid grid-rows-[1fr,_auto] h-full gap-2 pb-2",
+        "flex flex-col h-full justify-between pt-8 md:pt-0 gap-2",
         className
       )}
     >
-      <ul className="p-4 flex flex-col gap-2 h-full">
+      <ul className="grid gap-2">
         {topItems.map((link, index) => (
           <SidebarItem key={index} link={link} onClick={onClose} />
         ))}
       </ul>
 
-      <ul className="p-4 grid gap-2 h-fit">
+      <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
+
+      <ul className="grid gap-2">
         {bottomItems.map((link, index) => (
           <SidebarItem key={index} link={link} onClick={onClose} />
         ))}

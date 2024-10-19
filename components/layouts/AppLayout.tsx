@@ -41,12 +41,12 @@ export default function AppLayout(props: AppLayoutProps) {
         </Sheet>
       </div>
 
-      <div className="flex">
-        <div className="hidden md:flex flex-col bg-[#fefae8] md:w-64">
+      <div className="flex h-screen overflow-hidden">
+        <div className="hidden md:flex flex-col w-full md:w-64 px-3 py-4 md:px-2">
           <Link
             href={ProjectUrls.home}
             title="Cookly Home"
-            className="grid place-items-center p-4"
+            className="mb-2 grid place-items-center rounded-md bg-primary-100 p-4"
           >
             <Logo className="max-w-[140px]" />
           </Link>
@@ -55,11 +55,10 @@ export default function AppLayout(props: AppLayoutProps) {
             topItems={topItems}
             bottomItems={bottomItems}
             onClose={() => setIsOpen(false)}
-            className="hidden md:grid flex-1"
           />
         </div>
 
-        <div className="min-h-[calc(100vh-(56px))] md:min-h-[calc(100vh)] px-3 py-4 sm:px-6 flex-1">
+        <div className="min-h-[calc(100vh-(56px))] md:min-h-[calc(100vh)] px-3 py-4 sm:px-6 flex-1 overflow-y-scroll">
           {children}
         </div>
       </div>
