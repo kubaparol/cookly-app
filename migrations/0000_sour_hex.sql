@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS "users" (
-	"clerkId" text,
+	"clerkId" text PRIMARY KEY NOT NULL,
 	"firstName" text,
 	"lastName" text,
 	"email" text,

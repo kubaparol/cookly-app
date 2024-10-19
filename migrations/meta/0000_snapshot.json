@@ -1,5 +1,5 @@
 {
-  "id": "3446754b-58a5-4ca6-b563-9c4be9d6a42e",
+  "id": "5652f24e-d68f-4be0-9ccc-c1c3e33819e0",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -11,8 +11,8 @@
         "clerkId": {
           "name": "clerkId",
           "type": "text",
-          "primaryKey": false,
-          "notNull": false
+          "primaryKey": true,
+          "notNull": true
         },
         "firstName": {
           "name": "firstName",
