@@ -1,3 +1,4 @@
+import PageTitle from "@/components/base/PageTitle";
 import { appPageTitles, ProjectUrls } from "@/constants";
 import { Metadata } from "next";
 
@@ -6,5 +7,9 @@ export const metadata: Metadata = {
 };
 
 export default function DashboardPage() {
-  return <section></section>;
+  return (
+    <section>
+      <PageTitle />
+    </section>
+  );
 }

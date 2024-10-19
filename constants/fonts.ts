@@ -1,10 +1,10 @@
-import { Inter, Caveat } from "next/font/google";
+import { Inter, Libre_Baskerville } from "next/font/google";
 
 export const inter = Inter({
   subsets: ["latin"],
 });
 
-export const rugeBoogie = Caveat({
+export const libreBaskerville = Libre_Baskerville({
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "700"],
 });

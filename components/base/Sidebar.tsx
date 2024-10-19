@@ -1,7 +1,6 @@
 import { SidebarItemEntity } from "@/hooks";
 import { cn } from "@/utils";
 import { ComponentPropsWithoutRef } from "react";
-import { Separator } from "../ui/separator";
 import SidebarItem from "./SidebarItem";
 
 export interface SidebarProps extends ComponentPropsWithoutRef<"nav"> {
@@ -17,25 +16,21 @@ export default function Sidebar(props: SidebarProps) {
     <nav
       {...rest}
       className={cn(
-        "p-4 bg-background grid md:border-r h-full md:h-auto",
+        "md:p-2 grid grid-rows-[1fr,_auto] h-full gap-2 pb-2",
         className
       )}
     >
-      <ul className="grid gap-2 h-fit">
+      <ul className="p-4 flex flex-col gap-2 h-full">
         {topItems.map((link, index) => (
           <SidebarItem key={index} link={link} onClick={onClose} />
         ))}
       </ul>
 
-      <div className="mt-auto">
-        <Separator className="my-2" />
-
-        <ul className="grid gap-2">
-          {bottomItems.map((link, index) => (
-            <SidebarItem key={index} link={link} onClick={onClose} />
-          ))}
-        </ul>
-      </div>
+      <ul className="p-4 grid gap-2 h-fit">
+        {bottomItems.map((link, index) => (
+          <SidebarItem key={index} link={link} onClick={onClose} />
+        ))}
+      </ul>
     </nav>
   );
 }

@@ -1,3 +1,4 @@
+import PageTitle from "@/components/base/PageTitle";
 import Search from "@/components/base/Search";
 import { Button } from "@/components/ui/button";
 import { appPageTitles, ProjectUrls } from "@/constants";
@@ -12,15 +13,19 @@ export const metadata: Metadata = {
 export default function RecipesPage() {
   return (
     <section className="grid gap-24">
-      <header className="flex flex-col-reverse items-center gap-4 sm:flex-row sm:gap-8">
-        <Search placeholder="Search recipes..." />
+      <header className="grid gap-3">
+        <PageTitle />
 
-        <Button asChild className="w-full sm:w-fit">
-          <Link href={ProjectUrls.createRecipe} className="gap-3">
-            Create Recipe
-            <PlusIcon className="size-5" />
-          </Link>
-        </Button>
+        <div className="flex flex-col-reverse items-center gap-4 sm:flex-row sm:gap-8">
+          <Search placeholder="Search recipes..." />
+
+          <Button asChild className="w-full sm:w-fit">
+            <Link href={ProjectUrls.createRecipe} className="gap-3">
+              Create Recipe
+              <PlusIcon className="size-5" />
+            </Link>
+          </Button>
+        </div>
       </header>
 
       <div className="grid gap-10">
