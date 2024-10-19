@@ -1,5 +1,6 @@
 import PageTitle from "@/components/base/PageTitle";
 import Search from "@/components/base/Search";
+import RecipeCard from "@/components/shared/RecipeCard";
 import { Button } from "@/components/ui/button";
 import { appPageTitles, ProjectUrls } from "@/constants";
 import { PlusIcon } from "lucide-react";
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function RecipesPage() {
   return (
-    <section className="grid gap-24">
+    <section className="grid gap-24 pb-8">
       <header className="grid gap-3">
         <PageTitle />
 
@@ -29,35 +30,75 @@ export default function RecipesPage() {
       </header>
 
       <div className="grid gap-10">
-        {/* <ul className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-x-8 gap-y-16">
-          {[].map((m) => (
-            <li key={m.id} className="bg-muted rounded-xl">
-              <header className="pb-2 grid gap-6">
-                <Image
-                  src={m.image}
-                  width={150}
-                  height={150}
-                  alt={`${m.name} picture`}
-                  className="rounded-full -mt-12 mx-auto border-2 shadow-xl"
-                />
-                <p className="text-center font-bold">{m.name}</p>
-              </header>
-
-              <Separator />
-
-              <footer className="flex items-center justify-between p-3">
-                <div className="flex items-center gap-1 text-muted-foreground">
-                  <Clock9 className="size-4" />
-                  <p className="text-xs font-medium">{m.cookTime} minutes</p>
-                </div>
-                <Button size="sm">View recipe</Button>
-              </footer>
+        <ul className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-x-8 gap-y-20">
+          {getRandomDishes(24).map((item, index) => (
+            <li key={index}>
+              <RecipeCard
+                name={item.name}
+                imageUrl={item.imageUrl}
+                isAuthor={index % 2 === 0}
+              />
             </li>
           ))}
-        </ul> */}
+        </ul>
 
         {/* <Pagination totalPages={10} className="mx-auto" /> */}
       </div>
     </section>
   );
+}
+
+function getRandomDishes(count: number) {
+  const dishNames = [
+    "Crispy Zucchini Tempura",
+    "Spicy Mango Curry",
+    "Honey Glazed Chicken Tenders",
+    "Lemon Basil Panna Cotta",
+    "Maple Roasted Pumpkin Soup",
+    "Saffron Infused Risotto",
+    "Coconut Lime Shrimp Skewers",
+    "Blueberry Lavender Tart",
+    "Chimichurri Grilled Steak",
+    "Ginger Sesame Noodles",
+    "Balsamic Fig Bruschetta",
+    "Smoked Paprika Salmon",
+    "Truffle Parmesan Fries",
+    "Miso Glazed Eggplant",
+    "Raspberry White Chocolate Mousse",
+    "Peanut Butter Banana Smoothie",
+    "Caramelized Onion Tart",
+    "Pumpkin Spice Latte",
+    "Mushroom Stroganoff",
+    "Candied Pecan Salad",
+    "Cajun Jambalaya",
+    "Peach Basil Sorbet",
+    "Mint Chocolate Chip Ice Cream",
+    "Pistachio Crusted Halibut",
+    "Sesame Ginger Tofu",
+    "Pineapple Coconut Cake",
+    "Lavender Lemonade",
+    "Cilantro Lime Chicken",
+    "Raspberry Almond Tart",
+    "Pumpkin Sage Risotto",
+    "Mango Coconut Smoothie",
+    "Spicy Peanut Noodles",
+    "Peach Basil Sorbet",
+    "Mint Chocolate Chip Ice Cream",
+    "Pistachio Crusted Halibut",
+  ];
+
+  // Helper function to generate a single random dish
+  const getRandomDish = () => {
+    const randomName = dishNames[Math.floor(Math.random() * dishNames.length)];
+    const imageUrl = `https://picsum.photos/id/${
+      Math.floor(Math.random() * 1000) + 1
+    }/300/300`;
+    return {
+      name: randomName,
+      imageUrl: imageUrl,
+    };
+  };
+
+  // Generate an array of random dishes based on the count parameter
+  return Array.from({ length: count }, getRandomDish);
 }
