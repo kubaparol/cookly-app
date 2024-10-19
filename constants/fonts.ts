@@ -1,10 +1,10 @@
-import { Inter, Ruge_Boogie } from "next/font/google";
+import { Inter, Caveat } from "next/font/google";
 
 export const inter = Inter({
   subsets: ["latin"],
 });
 
-export const rugeBoogie = Ruge_Boogie({
+export const rugeBoogie = Caveat({
   subsets: ["latin"],
   weight: ["400"],
 });

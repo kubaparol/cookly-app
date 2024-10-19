@@ -1,11 +1,5 @@
-import { rugeBoogie } from "@/constants";
+import Image from "next/image";
 
 export default function Logo() {
-  return (
-    <div
-      className={`${rugeBoogie.className} flex flex-row items-center leading-none gap-1`}
-    >
-      <p className="text-[32px] md:text-[36px]">Cookly</p>
-    </div>
-  );
+  return <Image src="/logo.webp" alt="Cookly Home" width={150} height={150} />;
 }
