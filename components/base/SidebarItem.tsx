@@ -1,7 +1,6 @@
 import { SidebarItemEntity } from "@/hooks";
 import { usePathname } from "next/navigation";
 import { ComponentPropsWithoutRef } from "react";
-import { Button, ButtonProps } from "../ui/button";
 import { cn } from "@/utils";
 import Link from "next/link";
 
@@ -15,13 +14,10 @@ export default function SidebarItem(props: SidebarItemProps) {
 
   const isActive = pathname === link.url;
 
-  const commonProps: ButtonProps = {
-    variant: isActive ? "default" : "ghost",
-    className: cn(
-      "w-full gap-2 justify-start rounded-sm text-center min-w-44",
-      isActive && "pointer-events-none bg-primary/35"
-    ),
-  };
+  const contentClassName = cn(
+    "flex gap-2 w-full items-center rounded-md bg-gray-50 p-4 text-sm font-medium hover:bg-primary-50",
+    isActive && "pointer-events-none bg-primary-200 text-primary-950"
+  );
 
   const Icon = link.icon;
 
@@ -35,13 +31,13 @@ export default function SidebarItem(props: SidebarItemProps) {
   return (
     <li {...rest} className={cn("", className)}>
       {link.url ? (
-        <Button asChild {...commonProps}>
-          <Link href={link.url}>{content}</Link>
-        </Button>
-      ) : (
-        <Button onClick={link.onClick} {...commonProps}>
+        <Link href={link.url} className={contentClassName}>
           {content}
-        </Button>
+        </Link>
+      ) : (
+        <button onClick={link.onClick} className={contentClassName}>
+          {content}
+        </button>
       )}
     </li>
   );
