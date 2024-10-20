@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 import { getOneRecipe } from '@/db';
 
@@ -15,6 +16,12 @@ export default async function EditRecipePage(props: PageProps) {
   const id = props.params.id;
 
   const recipe = await getOneRecipe(id);
+
+  console.log(recipe);
+
+  if (!recipe) {
+    notFound();
+  }
 
   return (
     <section className="grid gap-6">

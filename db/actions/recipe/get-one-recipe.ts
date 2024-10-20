@@ -21,6 +21,8 @@ export async function getOneRecipe(id: string) {
       .from(recipes)
       .where(and(...filters));
 
+    if (!recipeData) return null;
+
     const ingredientsData = await db
       .select({
         id: ingredients.id,

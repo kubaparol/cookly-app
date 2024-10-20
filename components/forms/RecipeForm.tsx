@@ -1,8 +1,9 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, Pencil, Plus, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { BadgeCheck, Loader2, Pencil, Plus, X } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -54,12 +55,16 @@ interface RecipeFormProps {
   type: 'Create' | 'Update';
   id?: string;
   defaultValues?: Partial<RecipeFormValues>;
+  isSuccess?: boolean;
 }
 
 export default function RecipeForm(props: RecipeFormProps) {
-  const { type, id, defaultValues } = props;
+  const { type, id, defaultValues, isSuccess = false } = props;
 
   const router = useRouter();
+  const pathname = usePathname();
+
+  const [isCreationSuccess, setIsCreationSuccess] = useState(isSuccess);
 
   const [files, setFiles] = useState<File[]>([]);
 
@@ -103,26 +108,28 @@ export default function RecipeForm(props: RecipeFormProps) {
 
     const recipeValues = { ...values, imageUrl: uploadedImageUrl };
 
-    let recipe;
-
     if (type === 'Create') {
-      recipe = await createRecipe(recipeValues);
+      await createRecipe(recipeValues);
+
+      const params = new URLSearchParams();
+      params.set('success', 'true');
+
+      router.replace(`${pathname}?${params.toString()}`);
+
+      setIsCreationSuccess(true);
     }
 
     if (type === 'Update') {
-      recipe = await updateRecipe({
+      await updateRecipe({
         id: id!,
         ...recipeValues,
       });
-    }
 
-    if (recipe) {
       router.push(ProjectUrls.myRecipes);
-      form.reset();
     }
-  };
 
-  console.log(form.getValues().steps);
+    form.reset();
+  };
 
   const itemFormSubmitHandler = (values: IngredientFormValues | StepFormValues) => {
     // add new
@@ -205,6 +212,27 @@ export default function RecipeForm(props: RecipeFormProps) {
   };
 
   const isSubmitting = form.formState.isSubmitting;
+
+  if (isCreationSuccess) {
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center gap-4">
+        <BadgeCheck className="size-44 text-green-400" />
+
+        <div className="grid place-items-center gap-2">
+          <p className="text-4xl font-semibold">Success!</p>
+          <p>Your recipe has been created successfully</p>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <Button variant="outline" asChild>
+            <Link href={ProjectUrls.myRecipes}>Go Back</Link>
+          </Button>
+
+          <Button onClick={() => setIsCreationSuccess(false)}>Create Another Recipe</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
