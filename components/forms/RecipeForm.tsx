@@ -11,7 +11,7 @@ import { useUploadThing } from '@/lib/uploadthing';
 
 import { ProjectUrls } from '@/constants';
 
-import { createRecipe, getOneRecipe, updateRecipe } from '@/db';
+import { createRecipe, updateRecipe } from '@/db';
 
 import FileUploader from '../base/FileUploader';
 import {
@@ -118,8 +118,11 @@ export default function RecipeForm(props: RecipeFormProps) {
 
     if (recipe) {
       router.push(ProjectUrls.myRecipes);
+      form.reset();
     }
   };
+
+  console.log(form.getValues().steps);
 
   const itemFormSubmitHandler = (values: IngredientFormValues | StepFormValues) => {
     // add new
@@ -188,7 +191,9 @@ export default function RecipeForm(props: RecipeFormProps) {
 
     if (itemIdToDelete?.type === 'step') {
       const steps = form.getValues().steps;
-      const updatedSteps = steps.filter((i) => i.id !== itemIdToDelete?.id);
+      const updatedSteps = steps
+        .filter((i) => i.id !== itemIdToDelete?.id)
+        .map((s, i) => ({ ...s, order: i + 1 }));
       form.setValue('steps', updatedSteps);
 
       if (form.formState.isSubmitted) {
@@ -372,62 +377,64 @@ export default function RecipeForm(props: RecipeFormProps) {
 
                   {field.value.length > 0 && (
                     <ol className="grid gap-4">
-                      {field.value.map((field, index) => (
-                        <li key={index}>
-                          <Badge variant="secondary" className="flex justify-between gap-3">
-                            <p className="text-sm font-light">
-                              <span className="font-semibold">{index + 1}.</span>{' '}
-                              {field.description}
-                            </p>
+                      {field.value
+                        .sort((a, b) => a.order - b.order)
+                        .map((field, index) => (
+                          <li key={field.id}>
+                            <Badge variant="secondary" className="flex justify-between gap-3">
+                              <p className="text-sm font-light">
+                                <span className="font-semibold">{index + 1}.</span>{' '}
+                                {field.description}
+                              </p>
 
-                            <div className="flex items-center gap-1">
-                              <TooltipProvider delayDuration={0}>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <Button
-                                      type="button"
-                                      size="icon"
-                                      variant="outline"
-                                      onClick={() =>
-                                        setItemToEdit({
-                                          item: field,
-                                          type: 'step',
-                                        })
-                                      }>
-                                      <Pencil className="size-4" />
-                                    </Button>
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p>Edit</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
+                              <div className="flex items-center gap-1">
+                                <TooltipProvider delayDuration={0}>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <Button
+                                        type="button"
+                                        size="icon"
+                                        variant="outline"
+                                        onClick={() =>
+                                          setItemToEdit({
+                                            item: field,
+                                            type: 'step',
+                                          })
+                                        }>
+                                        <Pencil className="size-4" />
+                                      </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p>Edit</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
 
-                              <TooltipProvider delayDuration={0}>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <Button
-                                      type="button"
-                                      size="icon"
-                                      variant="outline"
-                                      onClick={() =>
-                                        setItemIdToDelete({
-                                          id: field.id,
-                                          type: 'step',
-                                        })
-                                      }>
-                                      <X className="size-4" />
-                                    </Button>
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p>Delete</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                            </div>
-                          </Badge>
-                        </li>
-                      ))}
+                                <TooltipProvider delayDuration={0}>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <Button
+                                        type="button"
+                                        size="icon"
+                                        variant="outline"
+                                        onClick={() =>
+                                          setItemIdToDelete({
+                                            id: field.id,
+                                            type: 'step',
+                                          })
+                                        }>
+                                        <X className="size-4" />
+                                      </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p>Delete</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              </div>
+                            </Badge>
+                          </li>
+                        ))}
                     </ol>
                   )}
                   <Button

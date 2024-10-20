@@ -25,31 +25,61 @@ export async function updateRecipe(recipe: UpdateRecipeParams) {
       .where(eq(recipes.id, recipe.id))
       .returning();
 
-    for (const ingredient of recipe.ingredients) {
-      await db
-        .update(ingredients)
-        .set({
-          recipeId: newRecipe.id,
-          name: ingredient.name,
-          quantity: ingredient.quantity,
-          unit: ingredient.unit,
-        })
-        .where(eq(ingredients.id, ingredient.id));
-    }
+    const existingIngredients = await db
+      .select()
+      .from(ingredients)
+      .where(eq(ingredients.recipeId, newRecipe.id));
 
-    for (const step of recipe.steps) {
-      await db
-        .update(steps)
-        .set({
-          recipeId: newRecipe.id,
-          description: step.description,
-          order: step.order,
-        })
-        .where(eq(steps.id, step.id));
-    }
+    const existingSteps = await db.select().from(steps).where(eq(steps.recipeId, newRecipe.id));
+
+    await updateOrInsertEntities(
+      ingredients,
+      existingIngredients,
+      recipe.ingredients,
+      'id',
+      newRecipe.id,
+    );
+
+    await updateOrInsertEntities(steps, existingSteps, recipe.steps, 'id', newRecipe.id);
 
     return JSON.parse(JSON.stringify(newRecipe));
   } catch (error) {
     handleError(error);
   }
+}
+
+async function updateOrInsertEntities(
+  dbTable: any,
+  existingEntities: any[],
+  newEntities: any[],
+  entityIdField: string,
+  recipeId: string,
+) {
+  const existingEntitiesMap = new Map(
+    existingEntities.map((entity) => [entity[entityIdField], entity]),
+  );
+
+  const operations = newEntities.map((entity) => {
+    if (entity[entityIdField] && existingEntitiesMap.has(entity[entityIdField])) {
+      existingEntitiesMap.delete(entity[entityIdField]);
+      return db
+        .update(dbTable)
+        .set({
+          ...entity,
+          recipeId,
+        })
+        .where(eq(dbTable[entityIdField], entity[entityIdField]));
+    } else {
+      return db.insert(dbTable).values({
+        ...entity,
+        recipeId,
+      });
+    }
+  });
+
+  const deleteOperations = Array.from(existingEntitiesMap.keys()).map((id) =>
+    db.delete(dbTable).where(eq(dbTable[entityIdField], id)),
+  );
+
+  await Promise.all([...operations, ...deleteOperations]);
 }
