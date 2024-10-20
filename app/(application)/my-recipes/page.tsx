@@ -45,7 +45,7 @@ export default async function RecipesPage(props: PageProps) {
       </header>
 
       <div className="grid gap-10">
-        <ul className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-x-8 gap-y-20">
+        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
           {recipes?.map((recipe, index) => (
             <li key={index}>
               <RecipeCard

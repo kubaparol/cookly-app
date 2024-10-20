@@ -13,7 +13,7 @@ export default function RecipeCard(props: RecipeCardProps) {
   const { title, imageUrl, isAuthor } = props;
 
   return (
-    <div className="group relative max-w-sm overflow-hidden rounded-lg shadow-xl transition-shadow duration-300">
+    <div className="group relative overflow-hidden rounded-lg shadow-xl transition-shadow duration-300">
       <div className="relative h-60 w-full overflow-hidden">
         <Image
           src={imageUrl}
@@ -40,7 +40,7 @@ export default function RecipeCard(props: RecipeCardProps) {
             </Button>
           </div>
 
-          <h2 className="bg-white/10 p-4 text-xl font-semibold text-white backdrop-blur-md">
+          <h2 className="text-md bg-white/10 p-3 font-semibold text-white backdrop-blur-md xl:p-4 xl:text-lg">
             {title}
           </h2>
         </div>
