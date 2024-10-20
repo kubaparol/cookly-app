@@ -1,10 +1,7 @@
 import { ExternalLink, Pencil } from 'lucide-react';
 import Image from 'next/image';
 
-import { cn } from '@/utils';
-
 import { Button } from '../ui/button';
-import { Separator } from '../ui/separator';
 
 interface RecipeCardProps {
   title: string;

@@ -1,7 +1,5 @@
 'use server';
 
-import { eq } from 'drizzle-orm';
-
 import { handleError } from '@/utils';
 
 import { users } from '@/db';

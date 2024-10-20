@@ -2,11 +2,14 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, Pencil, Plus, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { useUploadThing } from '@/lib/uploadthing';
+
+import { ProjectUrls } from '@/constants';
 
 import { createRecipe } from '@/db';
 
@@ -54,6 +57,8 @@ interface RecipeFormProps {
 export default function RecipeForm(props: RecipeFormProps) {
   const { type } = props;
 
+  const router = useRouter();
+
   const [files, setFiles] = useState<File[]>([]);
 
   const [itemToAdd, setItemToAdd] = useState<'ingredient' | 'step' | null>(null);
@@ -92,7 +97,11 @@ export default function RecipeForm(props: RecipeFormProps) {
       uploadedImageUrl = uploadedImages[0].url;
     }
 
-    await createRecipe({ ...values, imageUrl: uploadedImageUrl });
+    const newRecipe = await createRecipe({ ...values, imageUrl: uploadedImageUrl });
+
+    if (newRecipe) {
+      router.push(ProjectUrls.myRecipes);
+    }
   };
 
   const itemFormSubmitHandler = (values: IngredientFormValues | StepFormValues) => {

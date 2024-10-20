@@ -1,6 +1,8 @@
+import { currentUser } from '@clerk/nextjs/server';
 import { PlusIcon } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 import { ProjectUrls, appPageTitles } from '@/constants';
 
@@ -11,12 +13,19 @@ import Search from '@/components/base/Search';
 import RecipeCard from '@/components/shared/RecipeCard';
 import { Button } from '@/components/ui/button';
 
+import { PageProps } from '@/types';
+
 export const metadata: Metadata = {
   title: appPageTitles[ProjectUrls.myRecipes],
 };
 
-export default async function RecipesPage() {
-  const recipes = await getMyRecipes();
+export default async function RecipesPage(props: PageProps) {
+  const recipes = await getMyRecipes({ query: props.searchParams.query as string });
+  const user = await currentUser();
+
+  if (!user) {
+    notFound();
+  }
 
   return (
     <section className="grid gap-24 pb-8">
@@ -37,9 +46,13 @@ export default async function RecipesPage() {
 
       <div className="grid gap-10">
         <ul className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-x-8 gap-y-20">
-          {recipes?.map((item, index) => (
+          {recipes?.map((recipe, index) => (
             <li key={index}>
-              <RecipeCard title={item.title} imageUrl={item.imageUrl} isAuthor={index % 2 === 0} />
+              <RecipeCard
+                title={recipe.title}
+                imageUrl={recipe.imageUrl}
+                isAuthor={user.id === recipe.authorId}
+              />
             </li>
           ))}
         </ul>
