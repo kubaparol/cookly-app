@@ -31,26 +31,7 @@ export const ingredientFormSchema = z.object({
     .min(3, 'Name must be at least 3 characters')
     .max(50, 'Name must be at most 255 characters'),
   quantity: z.coerce.number().positive('Quantity must be a positive number'),
-  unit: z.enum(
-    [
-      'cups',
-      'tbsp',
-      'tsp',
-      'ml',
-      'l',
-      'g',
-      'kg',
-      'oz',
-      'lb',
-      'pcs',
-      'dozen',
-      'pinch',
-      'dash',
-      'quart',
-      'pint',
-    ],
-    { required_error: 'Unit is required' },
-  ),
+  unit: z.string().min(1, 'Unit is required'),
 });
 
 export type IngredientFormValues = z.infer<typeof ingredientFormSchema>;

@@ -80,6 +80,9 @@ dependencies:
   uploadthing:
     specifier: ^7.1.0
     version: 7.1.0(next@14.2.15)(tailwindcss@3.4.13)
+  use-debounce:
+    specifier: ^10.0.4
+    version: 10.0.4(react@18.3.1)
   zod:
     specifier: ^3.23.8
     version: 3.23.8
@@ -4884,6 +4887,15 @@ packages:
       '@types/react': 18.3.11
       react: 18.3.1
       tslib: 2.7.0
+    dev: false
+
+  /use-debounce@10.0.4(react@18.3.1):
+    resolution: {integrity: sha512-6Cf7Yr7Wk7Kdv77nnJMf6de4HuDE4dTxKij+RqE9rufDsI6zsbjyAxcH5y2ueJCQAnfgKbzXbZHYlkFwmBlWkw==}
+    engines: {node: '>= 16.0.0'}
+    peerDependencies:
+      react: '*'
+    dependencies:
+      react: 18.3.1
     dev: false
 
   /use-sidecar@1.1.2(@types/react@18.3.11)(react@18.3.1):

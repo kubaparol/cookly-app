@@ -1,23 +1,36 @@
+import { currentUser } from '@clerk/nextjs/server';
 import { PlusIcon } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
-import { ProjectUrls, appPageTitles } from '@/constants';
+import { ProjectUrls } from '@/constants';
+
+import { getMyRecipes } from '@/db';
 
 import PageTitle from '@/components/base/PageTitle';
 import Search from '@/components/base/Search';
 import RecipeCard from '@/components/shared/RecipeCard';
 import { Button } from '@/components/ui/button';
 
+import { PageProps } from '@/types';
+
 export const metadata: Metadata = {
-  title: appPageTitles[ProjectUrls.recipes],
+  title: 'My Recipes',
 };
 
-export default function RecipesPage() {
+export default async function RecipesPage(props: PageProps) {
+  const recipes = await getMyRecipes({ query: props.searchParams.query as string });
+  const user = await currentUser();
+
+  if (!user) {
+    notFound();
+  }
+
   return (
     <section className="grid gap-24 pb-8">
       <header className="grid gap-3">
-        <PageTitle />
+        <PageTitle title="My Recipes" />
 
         <div className="flex flex-col-reverse items-center gap-4 sm:flex-row sm:gap-8">
           <Search placeholder="Search recipes..." />
@@ -32,10 +45,15 @@ export default function RecipesPage() {
       </header>
 
       <div className="grid gap-10">
-        <ul className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-x-8 gap-y-20">
-          {getRandomDishes(24).map((item, index) => (
+        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
+          {recipes?.map((recipe, index) => (
             <li key={index}>
-              <RecipeCard name={item.name} imageUrl={item.imageUrl} isAuthor={index % 2 === 0} />
+              <RecipeCard
+                id={recipe.id}
+                title={recipe.title}
+                imageUrl={recipe.imageUrl}
+                isAuthor={user.id === recipe.authorId}
+              />
             </li>
           ))}
         </ul>

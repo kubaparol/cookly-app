@@ -4,10 +4,8 @@ import { currentUser } from '@clerk/nextjs/server';
 
 import { handleError } from '@/utils';
 
-import { ingredients, recipes, steps } from '@/db';
+import { CreateRecipeParams, ingredients, recipes, steps } from '@/db';
 import { db } from '@/db/drizzle';
-
-import { CreateRecipeParams } from './recipe.types';
 
 export async function createRecipe(recipe: CreateRecipeParams) {
   try {
@@ -34,11 +32,11 @@ export async function createRecipe(recipe: CreateRecipeParams) {
       });
     }
 
-    for (const step of recipe.steps) {
+    for (let i = 0; i < recipe.steps.length; i++) {
       await db.insert(steps).values({
         recipeId: newRecipe.id,
-        description: step.description,
-        order: step.order,
+        description: recipe.steps[i].description,
+        order: i + 1,
       });
     }
 
