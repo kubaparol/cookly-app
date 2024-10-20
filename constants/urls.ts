@@ -8,8 +8,8 @@ export const ProjectUrls = Object.freeze({
 
   // app
   dashboard: '/dashboard',
-  recipes: '/recipes',
-  createRecipe: '/recipes/create',
+  myRecipes: '/my-recipes',
+  createRecipe: '/my-recipes/create',
 });
 
 export type ProjectUrlType = (typeof ProjectUrls)[keyof typeof ProjectUrls];
