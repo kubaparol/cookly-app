@@ -1,10 +1,10 @@
 "use server";
 
-import { CreateUserParams, UpdateUserParams } from "@/types";
 import { handleError } from "@/utils";
-import { db } from "../drizzle";
-import { users } from "../schema/users";
 import { eq } from "drizzle-orm";
+import { CreateUserParams, UpdateUserParams } from "./user.types";
+import { users } from "@/db/schema";
+import { db } from "@/db/drizzle";
 
 export async function createUser(user: CreateUserParams) {
   try {
