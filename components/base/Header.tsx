@@ -1,8 +1,10 @@
-import Link from "next/link";
-import { Button } from "../ui/button";
-import Logo from "./Logo";
-import { ProjectUrls } from "@/constants";
-import { SignedIn, SignedOut, SignOutButton } from "@clerk/nextjs";
+import { SignOutButton, SignedIn, SignedOut } from '@clerk/nextjs';
+import Link from 'next/link';
+
+import { ProjectUrls } from '@/constants';
+
+import { Button } from '../ui/button';
+import Logo from './Logo';
 
 export default function Header() {
   return (

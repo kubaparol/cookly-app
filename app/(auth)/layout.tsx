@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 interface AuthLayoutProps {
   readonly children: ReactNode;
@@ -7,9 +7,5 @@ interface AuthLayoutProps {
 export default function AuthLayout(props: AuthLayoutProps) {
   const { children } = props;
 
-  return (
-    <div className="flex items-center justify-center min-h-screen w-full">
-      {children}
-    </div>
-  );
+  return <div className="flex min-h-screen w-full items-center justify-center">{children}</div>;
 }

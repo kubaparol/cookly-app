@@ -1,5 +1,6 @@
-import AppLayout from "@/components/layouts/AppLayout";
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
+
+import AppLayout from '@/components/layouts/AppLayout';
 
 interface AppRootLayoutProps {
   readonly children: ReactNode;

@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import { appPageTitles, libreBaskerville, ProjectUrlType } from "@/constants";
-import { usePathname } from "next/navigation";
+import { usePathname } from 'next/navigation';
+
+import { ProjectUrlType, appPageTitles, libreBaskerville } from '@/constants';
 
 export default function PageTitle() {
   const pathname = usePathname();
@@ -10,9 +11,5 @@ export default function PageTitle() {
 
   if (!title) return null;
 
-  return (
-    <h1 className={`${libreBaskerville.className} text-xl md:text-2xl md:py-3`}>
-      {title}
-    </h1>
-  );
+  return <h1 className={`${libreBaskerville.className} text-xl md:py-3 md:text-2xl`}>{title}</h1>;
 }

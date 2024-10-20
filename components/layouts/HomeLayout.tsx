@@ -1,6 +1,7 @@
-import { ReactNode } from "react";
-import Header from "../base/Header";
-import Footer from "../base/Footer";
+import { ReactNode } from 'react';
+
+import Footer from '../base/Footer';
+import Header from '../base/Header';
 
 interface HomeLayoutProps {
   readonly children: ReactNode;

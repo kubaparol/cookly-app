@@ -1,11 +1,13 @@
-import PageTitle from "@/components/base/PageTitle";
-import Search from "@/components/base/Search";
-import RecipeCard from "@/components/shared/RecipeCard";
-import { Button } from "@/components/ui/button";
-import { appPageTitles, ProjectUrls } from "@/constants";
-import { PlusIcon } from "lucide-react";
-import { Metadata } from "next";
-import Link from "next/link";
+import { PlusIcon } from 'lucide-react';
+import { Metadata } from 'next';
+import Link from 'next/link';
+
+import { ProjectUrls, appPageTitles } from '@/constants';
+
+import PageTitle from '@/components/base/PageTitle';
+import Search from '@/components/base/Search';
+import RecipeCard from '@/components/shared/RecipeCard';
+import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
   title: appPageTitles[ProjectUrls.recipes],
@@ -33,11 +35,7 @@ export default function RecipesPage() {
         <ul className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-x-8 gap-y-20">
           {getRandomDishes(24).map((item, index) => (
             <li key={index}>
-              <RecipeCard
-                name={item.name}
-                imageUrl={item.imageUrl}
-                isAuthor={index % 2 === 0}
-              />
+              <RecipeCard name={item.name} imageUrl={item.imageUrl} isAuthor={index % 2 === 0} />
             </li>
           ))}
         </ul>
@@ -50,49 +48,47 @@ export default function RecipesPage() {
 
 function getRandomDishes(count: number) {
   const dishNames = [
-    "Crispy Zucchini Tempura",
-    "Spicy Mango Curry",
-    "Honey Glazed Chicken Tenders",
-    "Lemon Basil Panna Cotta",
-    "Maple Roasted Pumpkin Soup",
-    "Saffron Infused Risotto",
-    "Coconut Lime Shrimp Skewers",
-    "Blueberry Lavender Tart",
-    "Chimichurri Grilled Steak",
-    "Ginger Sesame Noodles",
-    "Balsamic Fig Bruschetta",
-    "Smoked Paprika Salmon",
-    "Truffle Parmesan Fries",
-    "Miso Glazed Eggplant",
-    "Raspberry White Chocolate Mousse",
-    "Peanut Butter Banana Smoothie",
-    "Caramelized Onion Tart",
-    "Pumpkin Spice Latte",
-    "Mushroom Stroganoff",
-    "Candied Pecan Salad",
-    "Cajun Jambalaya",
-    "Peach Basil Sorbet",
-    "Mint Chocolate Chip Ice Cream",
-    "Pistachio Crusted Halibut",
-    "Sesame Ginger Tofu",
-    "Pineapple Coconut Cake",
-    "Lavender Lemonade",
-    "Cilantro Lime Chicken",
-    "Raspberry Almond Tart",
-    "Pumpkin Sage Risotto",
-    "Mango Coconut Smoothie",
-    "Spicy Peanut Noodles",
-    "Peach Basil Sorbet",
-    "Mint Chocolate Chip Ice Cream",
-    "Pistachio Crusted Halibut",
+    'Crispy Zucchini Tempura',
+    'Spicy Mango Curry',
+    'Honey Glazed Chicken Tenders',
+    'Lemon Basil Panna Cotta',
+    'Maple Roasted Pumpkin Soup',
+    'Saffron Infused Risotto',
+    'Coconut Lime Shrimp Skewers',
+    'Blueberry Lavender Tart',
+    'Chimichurri Grilled Steak',
+    'Ginger Sesame Noodles',
+    'Balsamic Fig Bruschetta',
+    'Smoked Paprika Salmon',
+    'Truffle Parmesan Fries',
+    'Miso Glazed Eggplant',
+    'Raspberry White Chocolate Mousse',
+    'Peanut Butter Banana Smoothie',
+    'Caramelized Onion Tart',
+    'Pumpkin Spice Latte',
+    'Mushroom Stroganoff',
+    'Candied Pecan Salad',
+    'Cajun Jambalaya',
+    'Peach Basil Sorbet',
+    'Mint Chocolate Chip Ice Cream',
+    'Pistachio Crusted Halibut',
+    'Sesame Ginger Tofu',
+    'Pineapple Coconut Cake',
+    'Lavender Lemonade',
+    'Cilantro Lime Chicken',
+    'Raspberry Almond Tart',
+    'Pumpkin Sage Risotto',
+    'Mango Coconut Smoothie',
+    'Spicy Peanut Noodles',
+    'Peach Basil Sorbet',
+    'Mint Chocolate Chip Ice Cream',
+    'Pistachio Crusted Halibut',
   ];
 
   // Helper function to generate a single random dish
   const getRandomDish = () => {
     const randomName = dishNames[Math.floor(Math.random() * dishNames.length)];
-    const imageUrl = `https://picsum.photos/id/${
-      Math.floor(Math.random() * 1000) + 1
-    }/300/300`;
+    const imageUrl = `https://picsum.photos/id/${Math.floor(Math.random() * 1000) + 1}/300/300`;
     return {
       name: randomName,
       imageUrl: imageUrl,
