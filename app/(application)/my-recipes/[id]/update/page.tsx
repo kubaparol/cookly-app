@@ -18,7 +18,7 @@ export default async function EditRecipePage(props: PageProps) {
 
   return (
     <section className="grid gap-6">
-      <PageTitle custom="Edit Recipe" />
+      <PageTitle title="Edit Recipe" />
 
       <RecipeForm
         id={id}

@@ -12,5 +12,3 @@ export const ProjectUrls = Object.freeze({
   createRecipe: '/my-recipes/create',
   updateRecipe: (id: string) => `/my-recipes/${id}/update`,
 });
-
-export type ProjectUrlType = Extract<(typeof ProjectUrls)[keyof typeof ProjectUrls], string>;

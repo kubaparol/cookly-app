@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { ProjectUrls, appPageTitles } from '@/constants';
+import { ProjectUrls } from '@/constants';
 
 import { getMyRecipes } from '@/db';
 
@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import { PageProps } from '@/types';
 
 export const metadata: Metadata = {
-  title: appPageTitles[ProjectUrls.myRecipes],
+  title: 'My Recipes',
 };
 
 export default async function RecipesPage(props: PageProps) {
@@ -30,7 +30,7 @@ export default async function RecipesPage(props: PageProps) {
   return (
     <section className="grid gap-24 pb-8">
       <header className="grid gap-3">
-        <PageTitle />
+        <PageTitle title="My Recipes" />
 
         <div className="flex flex-col-reverse items-center gap-4 sm:flex-row sm:gap-8">
           <Search placeholder="Search recipes..." />
