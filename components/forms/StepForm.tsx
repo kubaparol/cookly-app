@@ -19,6 +19,7 @@ export const StepFormSchema = z.object({
     .string()
     .min(3, 'Description must be at least 3 characters')
     .max(1000, 'Description must be at most 1000 characters'),
+  order: z.number().int(),
 });
 
 export type StepFormValues = z.infer<typeof StepFormSchema>;
@@ -33,6 +34,7 @@ export default function StepForm(props: StepFormProps) {
     defaultValues: defaultValues || {
       id: id,
       description: '',
+      order: 0,
     },
   });
 

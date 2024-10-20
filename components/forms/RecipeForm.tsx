@@ -8,6 +8,8 @@ import { z } from 'zod';
 
 import { useUploadThing } from '@/lib/uploadthing';
 
+import { createRecipe } from '@/db';
+
 import FileUploader from '../base/FileUploader';
 import {
   AlertDialog,
@@ -90,7 +92,7 @@ export default function RecipeForm(props: RecipeFormProps) {
       uploadedImageUrl = uploadedImages[0].url;
     }
 
-    console.log({ ...values, imageUrl: uploadedImageUrl });
+    await createRecipe({ ...values, imageUrl: uploadedImageUrl });
   };
 
   const itemFormSubmitHandler = (values: IngredientFormValues | StepFormValues) => {
@@ -122,7 +124,10 @@ export default function RecipeForm(props: RecipeFormProps) {
 
     // edit
     if (itemToAdd === 'step') {
-      form.setValue('steps', [...form.getValues().steps, values as StepFormValues]);
+      form.setValue('steps', [
+        ...form.getValues().steps,
+        { ...(values as StepFormValues), order: form.getValues().steps.length + 1 },
+      ]);
       form.trigger('steps');
       setItemToAdd(null);
 

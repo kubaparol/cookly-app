@@ -4,8 +4,8 @@ import { eq } from 'drizzle-orm';
 
 import { handleError } from '@/utils';
 
+import { users } from '@/db';
 import { db } from '@/db/drizzle';
-import { users } from '@/db/schema';
 
 import { CreateUserParams, UpdateUserParams } from './user.types';
 
