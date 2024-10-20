@@ -4,6 +4,8 @@ import Link from 'next/link';
 
 import { ProjectUrls, appPageTitles } from '@/constants';
 
+import { getMyRecipes } from '@/db';
+
 import PageTitle from '@/components/base/PageTitle';
 import Search from '@/components/base/Search';
 import RecipeCard from '@/components/shared/RecipeCard';
@@ -13,7 +15,9 @@ export const metadata: Metadata = {
   title: appPageTitles[ProjectUrls.myRecipes],
 };
 
-export default function RecipesPage() {
+export default async function RecipesPage() {
+  const recipes = await getMyRecipes();
+
   return (
     <section className="grid gap-24 pb-8">
       <header className="grid gap-3">
@@ -32,10 +36,10 @@ export default function RecipesPage() {
       </header>
 
       <div className="grid gap-10">
-        <ul className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-x-8 gap-y-20">
-          {getRandomDishes(24).map((item, index) => (
+        <ul className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-x-8 gap-y-20">
+          {recipes?.map((item, index) => (
             <li key={index}>
-              <RecipeCard name={item.name} imageUrl={item.imageUrl} isAuthor={index % 2 === 0} />
+              <RecipeCard title={item.title} imageUrl={item.imageUrl} isAuthor={index % 2 === 0} />
             </li>
           ))}
         </ul>
