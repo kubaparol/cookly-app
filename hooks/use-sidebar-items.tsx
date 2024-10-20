@@ -24,8 +24,8 @@ export const useSidebarItems = () => {
         icon: Home,
       },
       {
-        label: 'Recipes',
-        url: ProjectUrls.recipes,
+        label: 'My Recipes',
+        url: ProjectUrls.myRecipes,
         icon: ScrollText,
       },
     ],

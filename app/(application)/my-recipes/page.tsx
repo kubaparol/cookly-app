@@ -10,7 +10,7 @@ import RecipeCard from '@/components/shared/RecipeCard';
 import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
-  title: appPageTitles[ProjectUrls.recipes],
+  title: appPageTitles[ProjectUrls.myRecipes],
 };
 
 export default function RecipesPage() {

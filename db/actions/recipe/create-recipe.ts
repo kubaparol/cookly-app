@@ -4,10 +4,8 @@ import { currentUser } from '@clerk/nextjs/server';
 
 import { handleError } from '@/utils';
 
-import { ingredients, recipes, steps } from '@/db';
+import { CreateRecipeParams, ingredients, recipes, steps } from '@/db';
 import { db } from '@/db/drizzle';
-
-import { CreateRecipeParams } from './recipe.types';
 
 export async function createRecipe(recipe: CreateRecipeParams) {
   try {
