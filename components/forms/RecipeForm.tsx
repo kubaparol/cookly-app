@@ -11,7 +11,7 @@ import { useUploadThing } from '@/lib/uploadthing';
 
 import { ProjectUrls } from '@/constants';
 
-import { createRecipe } from '@/db';
+import { createRecipe, getOneRecipe, updateRecipe } from '@/db';
 
 import FileUploader from '../base/FileUploader';
 import {
@@ -52,10 +52,12 @@ export type RecipeFormValues = z.infer<typeof recipeFormSchema>;
 
 interface RecipeFormProps {
   type: 'Create' | 'Update';
+  id?: string;
+  defaultValues?: Partial<RecipeFormValues>;
 }
 
 export default function RecipeForm(props: RecipeFormProps) {
-  const { type } = props;
+  const { type, id, defaultValues } = props;
 
   const router = useRouter();
 
@@ -75,7 +77,7 @@ export default function RecipeForm(props: RecipeFormProps) {
 
   const form = useForm<RecipeFormValues>({
     resolver: zodResolver(recipeFormSchema),
-    defaultValues: {
+    defaultValues: defaultValues || {
       title: '',
       description: undefined,
       imageUrl: '',
@@ -90,6 +92,8 @@ export default function RecipeForm(props: RecipeFormProps) {
     let uploadedImageUrl = values.imageUrl;
 
     if (files.length > 0) {
+      if (defaultValues && uploadedImageUrl === defaultValues.imageUrl) return;
+
       const uploadedImages = await startUpload(files);
 
       if (!uploadedImages) return;
@@ -97,9 +101,22 @@ export default function RecipeForm(props: RecipeFormProps) {
       uploadedImageUrl = uploadedImages[0].url;
     }
 
-    const newRecipe = await createRecipe({ ...values, imageUrl: uploadedImageUrl });
+    const recipeValues = { ...values, imageUrl: uploadedImageUrl };
 
-    if (newRecipe) {
+    let recipe;
+
+    if (type === 'Create') {
+      recipe = await createRecipe(recipeValues);
+    }
+
+    if (type === 'Update') {
+      recipe = await updateRecipe({
+        id: id!,
+        ...recipeValues,
+      });
+    }
+
+    if (recipe) {
       router.push(ProjectUrls.myRecipes);
     }
   };

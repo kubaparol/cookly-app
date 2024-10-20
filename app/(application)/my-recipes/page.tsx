@@ -49,6 +49,7 @@ export default async function RecipesPage(props: PageProps) {
           {recipes?.map((recipe, index) => (
             <li key={index}>
               <RecipeCard
+                id={recipe.id}
                 title={recipe.title}
                 imageUrl={recipe.imageUrl}
                 isAuthor={user.id === recipe.authorId}

@@ -4,10 +4,16 @@ import { usePathname } from 'next/navigation';
 
 import { ProjectUrlType, appPageTitles, libreBaskerville } from '@/constants';
 
-export default function PageTitle() {
+interface PageTitleProps {
+  custom?: string;
+}
+
+export default function PageTitle(props: PageTitleProps) {
+  const { custom } = props;
+
   const pathname = usePathname();
 
-  const title = appPageTitles[pathname as ProjectUrlType];
+  let title = custom ?? appPageTitles[pathname as ProjectUrlType];
 
   if (!title) return null;
 

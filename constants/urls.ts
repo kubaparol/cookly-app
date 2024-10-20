@@ -10,6 +10,7 @@ export const ProjectUrls = Object.freeze({
   dashboard: '/dashboard',
   myRecipes: '/my-recipes',
   createRecipe: '/my-recipes/create',
+  updateRecipe: (id: string) => `/my-recipes/${id}/update`,
 });
 
-export type ProjectUrlType = (typeof ProjectUrls)[keyof typeof ProjectUrls];
+export type ProjectUrlType = Extract<(typeof ProjectUrls)[keyof typeof ProjectUrls], string>;
