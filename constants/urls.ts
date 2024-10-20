@@ -1,15 +1,15 @@
 export const ProjectUrls = Object.freeze({
   // landing page
-  home: "/",
+  home: '/',
 
   // auth
-  signIn: "/sign-in",
-  signUp: "/sign-up",
+  signIn: '/sign-in',
+  signUp: '/sign-up',
 
   // app
-  dashboard: "/dashboard",
-  recipes: "/recipes",
-  createRecipe: "/recipes/create",
+  dashboard: '/dashboard',
+  recipes: '/recipes',
+  createRecipe: '/recipes/create',
 });
 
 export type ProjectUrlType = (typeof ProjectUrls)[keyof typeof ProjectUrls];

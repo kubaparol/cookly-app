@@ -1,8 +1,9 @@
-import { ComponentType, useMemo } from "react";
-import { Home, LucideProps, PowerIcon, ScrollText } from "lucide-react";
-import { usePathname } from "next/navigation";
-import { ProjectUrls } from "@/constants/urls";
-import { useClerk } from "@clerk/nextjs";
+import { useClerk } from '@clerk/nextjs';
+import { Home, LucideProps, PowerIcon, ScrollText } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { ComponentType, useMemo } from 'react';
+
+import { ProjectUrls } from '@/constants/urls';
 
 export interface SidebarItemEntity {
   label: string;
@@ -18,28 +19,28 @@ export const useSidebarItems = () => {
   const topItems = useMemo<SidebarItemEntity[]>(
     () => [
       {
-        label: "Dashboard",
+        label: 'Dashboard',
         url: ProjectUrls.dashboard,
         icon: Home,
       },
       {
-        label: "Recipes",
+        label: 'Recipes',
         url: ProjectUrls.recipes,
         icon: ScrollText,
       },
     ],
-    []
+    [],
   );
 
   const bottomItems = useMemo<SidebarItemEntity[]>(
     () => [
       {
-        label: "Sign Out",
+        label: 'Sign Out',
         onClick: () => signOut({ redirectUrl: ProjectUrls.home }),
         icon: PowerIcon,
       },
     ],
-    [signOut]
+    [signOut],
   );
 
   const currentItem = useMemo(() => {

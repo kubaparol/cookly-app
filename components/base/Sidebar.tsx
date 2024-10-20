@@ -1,9 +1,12 @@
-import { SidebarItemEntity } from "@/hooks";
-import { cn } from "@/utils";
-import { ComponentPropsWithoutRef } from "react";
-import SidebarItem from "./SidebarItem";
+import { ComponentPropsWithoutRef } from 'react';
 
-export interface SidebarProps extends ComponentPropsWithoutRef<"nav"> {
+import { SidebarItemEntity } from '@/hooks';
+
+import { cn } from '@/utils';
+
+import SidebarItem from './SidebarItem';
+
+export interface SidebarProps extends ComponentPropsWithoutRef<'nav'> {
   topItems: SidebarItemEntity[];
   bottomItems: SidebarItemEntity[];
   onClose?: () => void;
@@ -15,11 +18,7 @@ export default function Sidebar(props: SidebarProps) {
   return (
     <nav
       {...rest}
-      className={cn(
-        "flex flex-col h-full justify-between pt-8 md:pt-0 gap-2",
-        className
-      )}
-    >
+      className={cn('flex h-full flex-col justify-between gap-2 pt-8 md:pt-0', className)}>
       <ul className="grid gap-2">
         {topItems.map((link, index) => (
           <SidebarItem key={index} link={link} onClick={onClose} />

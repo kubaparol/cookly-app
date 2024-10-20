@@ -1,5 +1,6 @@
-import { cn } from "@/utils";
-import Image from "next/image";
+import Image from 'next/image';
+
+import { cn } from '@/utils';
 
 interface LogoProps {
   className?: string;
@@ -14,7 +15,7 @@ export default function Logo(props: LogoProps) {
       alt="Cookly Home"
       width={150}
       height={150}
-      className={cn("", className)}
+      className={cn('', className)}
     />
   );
 }

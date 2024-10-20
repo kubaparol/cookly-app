@@ -1,18 +1,19 @@
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import Image from 'next/image';
+
+import { Button } from '@/components/ui/button';
 
 export default async function HomePage() {
   return (
     <section className="wrapper">
       <div className="wrapper grid grid-cols-1 gap-5 md:grid-cols-2 2xl:gap-0">
         <div className="flex flex-col justify-center gap-8">
-          <h1 className="font-bold text-[40px] leading-[48px] lg:text-[48px] lg:leading-[60px] xl:text-[58px] xl:leading-[74px]">
+          <h1 className="text-[40px] font-bold leading-[48px] lg:text-[48px] lg:leading-[60px] xl:text-[58px] xl:leading-[74px]">
             Welcome to Cookly!
           </h1>
 
           <p className="text-[20px] font-normal leading-[30px] tracking-[2%] md:text-[24px] md:leading-[36px]">
-            Cookly is a platform for food lovers. Share your recipes, discover
-            new ones, and connect with other foodies.
+            Cookly is a platform for food lovers. Share your recipes, discover new ones, and connect
+            with other foodies.
           </p>
 
           <Button size="lg" className="w-full sm:w-fit">

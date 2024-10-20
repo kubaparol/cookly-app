@@ -1,15 +1,17 @@
-import type { Metadata } from "next";
-import "@/styles/globals.css";
-import { inter } from "@/constants";
-import { ClerkProvider } from "@clerk/nextjs";
-import { ReactNode } from "react";
+import { ClerkProvider } from '@clerk/nextjs';
+import type { Metadata } from 'next';
+import { ReactNode } from 'react';
+
+import '@/styles/globals.css';
+
+import { inter } from '@/constants';
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | Cookly",
-    default: "Cookly",
+    template: '%s | Cookly',
+    default: 'Cookly',
   },
-  description: "Cookly is a recipe sharing platform.",
+  description: 'Cookly is a recipe sharing platform.',
 };
 
 interface RootLayoutProps {

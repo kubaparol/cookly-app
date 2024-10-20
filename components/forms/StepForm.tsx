@@ -1,17 +1,11 @@
-import { z } from "zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, ButtonProps } from "../ui/button";
-import { useId } from "react";
-import { Textarea } from "../ui/textarea";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useId } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { Button, ButtonProps } from '../ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Textarea } from '../ui/textarea';
 
 interface StepFormProps {
   leftButton?: ButtonProps;
@@ -23,8 +17,8 @@ export const StepFormSchema = z.object({
   id: z.string(),
   description: z
     .string()
-    .min(3, "Description must be at least 3 characters")
-    .max(1000, "Description must be at most 1000 characters"),
+    .min(3, 'Description must be at least 3 characters')
+    .max(1000, 'Description must be at most 1000 characters'),
 });
 
 export type StepFormValues = z.infer<typeof StepFormSchema>;
@@ -38,7 +32,7 @@ export default function StepForm(props: StepFormProps) {
     resolver: zodResolver(StepFormSchema),
     defaultValues: defaultValues || {
       id: id,
-      description: "",
+      description: '',
     },
   });
 

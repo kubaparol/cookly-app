@@ -1,13 +1,16 @@
-"use client";
+'use client';
 
-import { ReactNode, useState } from "react";
-import { useSidebarItems } from "@/hooks";
-import Link from "next/link";
-import { Menu } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
-import { ProjectUrls } from "@/constants/urls";
-import Logo from "../base/Logo";
-import Sidebar from "../base/Sidebar";
+import { Menu } from 'lucide-react';
+import Link from 'next/link';
+import { ReactNode, useState } from 'react';
+
+import { useSidebarItems } from '@/hooks';
+
+import { ProjectUrls } from '@/constants/urls';
+
+import Logo from '../base/Logo';
+import Sidebar from '../base/Sidebar';
+import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 
 interface AppLayoutProps {
   readonly children: ReactNode;
@@ -21,13 +24,13 @@ export default function AppLayout(props: AppLayoutProps) {
 
   return (
     <>
-      <div className="border-b flex justify-between py-2 px-6 md:hidden">
+      <div className="flex justify-between border-b px-6 py-2 md:hidden">
         <Link href={ProjectUrls.home} title="Cookly Home">
           <Logo className="max-w-[100px]" />
         </Link>
 
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger className="md:hidden ml-auto">
+          <SheetTrigger className="ml-auto md:hidden">
             <Menu />
           </SheetTrigger>
 
@@ -42,23 +45,18 @@ export default function AppLayout(props: AppLayoutProps) {
       </div>
 
       <div className="flex h-screen overflow-hidden">
-        <div className="hidden md:flex flex-col w-full md:w-64 px-3 py-4 md:px-2">
+        <div className="hidden w-full flex-col px-3 py-4 md:flex md:w-64 md:px-2">
           <Link
             href={ProjectUrls.home}
             title="Cookly Home"
-            className="mb-2 grid place-items-center rounded-md bg-primary-100 p-4"
-          >
+            className="mb-2 grid place-items-center rounded-md bg-primary-100 p-4">
             <Logo className="max-w-[140px]" />
           </Link>
 
-          <Sidebar
-            topItems={topItems}
-            bottomItems={bottomItems}
-            onClose={() => setIsOpen(false)}
-          />
+          <Sidebar topItems={topItems} bottomItems={bottomItems} onClose={() => setIsOpen(false)} />
         </div>
 
-        <div className="min-h-[calc(100vh-(56px))] md:min-h-[calc(100vh)] px-3 py-4 sm:px-6 flex-1 overflow-y-scroll">
+        <div className="min-h-[calc(100vh-(56px))] flex-1 overflow-y-scroll px-3 py-4 sm:px-6 md:min-h-[calc(100vh)]">
           {children}
         </div>
       </div>

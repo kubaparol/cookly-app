@@ -1,7 +1,7 @@
-import { ProjectUrls, ProjectUrlType } from "./urls";
+import { ProjectUrlType, ProjectUrls } from './urls';
 
 export const appPageTitles: Partial<Record<ProjectUrlType, string>> = {
-  [ProjectUrls.dashboard]: "Dashboard",
-  [ProjectUrls.recipes]: "Recipes",
-  [ProjectUrls.createRecipe]: "Create Recipe",
+  [ProjectUrls.dashboard]: 'Dashboard',
+  [ProjectUrls.recipes]: 'Recipes',
+  [ProjectUrls.createRecipe]: 'Create Recipe',
 };

@@ -1,9 +1,11 @@
-"use client";
+'use client';
 
-import { Search as SearchIcon } from "lucide-react";
-import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import { useCallback } from "react";
-import { Input } from "../ui/input";
+import { Search as SearchIcon } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback } from 'react';
+
+import { Input } from '../ui/input';
+
 // import { useDebouncedCallback } from "use-debounce";
 
 interface SearchProps {
@@ -22,16 +24,16 @@ export default function Search(props: SearchProps) {
     (term: string) => {
       const params = new URLSearchParams(searchParams);
 
-      params.set("page", "1");
+      params.set('page', '1');
 
       if (term) {
-        params.set("query", term);
+        params.set('query', term);
       } else {
-        params.delete("query");
+        params.delete('query');
       }
       replace(`${pathname}?${params.toString()}`);
     },
-    [pathname, replace, searchParams]
+    [pathname, replace, searchParams],
   );
   // }, 300);
 
@@ -42,7 +44,7 @@ export default function Search(props: SearchProps) {
       onChange={(e) => {
         handleSearch(e.target.value);
       }}
-      defaultValue={searchParams.get("query")?.toString()}
+      defaultValue={searchParams.get('query')?.toString()}
     />
   );
 }

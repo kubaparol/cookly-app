@@ -1,10 +1,13 @@
-"use server";
+'use server';
 
-import { handleError } from "@/utils";
-import { eq } from "drizzle-orm";
-import { CreateUserParams, UpdateUserParams } from "./user.types";
-import { users } from "@/db/schema";
-import { db } from "@/db/drizzle";
+import { eq } from 'drizzle-orm';
+
+import { handleError } from '@/utils';
+
+import { db } from '@/db/drizzle';
+import { users } from '@/db/schema';
+
+import { CreateUserParams, UpdateUserParams } from './user.types';
 
 export async function createUser(user: CreateUserParams) {
   try {
@@ -24,7 +27,7 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
       .where(eq(users.clerkId, clerkId))
       .returning();
 
-    if (!updatedUser) throw new Error("User update failed");
+    if (!updatedUser) throw new Error('User update failed');
 
     return JSON.parse(JSON.stringify(updatedUser));
   } catch (error) {
@@ -34,13 +37,10 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
 
 export async function deleteUser(clerkId: string) {
   try {
-    const [deletedUser] = await db
-      .delete(users)
-      .where(eq(users.clerkId, clerkId))
-      .returning();
+    const [deletedUser] = await db.delete(users).where(eq(users.clerkId, clerkId)).returning();
 
     if (!deletedUser) {
-      throw new Error("User not found");
+      throw new Error('User not found');
     }
 
     return deletedUser ? JSON.parse(JSON.stringify(deletedUser)) : null;

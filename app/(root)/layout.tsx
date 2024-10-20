@@ -1,5 +1,6 @@
-import HomeLayout from "@/components/layouts/HomeLayout";
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
+
+import HomeLayout from '@/components/layouts/HomeLayout';
 
 interface RootLayoutProps {
   readonly children: ReactNode;

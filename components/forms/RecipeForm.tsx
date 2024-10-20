@@ -1,67 +1,52 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { Loader2, Pencil, Plus, X } from "lucide-react";
-import { Textarea } from "../ui/textarea";
-import IngredientForm, {
-  ingredientFormSchema,
-  IngredientFormValues,
-} from "./IngredientForm";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2, Pencil, Plus, X } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { useUploadThing } from '@/lib/uploadthing';
+
+import FileUploader from '../base/FileUploader';
 import {
   AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogTitle,
-} from "../ui/alert-dialog";
-import { useState } from "react";
-import { Badge } from "../ui/badge";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
-import StepForm, { StepFormSchema, StepFormValues } from "./StepForm";
-import FileUploader from "../base/FileUploader";
-import { useUploadThing } from "@/app/lib/uploadthing";
+} from '../ui/alert-dialog';
+import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Input } from '../ui/input';
+import { Textarea } from '../ui/textarea';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
+import IngredientForm, { IngredientFormValues, ingredientFormSchema } from './IngredientForm';
+import StepForm, { StepFormSchema, StepFormValues } from './StepForm';
 
 const recipeFormSchema = z.object({
   title: z
     .string()
-    .min(3, "Title must be at least 3 characters")
-    .max(255, "Title must be at most 255 characters"),
+    .min(3, 'Title must be at least 3 characters')
+    .max(255, 'Title must be at most 255 characters'),
   description: z
     .string()
-    .min(10, "Description must be at least 10 characters")
-    .max(500, "Description must be at most 500 characters")
+    .min(10, 'Description must be at least 10 characters')
+    .max(500, 'Description must be at most 500 characters')
     .optional(),
-  imageUrl: z.string().min(1, "Image is required"),
-  ingredients: z
-    .array(ingredientFormSchema)
-    .min(1, "At least one ingredient is required"),
-  steps: z.array(StepFormSchema).min(1, "At least one step is required"),
+  imageUrl: z.string().min(1, 'Image is required'),
+  ingredients: z.array(ingredientFormSchema).min(1, 'At least one ingredient is required'),
+  steps: z.array(StepFormSchema).min(1, 'At least one step is required'),
 });
 
 export type RecipeFormValues = z.infer<typeof recipeFormSchema>;
 
 interface RecipeFormProps {
-  type: "Create" | "Update";
+  type: 'Create' | 'Update';
 }
 
 export default function RecipeForm(props: RecipeFormProps) {
@@ -69,32 +54,30 @@ export default function RecipeForm(props: RecipeFormProps) {
 
   const [files, setFiles] = useState<File[]>([]);
 
-  const [itemToAdd, setItemToAdd] = useState<"ingredient" | "step" | null>(
-    null
-  );
+  const [itemToAdd, setItemToAdd] = useState<'ingredient' | 'step' | null>(null);
 
   const [itemToEdit, setItemToEdit] = useState<{
     item: IngredientFormValues | StepFormValues;
-    type: "ingredient" | "step";
+    type: 'ingredient' | 'step';
   } | null>(null);
 
   const [itemIdToDelete, setItemIdToDelete] = useState<{
     id: string;
-    type: "ingredient" | "step";
+    type: 'ingredient' | 'step';
   } | null>(null);
 
   const form = useForm<RecipeFormValues>({
     resolver: zodResolver(recipeFormSchema),
     defaultValues: {
-      title: "",
+      title: '',
       description: undefined,
-      imageUrl: "",
+      imageUrl: '',
       ingredients: [],
       steps: [],
     },
   });
 
-  const { startUpload } = useUploadThing("imageUploader");
+  const { startUpload } = useUploadThing('imageUploader');
 
   const onSubmit = async (values: RecipeFormValues) => {
     let uploadedImageUrl = values.imageUrl;
@@ -110,32 +93,27 @@ export default function RecipeForm(props: RecipeFormProps) {
     console.log({ ...values, imageUrl: uploadedImageUrl });
   };
 
-  const itemFormSubmitHandler = (
-    values: IngredientFormValues | StepFormValues
-  ) => {
+  const itemFormSubmitHandler = (values: IngredientFormValues | StepFormValues) => {
     // add new
-    if (itemToAdd === "ingredient") {
-      form.setValue("ingredients", [
+    if (itemToAdd === 'ingredient') {
+      form.setValue('ingredients', [
         ...form.getValues().ingredients,
         values as IngredientFormValues,
       ]);
-      form.trigger("ingredients");
+      form.trigger('ingredients');
       setItemToAdd(null);
 
       return;
     }
 
-    if (itemToEdit?.type === "ingredient") {
+    if (itemToEdit?.type === 'ingredient') {
       const ingredients = form.getValues().ingredients;
-      const ingredientToUpdateIndex = ingredients.findIndex(
-        (i) => i.id === values.id
-      );
+      const ingredientToUpdateIndex = ingredients.findIndex((i) => i.id === values.id);
 
       if (ingredientToUpdateIndex !== -1) {
         const updatedIngredients = [...ingredients];
-        updatedIngredients[ingredientToUpdateIndex] =
-          values as IngredientFormValues;
-        form.setValue("ingredients", updatedIngredients);
+        updatedIngredients[ingredientToUpdateIndex] = values as IngredientFormValues;
+        form.setValue('ingredients', updatedIngredients);
         setItemToEdit(null);
 
         return;
@@ -143,25 +121,22 @@ export default function RecipeForm(props: RecipeFormProps) {
     }
 
     // edit
-    if (itemToAdd === "step") {
-      form.setValue("steps", [
-        ...form.getValues().steps,
-        values as StepFormValues,
-      ]);
-      form.trigger("steps");
+    if (itemToAdd === 'step') {
+      form.setValue('steps', [...form.getValues().steps, values as StepFormValues]);
+      form.trigger('steps');
       setItemToAdd(null);
 
       return;
     }
 
-    if (itemToEdit?.type === "step") {
+    if (itemToEdit?.type === 'step') {
       const steps = form.getValues().steps;
       const stepToUpdateIndex = steps.findIndex((i) => i.id === values.id);
 
       if (stepToUpdateIndex !== -1) {
         const updatedSteps = [...steps];
         updatedSteps[stepToUpdateIndex] = values as StepFormValues;
-        form.setValue("steps", updatedSteps);
+        form.setValue('steps', updatedSteps);
         setItemToEdit(null);
 
         return;
@@ -170,25 +145,23 @@ export default function RecipeForm(props: RecipeFormProps) {
   };
 
   const deleteItem = () => {
-    if (itemIdToDelete?.type === "ingredient") {
+    if (itemIdToDelete?.type === 'ingredient') {
       const ingredients = form.getValues().ingredients;
-      const updatedIngredients = ingredients.filter(
-        (i) => i.id !== itemIdToDelete.id
-      );
-      form.setValue("ingredients", updatedIngredients);
+      const updatedIngredients = ingredients.filter((i) => i.id !== itemIdToDelete.id);
+      form.setValue('ingredients', updatedIngredients);
 
       if (form.formState.isSubmitted) {
-        form.trigger("ingredients");
+        form.trigger('ingredients');
       }
     }
 
-    if (itemIdToDelete?.type === "step") {
+    if (itemIdToDelete?.type === 'step') {
       const steps = form.getValues().steps;
       const updatedSteps = steps.filter((i) => i.id !== itemIdToDelete?.id);
-      form.setValue("steps", updatedSteps);
+      form.setValue('steps', updatedSteps);
 
       if (form.formState.isSubmitted) {
-        form.trigger("steps");
+        form.trigger('steps');
       }
     }
 
@@ -207,15 +180,12 @@ export default function RecipeForm(props: RecipeFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  <span className="text-red-500 text-[18px]">*</span>
+                  <span className="text-[18px] text-red-500">*</span>
                   Title
                 </FormLabel>
 
                 <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="e.g., Classic Spaghetti Bolognese"
-                  />
+                  <Input {...field} placeholder="e.g., Classic Spaghetti Bolognese" />
                 </FormControl>
 
                 <FormMessage />
@@ -248,7 +218,7 @@ export default function RecipeForm(props: RecipeFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  <span className="text-red-500 text-[18px]">*</span>
+                  <span className="text-[18px] text-red-500">*</span>
                   Image
                 </FormLabel>
 
@@ -270,27 +240,22 @@ export default function RecipeForm(props: RecipeFormProps) {
             render={({ field }) => (
               <FormItem className="w-fulls">
                 <FormLabel>
-                  <span className="text-red-500 text-[18px]">*</span>
+                  <span className="text-[18px] text-red-500">*</span>
                   Ingredients
                 </FormLabel>
 
-                <div className="border p-4 rounded-lg grid gap-5 shadow-sm">
+                <div className="grid gap-5 rounded-lg border p-4 shadow-sm">
                   {field.value.length === 0 && (
-                    <p className="text-muted-foreground text-sm italic">
-                      No ingredients added
-                    </p>
+                    <p className="text-sm italic text-muted-foreground">No ingredients added</p>
                   )}
 
                   {field.value.length > 0 && (
-                    <ul className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <ul className="grid grid-cols-1 gap-4 lg:grid-cols-3">
                       {field.value.map((field, index) => (
                         <li key={index}>
-                          <Badge
-                            variant="secondary"
-                            className="flex gap-3 justify-between"
-                          >
+                          <Badge variant="secondary" className="flex justify-between gap-3">
                             <p className="text-sm">
-                              {field.quantity} {field.unit}{" "}
+                              {field.quantity} {field.unit}{' '}
                               <span className="font-light">{field.name}</span>
                             </p>
 
@@ -305,10 +270,9 @@ export default function RecipeForm(props: RecipeFormProps) {
                                       onClick={() =>
                                         setItemToEdit({
                                           item: field,
-                                          type: "ingredient",
+                                          type: 'ingredient',
                                         })
-                                      }
-                                    >
+                                      }>
                                       <Pencil className="size-4" />
                                     </Button>
                                   </TooltipTrigger>
@@ -328,10 +292,9 @@ export default function RecipeForm(props: RecipeFormProps) {
                                       onClick={() =>
                                         setItemIdToDelete({
                                           id: field.id,
-                                          type: "ingredient",
+                                          type: 'ingredient',
                                         })
-                                      }
-                                    >
+                                      }>
                                       <X className="size-4" />
                                     </Button>
                                   </TooltipTrigger>
@@ -349,9 +312,8 @@ export default function RecipeForm(props: RecipeFormProps) {
                   <Button
                     size="sm"
                     type="button"
-                    onClick={() => setItemToAdd("ingredient")}
-                    className="w-fit gap-2"
-                  >
+                    onClick={() => setItemToAdd('ingredient')}
+                    className="w-fit gap-2">
                     Add Ingredient
                     <Plus className="size-4" />
                   </Button>
@@ -368,29 +330,22 @@ export default function RecipeForm(props: RecipeFormProps) {
             render={({ field }) => (
               <FormItem className="w-fulls">
                 <FormLabel>
-                  <span className="text-red-500 text-[18px]">*</span>
+                  <span className="text-[18px] text-red-500">*</span>
                   Steps
                 </FormLabel>
 
-                <div className="border p-4 rounded-lg grid gap-5 shadow-sm">
+                <div className="grid gap-5 rounded-lg border p-4 shadow-sm">
                   {field.value.length === 0 && (
-                    <p className="text-muted-foreground text-sm italic">
-                      No steps added
-                    </p>
+                    <p className="text-sm italic text-muted-foreground">No steps added</p>
                   )}
 
                   {field.value.length > 0 && (
                     <ol className="grid gap-4">
                       {field.value.map((field, index) => (
                         <li key={index}>
-                          <Badge
-                            variant="secondary"
-                            className="flex gap-3 justify-between"
-                          >
+                          <Badge variant="secondary" className="flex justify-between gap-3">
                             <p className="text-sm font-light">
-                              <span className="font-semibold">
-                                {index + 1}.
-                              </span>{" "}
+                              <span className="font-semibold">{index + 1}.</span>{' '}
                               {field.description}
                             </p>
 
@@ -405,10 +360,9 @@ export default function RecipeForm(props: RecipeFormProps) {
                                       onClick={() =>
                                         setItemToEdit({
                                           item: field,
-                                          type: "step",
+                                          type: 'step',
                                         })
-                                      }
-                                    >
+                                      }>
                                       <Pencil className="size-4" />
                                     </Button>
                                   </TooltipTrigger>
@@ -428,10 +382,9 @@ export default function RecipeForm(props: RecipeFormProps) {
                                       onClick={() =>
                                         setItemIdToDelete({
                                           id: field.id,
-                                          type: "step",
+                                          type: 'step',
                                         })
-                                      }
-                                    >
+                                      }>
                                       <X className="size-4" />
                                     </Button>
                                   </TooltipTrigger>
@@ -449,9 +402,8 @@ export default function RecipeForm(props: RecipeFormProps) {
                   <Button
                     size="sm"
                     type="button"
-                    onClick={() => setItemToAdd("step")}
-                    className="w-fit gap-2"
-                  >
+                    onClick={() => setItemToAdd('step')}
+                    className="w-fit gap-2">
                     Add Step
                     <Plus className="size-4" />
                   </Button>
@@ -462,14 +414,9 @@ export default function RecipeForm(props: RecipeFormProps) {
             )}
           />
 
-          <Button
-            type="submit"
-            size="lg"
-            disabled={isSubmitting}
-            className="w-fit m-auto"
-          >
+          <Button type="submit" size="lg" disabled={isSubmitting} className="m-auto w-fit">
             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {form.formState.isSubmitting ? "Submitting..." : `${type} Recipe`}
+            {form.formState.isSubmitting ? 'Submitting...' : `${type} Recipe`}
           </Button>
         </form>
       </Form>
@@ -479,42 +426,36 @@ export default function RecipeForm(props: RecipeFormProps) {
         onOpenChange={() => {
           setItemToAdd(null);
           setItemToEdit(null);
-        }}
-      >
+        }}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {itemToAdd ? "Add" : "Edit"} {itemToAdd || itemToEdit?.type}
+              {itemToAdd ? 'Add' : 'Edit'} {itemToAdd || itemToEdit?.type}
             </AlertDialogTitle>
 
             <AlertDialogDescription>
-              {itemToAdd
-                ? `Add an ${itemToAdd} to the recipe`
-                : `Edit the ${itemToEdit?.type}`}
+              {itemToAdd ? `Add an ${itemToAdd} to the recipe` : `Edit the ${itemToEdit?.type}`}
             </AlertDialogDescription>
           </AlertDialogHeader>
 
-          {(itemToAdd === "ingredient" ||
-            itemToEdit?.type === "ingredient") && (
+          {(itemToAdd === 'ingredient' || itemToEdit?.type === 'ingredient') && (
             <IngredientForm
               leftButton={{
-                variant: "outline",
+                variant: 'outline',
                 onClick: () => {
                   setItemToAdd(null);
                   setItemToEdit(null);
                 },
               }}
-              defaultValues={
-                (itemToEdit?.item as IngredientFormValues) || undefined
-              }
+              defaultValues={(itemToEdit?.item as IngredientFormValues) || undefined}
               onFormSubmit={itemFormSubmitHandler}
             />
           )}
 
-          {(itemToAdd === "step" || itemToEdit?.type === "step") && (
+          {(itemToAdd === 'step' || itemToEdit?.type === 'step') && (
             <StepForm
               leftButton={{
-                variant: "outline",
+                variant: 'outline',
                 onClick: () => {
                   setItemToAdd(null);
                   setItemToEdit(null);
@@ -527,10 +468,7 @@ export default function RecipeForm(props: RecipeFormProps) {
         </AlertDialogContent>
       </AlertDialog>
 
-      <AlertDialog
-        open={itemIdToDelete !== null}
-        onOpenChange={() => setItemIdToDelete(null)}
-      >
+      <AlertDialog open={itemIdToDelete !== null} onOpenChange={() => setItemIdToDelete(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
