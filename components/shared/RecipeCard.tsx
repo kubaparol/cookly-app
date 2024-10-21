@@ -33,7 +33,7 @@ export default function RecipeCard(props: RecipeCardProps) {
           <div className="flex gap-4 px-4 py-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             {isAuthor && (
               <Button size="sm" variant="outline" asChild>
-                <Link href={ProjectUrls.updateRecipe(id)}>
+                <Link href={ProjectUrls.editRecipe(id)}>
                   Edit
                   <Pencil className="ml-2 size-4" />
                 </Link>
