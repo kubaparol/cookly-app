@@ -9,7 +9,8 @@ interface StatusCardProps {
   message: string;
   primaryAction: {
     label: string;
-    href: string;
+    href?: string;
+    onClick?: () => void;
   };
   secondaryAction?: {
     label: string;
@@ -34,9 +35,13 @@ export default function StatusCard(props: StatusCardProps) {
       </div>
 
       <div className="mx-auto flex w-full max-w-56 flex-col space-y-2">
-        <Button asChild>
-          <Link href={primaryAction.href}>{primaryAction.label}</Link>
-        </Button>
+        {primaryAction.href ? (
+          <Button asChild>
+            <Link href={primaryAction.href}>{primaryAction.label}</Link>
+          </Button>
+        ) : (
+          <Button onClick={primaryAction.onClick}>{primaryAction.label}</Button>
+        )}
 
         {secondaryAction && (
           <Button asChild variant="outline">
