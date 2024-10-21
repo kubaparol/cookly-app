@@ -8,13 +8,13 @@ export interface SidebarItemEntity {
   label: string;
   url?: string;
   onClick?: () => void;
-  icon?: ComponentType<LucideProps>;
+  icon: ComponentType<LucideProps>;
 }
 
-export const useSidebarItems = () => {
+export const useAppSidebarItems = () => {
   const { signOut } = useClerk();
 
-  const appTopItems = useMemo<SidebarItemEntity[]>(
+  const topItems = useMemo<SidebarItemEntity[]>(
     () => [
       {
         label: 'Dashboard',
@@ -30,7 +30,7 @@ export const useSidebarItems = () => {
     [],
   );
 
-  const appBottomItems = useMemo<SidebarItemEntity[]>(
+  const bottomItems = useMemo<SidebarItemEntity[]>(
     () => [
       {
         label: 'Sign Out',
@@ -40,16 +40,5 @@ export const useSidebarItems = () => {
     ],
     [],
   );
-
-  const homeItems = useMemo<SidebarItemEntity[]>(
-    () => [
-      {
-        label: 'Recipes',
-        url: ProjectUrls.recipes,
-      },
-    ],
-    [],
-  );
-
-  return { appTopItems, appBottomItems, homeItems };
+  return { topItems, bottomItems };
 };

@@ -4,7 +4,7 @@ import { Menu } from 'lucide-react';
 import Link from 'next/link';
 import { ReactNode, useState } from 'react';
 
-import { useSidebarItems } from '@/hooks';
+import { useAppSidebarItems } from '@/hooks';
 
 import { ProjectUrls } from '@/constants/urls';
 
@@ -20,7 +20,7 @@ export default function AppLayout(props: AppLayoutProps) {
   const { children } = props;
   const [isOpen, setIsOpen] = useState(false);
 
-  const { appTopItems, appBottomItems } = useSidebarItems();
+  const { topItems, bottomItems } = useAppSidebarItems();
 
   return (
     <>
@@ -34,10 +34,10 @@ export default function AppLayout(props: AppLayoutProps) {
             <Menu />
           </SheetTrigger>
 
-          <SheetContent side="right" className="xxs:w-3/4 w-full">
+          <SheetContent side="right" className="w-full xxs:w-3/4">
             <AppSidebar
-              topItems={appTopItems}
-              bottomItems={appBottomItems}
+              topItems={topItems}
+              bottomItems={bottomItems}
               onClose={() => setIsOpen(false)}
             />
           </SheetContent>
@@ -54,8 +54,8 @@ export default function AppLayout(props: AppLayoutProps) {
           </Link>
 
           <AppSidebar
-            topItems={appTopItems}
-            bottomItems={appBottomItems}
+            topItems={topItems}
+            bottomItems={bottomItems}
             onClose={() => setIsOpen(false)}
           />
         </div>

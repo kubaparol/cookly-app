@@ -1,1 +1,1 @@
-export * from './use-sidebar-items';
+export * from './use-app-sidebar-items';
