@@ -32,7 +32,7 @@ export default function SidebarItem(props: SidebarItemProps) {
         <Link
           href={link.url}
           className={cn(
-            'w-full rounded-md px-3 py-1 transition-all duration-300 ease-in-out hover:bg-primary/30',
+            'block rounded-md px-3 py-1 transition-all duration-300 ease-in-out hover:bg-primary/30',
             isActive && design === 'link' && 'bg-primary/30',
           )}>
           {content}
