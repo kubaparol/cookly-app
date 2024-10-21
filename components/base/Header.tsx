@@ -1,4 +1,5 @@
 import { SignOutButton, SignedIn, SignedOut } from '@clerk/nextjs';
+import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
 import { ProjectUrls } from '@/constants';
@@ -15,8 +16,11 @@ export default function Header() {
 
       <SignedIn>
         <div className="flex items-center gap-4">
-          <Button asChild>
-            <Link href={ProjectUrls.dashboard}>Go to dashboard</Link>
+          <Button asChild className="group">
+            <Link href={ProjectUrls.dashboard}>
+              Dashboard
+              <ChevronRight className="ml-1 size-4 transition-all group-hover:ml-2" />
+            </Link>
           </Button>
 
           <SignOutButton>
