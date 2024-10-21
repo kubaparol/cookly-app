@@ -19,7 +19,7 @@ export default function RecipeCard(props: RecipeCardProps) {
 
   return (
     <div className="group relative overflow-hidden rounded-lg shadow-xl transition-shadow duration-300">
-      <div className="relative h-60 w-full overflow-hidden xl:h-72">
+      <div className="relative aspect-[16/9] w-full overflow-hidden">
         <Image
           src={imageUrl}
           alt={`${title} picture`}

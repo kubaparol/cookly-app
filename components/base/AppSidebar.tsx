@@ -6,13 +6,13 @@ import { cn } from '@/utils';
 
 import SidebarItem from './SidebarItem';
 
-export interface SidebarProps extends ComponentPropsWithoutRef<'nav'> {
+export interface AppSidebarProps extends ComponentPropsWithoutRef<'nav'> {
   topItems: SidebarItemEntity[];
   bottomItems: SidebarItemEntity[];
   onClose?: () => void;
 }
 
-export default function Sidebar(props: SidebarProps) {
+export default function AppSidebar(props: AppSidebarProps) {
   const { topItems, bottomItems, onClose, className, ...rest } = props;
 
   return (
@@ -21,7 +21,9 @@ export default function Sidebar(props: SidebarProps) {
       className={cn('flex h-full flex-col justify-between gap-2 pt-8 md:pt-0', className)}>
       <ul className="grid gap-2">
         {topItems.map((link, index) => (
-          <SidebarItem key={index} link={link} onClick={onClose} />
+          <li key={index}>
+            <SidebarItem design="button" link={link} onClick={onClose} />
+          </li>
         ))}
       </ul>
 
@@ -29,7 +31,9 @@ export default function Sidebar(props: SidebarProps) {
 
       <ul className="grid gap-2">
         {bottomItems.map((link, index) => (
-          <SidebarItem key={index} link={link} onClick={onClose} />
+          <li key={index}>
+            <SidebarItem design="button" link={link} onClick={onClose} />
+          </li>
         ))}
       </ul>
     </nav>

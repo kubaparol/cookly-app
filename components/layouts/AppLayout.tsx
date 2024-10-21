@@ -8,8 +8,8 @@ import { useSidebarItems } from '@/hooks';
 
 import { ProjectUrls } from '@/constants/urls';
 
+import AppSidebar from '../base/AppSidebar';
 import Logo from '../base/Logo';
-import Sidebar from '../base/Sidebar';
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 
 interface AppLayoutProps {
@@ -20,7 +20,7 @@ export default function AppLayout(props: AppLayoutProps) {
   const { children } = props;
   const [isOpen, setIsOpen] = useState(false);
 
-  const { topItems, bottomItems } = useSidebarItems();
+  const { appTopItems, appBottomItems } = useSidebarItems();
 
   return (
     <>
@@ -34,10 +34,10 @@ export default function AppLayout(props: AppLayoutProps) {
             <Menu />
           </SheetTrigger>
 
-          <SheetContent side="right">
-            <Sidebar
-              topItems={topItems}
-              bottomItems={bottomItems}
+          <SheetContent side="right" className="xxs:w-3/4 w-full">
+            <AppSidebar
+              topItems={appTopItems}
+              bottomItems={appBottomItems}
               onClose={() => setIsOpen(false)}
             />
           </SheetContent>
@@ -53,7 +53,11 @@ export default function AppLayout(props: AppLayoutProps) {
             <Logo className="max-w-[140px]" />
           </Link>
 
-          <Sidebar topItems={topItems} bottomItems={bottomItems} onClose={() => setIsOpen(false)} />
+          <AppSidebar
+            topItems={appTopItems}
+            bottomItems={appBottomItems}
+            onClose={() => setIsOpen(false)}
+          />
         </div>
 
         <div className="min-h-[calc(100vh-(56px))] flex-1 overflow-y-scroll px-3 py-4 sm:px-6 md:min-h-[calc(100vh)]">
