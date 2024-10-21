@@ -18,7 +18,7 @@ export default function RecipeCard(props: RecipeCardProps) {
 
   return (
     <div className="group relative overflow-hidden rounded-lg shadow-xl transition-shadow duration-300">
-      <div className="relative h-60 w-full overflow-hidden">
+      <div className="relative h-60 w-full overflow-hidden xl:h-72">
         <Image
           src={imageUrl}
           alt={`${title} picture`}
@@ -48,7 +48,7 @@ export default function RecipeCard(props: RecipeCardProps) {
             </Button>
           </div>
 
-          <h2 className="text-md bg-white/10 p-3 font-semibold text-white backdrop-blur-md xl:p-4 xl:text-lg">
+          <h2 className="text-md bg-white/10 p-3 font-semibold text-white backdrop-blur-lg xl:p-4 xl:text-lg">
             {title}
           </h2>
         </div>

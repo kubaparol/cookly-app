@@ -7,7 +7,7 @@ interface StatusCardProps {
   type: 'success' | 'alert';
   title: string;
   message: string;
-  primaryAction: {
+  primaryAction?: {
     label: string;
     href?: string;
     onClick?: () => void;
@@ -35,13 +35,14 @@ export default function StatusCard(props: StatusCardProps) {
       </div>
 
       <div className="mx-auto flex w-full max-w-56 flex-col space-y-2">
-        {primaryAction.href ? (
-          <Button asChild>
-            <Link href={primaryAction.href}>{primaryAction.label}</Link>
-          </Button>
-        ) : (
-          <Button onClick={primaryAction.onClick}>{primaryAction.label}</Button>
-        )}
+        {primaryAction &&
+          (primaryAction.href ? (
+            <Button asChild>
+              <Link href={primaryAction.href}>{primaryAction.label}</Link>
+            </Button>
+          ) : (
+            <Button onClick={primaryAction.onClick}>{primaryAction.label}</Button>
+          ))}
 
         {secondaryAction && (
           <Button asChild variant="outline">
