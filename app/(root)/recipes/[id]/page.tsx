@@ -1,29 +1,44 @@
 import { Dot, UtensilsCrossed } from 'lucide-react';
+import { Metadata } from 'next';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 
-const recipe = {
-  title: 'Classic Spaghetti Bolonese',
-  rating: 4.5,
-  cookTime: 30,
-  author: 'John Doe',
-  cookingTime: 30,
-  image: 'https://utfs.io/f/tn9qWFoW4N1fDPxoPyWH4Rn2ECSm31GzYqLeo7sIk0dbPjct',
-  description:
-    'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae totam repellat voluptate recusandae dignissimos dicta et consectetur. In, magnam earum. Optio deleniti velit provident consectetur minus earum natus corrupti recusandae.',
-  ingredients: new Array(9).fill(1).map(() => ({
-    id: Math.random().toString(36).substr(2, 9),
-    name: 'Ingredient',
-    quantity: Math.floor(Math.random() * 100),
-    unit: 'g',
-  })),
-  steps: new Array(3).fill(1).map(() => ({
-    id: Math.random().toString(36).substr(2, 9),
-    description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae totam repellat voluptate recusandae dignissimos dicta et consectetur. In, magnam earum. Optio deleniti velit provident consectetur minus earum natus corrupti recusandae.',
-  })),
-};
+import { getOneRecipe } from '@/db';
 
-export default function RecipePage() {
+import { PageProps } from '@/types';
+
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  const id = props.params.id as string;
+
+  const recipe = await getOneRecipe(id);
+
+  return {
+    title: recipe?.title,
+    description: recipe?.description,
+    openGraph: {
+      title: recipe?.title,
+      ...(recipe?.description && { description: recipe.description }),
+      images: [
+        {
+          url: recipe?.imageUrl!,
+          width: 800,
+          height: 600,
+          alt: `${recipe?.title} picture`,
+        },
+      ],
+    },
+  };
+}
+
+export default async function RecipePage(props: PageProps) {
+  const id = props.params.id as string;
+
+  const recipe = await getOneRecipe(id);
+
+  if (!recipe) {
+    notFound();
+  }
+
   return (
     <section className="mx-auto grid gap-6">
       <header className="flex items-center gap-3 border-b border-primary py-4 text-primary-900">
@@ -32,10 +47,15 @@ export default function RecipePage() {
         <h1 className="text-2xl font-bold md:text-3xl lg:text-4xl">{recipe.title}</h1>
       </header>
 
-      <p className="text-primary-950">{recipe.description}</p>
+      {recipe.description && <p className="text-primary-950">{recipe.description}</p>}
 
       <div className="relative h-60 overflow-hidden rounded-lg shadow-xl md:h-96 lg:h-[30rem]">
-        <Image src={recipe.image} alt={`${recipe.title} picture`} layout="fill" objectFit="cover" />
+        <Image
+          src={recipe.imageUrl}
+          alt={`${recipe.title} picture`}
+          layout="fill"
+          objectFit="cover"
+        />
       </div>
 
       <div className="grid gap-8 rounded-xl bg-primary-50 p-5 shadow-xl md:grid-cols-[350px,1fr] md:p-6">

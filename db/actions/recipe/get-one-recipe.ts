@@ -1,7 +1,6 @@
 'use server';
 
-import { currentUser } from '@clerk/nextjs/server';
-import { SQL, and, eq, ilike } from 'drizzle-orm';
+import { SQL, and, eq } from 'drizzle-orm';
 
 import { handleError } from '@/utils';
 
@@ -10,11 +9,7 @@ import { ingredients, recipes, steps } from '@/db/schema';
 
 export async function getOneRecipe(id: string) {
   try {
-    const user = await currentUser();
-
-    if (!user) throw new Error('User not found');
-
-    const filters: SQL[] = [eq(recipes.id, id), eq(recipes.authorId, user.id)];
+    const filters: SQL[] = [eq(recipes.id, id)];
 
     const [recipeData] = await db
       .select()
