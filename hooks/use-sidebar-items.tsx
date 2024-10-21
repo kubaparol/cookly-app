@@ -1,6 +1,5 @@
 import { useClerk } from '@clerk/nextjs';
 import { Home, LucideProps, PowerIcon, ScrollText } from 'lucide-react';
-import { usePathname } from 'next/navigation';
 import { ComponentType, useMemo } from 'react';
 
 import { ProjectUrls } from '@/constants/urls';
@@ -9,14 +8,13 @@ export interface SidebarItemEntity {
   label: string;
   url?: string;
   onClick?: () => void;
-  icon: ComponentType<LucideProps>;
+  icon?: ComponentType<LucideProps>;
 }
 
 export const useSidebarItems = () => {
-  const pathname = usePathname();
   const { signOut } = useClerk();
 
-  const topItems = useMemo<SidebarItemEntity[]>(
+  const appTopItems = useMemo<SidebarItemEntity[]>(
     () => [
       {
         label: 'Dashboard',
@@ -32,7 +30,7 @@ export const useSidebarItems = () => {
     [],
   );
 
-  const bottomItems = useMemo<SidebarItemEntity[]>(
+  const appBottomItems = useMemo<SidebarItemEntity[]>(
     () => [
       {
         label: 'Sign Out',
@@ -40,12 +38,18 @@ export const useSidebarItems = () => {
         icon: PowerIcon,
       },
     ],
-    [signOut],
+    [],
   );
 
-  const currentItem = useMemo(() => {
-    return [...topItems, ...bottomItems].find((item) => item?.url === pathname);
-  }, [bottomItems, pathname, topItems]);
+  const homeItems = useMemo<SidebarItemEntity[]>(
+    () => [
+      {
+        label: 'Recipes',
+        url: ProjectUrls.recipes,
+      },
+    ],
+    [],
+  );
 
-  return { topItems, bottomItems, currentItem };
+  return { appTopItems, appBottomItems, homeItems };
 };
