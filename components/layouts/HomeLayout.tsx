@@ -13,7 +13,7 @@ export default function HomeLayout(props: HomeLayoutProps) {
   return (
     <>
       <Header />
-      <main className="wrapper min-h-[calc(100vh-80px-60px)]">{children}</main>
+      <main className="wrapper flex min-h-[calc(100vh-80px-60px)] flex-col">{children}</main>
       <Footer />
     </>
   );

@@ -15,6 +15,7 @@ import { ProjectUrls } from '@/constants';
 import { createRecipe, updateRecipe } from '@/db';
 
 import FileUploader from '../base/FileUploader';
+import StatusCard from '../shared/StatusCard';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -215,21 +216,20 @@ export default function RecipeForm(props: RecipeFormProps) {
 
   if (isCreationSuccess) {
     return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-4">
-        <BadgeCheck className="size-44 text-green-400" />
-
-        <div className="grid place-items-center gap-2">
-          <p className="text-4xl font-semibold">Success!</p>
-          <p>Your recipe has been created successfully</p>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <Button variant="outline" asChild>
-            <Link href={ProjectUrls.myRecipes}>Go Back</Link>
-          </Button>
-
-          <Button onClick={() => setIsCreationSuccess(false)}>Create Another Recipe</Button>
-        </div>
+      <div className="flex flex-1 flex-col items-center justify-center">
+        <StatusCard
+          type="success"
+          title="Success!"
+          message="Your recipe has been created successfully"
+          primaryAction={{
+            label: 'Create Another Recipe',
+            onClick: () => {
+              setIsCreationSuccess(false);
+              router.replace(`${pathname}`);
+            },
+          }}
+          secondaryAction={{ label: 'Go Back', href: ProjectUrls.myRecipes }}
+        />
       </div>
     );
   }

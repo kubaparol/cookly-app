@@ -17,8 +17,6 @@ export default async function EditRecipePage(props: PageProps) {
 
   const recipe = await getOneRecipe(id);
 
-  console.log(recipe);
-
   if (!recipe) {
     notFound();
   }

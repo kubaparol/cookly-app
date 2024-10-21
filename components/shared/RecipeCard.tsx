@@ -40,9 +40,11 @@ export default function RecipeCard(props: RecipeCardProps) {
               </Button>
             )}
 
-            <Button size="sm">
-              View recipe
-              <ExternalLink className="ml-2 size-4" />
+            <Button size="sm" asChild>
+              <Link href={ProjectUrls.recipe(id)} target="_blank">
+                View recipe
+                <ExternalLink className="ml-2 size-4" />
+              </Link>
             </Button>
           </div>
 
