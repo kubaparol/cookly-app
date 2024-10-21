@@ -1,6 +1,8 @@
 export const ProjectUrls = Object.freeze({
   // landing page
   home: '/',
+  recipes: '/recipes',
+  recipe: (id: string) => `/recipes/${id}`,
 
   // auth
   signIn: '/sign-in',
