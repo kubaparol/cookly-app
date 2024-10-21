@@ -1,7 +1,7 @@
 import { currentUser } from '@clerk/nextjs/server';
 import { Metadata } from 'next';
 
-import { getMyRecipes } from '@/db';
+import { getAllRecipes } from '@/db';
 
 import Search from '@/components/base/Search';
 import RecipeCard from '@/components/shared/RecipeCard';
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default async function RecipesPage(props: PageProps) {
   const query = props.searchParams.query as string;
 
-  const recipes = await getMyRecipes({ query });
+  const recipes = await getAllRecipes({ query });
 
   const user = await currentUser();
 

@@ -11,10 +11,11 @@ interface RecipeCardProps {
   title: string;
   imageUrl: string;
   isAuthor: boolean;
+  openInNewTab?: boolean;
 }
 
 export default function RecipeCard(props: RecipeCardProps) {
-  const { id, title, imageUrl, isAuthor } = props;
+  const { id, title, imageUrl, isAuthor, openInNewTab = false } = props;
 
   return (
     <div className="group relative overflow-hidden rounded-lg shadow-xl transition-shadow duration-300">
@@ -22,8 +23,7 @@ export default function RecipeCard(props: RecipeCardProps) {
         <Image
           src={imageUrl}
           alt={`${title} picture`}
-          layout="fill"
-          objectFit="cover"
+          fill
           className="transition-transform duration-500 group-hover:scale-105"
         />
 
@@ -41,9 +41,9 @@ export default function RecipeCard(props: RecipeCardProps) {
             )}
 
             <Button size="sm" asChild>
-              <Link href={ProjectUrls.recipe(id)} target="_blank">
+              <Link href={ProjectUrls.recipe(id)} target={openInNewTab ? '_blank' : '_self'}>
                 View recipe
-                <ExternalLink className="ml-2 size-4" />
+                {openInNewTab && <ExternalLink className="ml-2 size-4" />}
               </Link>
             </Button>
           </div>

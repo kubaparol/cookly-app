@@ -53,6 +53,7 @@ export default async function RecipesPage(props: PageProps) {
                 title={recipe.title}
                 imageUrl={recipe.imageUrl}
                 isAuthor={user.id === recipe.authorId}
+                openInNewTab
               />
             </li>
           ))}

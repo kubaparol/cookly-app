@@ -40,7 +40,7 @@ export default async function RecipePage(props: PageProps) {
   }
 
   return (
-    <section className="mx-auto grid gap-6">
+    <section className="mx-auto grid w-full max-w-7xl gap-6">
       <header className="flex items-center gap-3 border-b border-primary py-4 text-primary-900">
         <UtensilsCrossed className="size-8" />
 
@@ -50,12 +50,7 @@ export default async function RecipePage(props: PageProps) {
       {recipe.description && <p className="text-primary-950">{recipe.description}</p>}
 
       <div className="relative h-60 overflow-hidden rounded-lg shadow-xl md:h-96 lg:h-[30rem]">
-        <Image
-          src={recipe.imageUrl}
-          alt={`${recipe.title} picture`}
-          layout="fill"
-          objectFit="cover"
-        />
+        <Image src={recipe.imageUrl} alt={`${recipe.title} picture`} fill objectFit="cover" />
       </div>
 
       <div className="grid gap-8 rounded-xl bg-primary-50 p-5 shadow-xl md:grid-cols-[350px,1fr] md:p-6">
