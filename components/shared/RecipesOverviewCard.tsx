@@ -47,7 +47,7 @@ export function RecipesOverviewCard(props: RecipesOverviewCardProps) {
           <div className="grid aspect-auto h-[350px] w-full place-items-center">
             <div className="grid gap-3">
               <p className="mt-4 text-center text-sm text-gray-500">
-                You haven't created any recipes yet.
+                You haven't created any recipes yet
               </p>
 
               <Button asChild size="sm" className="mx-auto w-fit">

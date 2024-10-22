@@ -6,9 +6,8 @@ import { getAllRecipes } from '@/db';
 
 import Search from '@/components/base/Search';
 import AllRecipesContainer from '@/components/containers/AllRecipesContainer';
-import RecipeCard from '@/components/shared/RecipeCard';
 import StatusCard from '@/components/shared/StatusCard';
-import { RecipesSkeleton } from '@/components/shared/skeletons';
+import { AllRecipesSkeleton } from '@/components/shared/skeletons';
 import { Separator } from '@/components/ui/separator';
 
 import { PageProps } from '@/types';
@@ -41,7 +40,7 @@ export default async function RecipesPage(props: PageProps) {
           />
         </div>
       ) : (
-        <Suspense fallback={<RecipesSkeleton />}>
+        <Suspense fallback={<AllRecipesSkeleton />}>
           <AllRecipesContainer query={props.searchParams.query as string} />
         </Suspense>
       )}

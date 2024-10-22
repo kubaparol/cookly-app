@@ -19,9 +19,22 @@ export function RecentRecipesCardSkeleton() {
   return <Skeleton className="h-[440px]" />;
 }
 
-export function RecipesSkeleton() {
+export function AllRecipesSkeleton() {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-[repeat(auto-fill,minmax(400px,1fr))]">
+      <Skeleton className="aspect-[16/9]" />
+      <Skeleton className="aspect-[16/9]" />
+      <Skeleton className="aspect-[16/9]" />
+      <Skeleton className="aspect-[16/9]" />
+      <Skeleton className="aspect-[16/9]" />
+      <Skeleton className="aspect-[16/9]" />
+    </div>
+  );
+}
+
+export function MyRecipesSkeleton() {
+  return (
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
       <Skeleton className="aspect-[16/9]" />
       <Skeleton className="aspect-[16/9]" />
       <Skeleton className="aspect-[16/9]" />
