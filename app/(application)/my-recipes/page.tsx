@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 
 export default async function RecipesPage(props: PageProps) {
   return (
-    <section className="grid gap-10 pb-8">
+    <section className="flex h-full flex-1 flex-col gap-10 pb-8">
       <header className="grid gap-3">
         <PageTitle title="My Recipes" />
 
@@ -35,15 +35,9 @@ export default async function RecipesPage(props: PageProps) {
         </div>
       </header>
 
-      <div className="grid gap-8">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
-          <Suspense fallback={<RecipesSkeleton />}>
-            <MyRecipesContainer query={props.searchParams.query as string} />
-          </Suspense>
-        </div>
-
-        {/* <Pagination totalPages={10} className="mx-auto" /> */}
-      </div>
+      <Suspense fallback={<RecipesSkeleton />}>
+        <MyRecipesContainer query={props.searchParams.query as string} />
+      </Suspense>
     </section>
   );
 }

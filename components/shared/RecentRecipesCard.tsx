@@ -71,9 +71,9 @@ export default function RecentRecipesCard(props: RecentRecipesCardProps) {
                   </Link>
                 </Button>
 
-                <Button size="icon" variant="outline" disabled>
+                {/* <Button size="icon" variant="outline" disabled>
                   <Trash2 className="size-4 text-red-600" />
-                </Button>
+                </Button> */}
               </div>
             </div>
           ))

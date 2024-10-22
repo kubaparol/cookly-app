@@ -1,3 +1,5 @@
+'use client';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -6,6 +8,7 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
 } from '@radix-ui/react-alert-dialog';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { deleteRecipe } from '@/db';
@@ -15,12 +18,18 @@ import { Button } from '../ui/button';
 
 interface DeleteRecipeContainerProps {
   id: string | null;
+  isOpen: boolean;
 }
 
 export default function DeleteRecipeContainer(props: DeleteRecipeContainerProps) {
-  const { id } = props;
+  const { id, isOpen } = props;
 
-  const [isOpen, setIsOpen] = useState(id ? true : false);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const closeHandler = () => {
+    router.replace(pathname);
+  };
 
   const deleteHandler = async () => {
     if (!id) return;
@@ -29,7 +38,7 @@ export default function DeleteRecipeContainer(props: DeleteRecipeContainerProps)
   };
 
   return (
-    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+    <AlertDialog open={true} onOpenChange={closeHandler}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>You&apos;re about to delete an recipe</AlertDialogTitle>

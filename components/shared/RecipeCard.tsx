@@ -1,5 +1,3 @@
-'use client';
-
 import { ExternalLink, Pencil, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,13 +10,12 @@ interface RecipeCardProps {
   id: string;
   title: string;
   imageUrl: string;
-  isAuthor: boolean;
+  isAuthor?: boolean;
   openInNewTab?: boolean;
 }
 
 export default function RecipeCard(props: RecipeCardProps) {
   const { id, title, imageUrl, isAuthor, openInNewTab = false } = props;
-
   return (
     <div className="group relative overflow-hidden rounded-lg shadow-xl transition-shadow duration-300">
       <div className="relative aspect-[16/9] w-full overflow-hidden">
@@ -35,10 +32,10 @@ export default function RecipeCard(props: RecipeCardProps) {
           <div className="flex gap-4 px-4 py-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             {isAuthor && (
               <>
-                <Button size="sm" variant="destructive">
+                {/* <Button size="sm" variant="destructive">
                   Delete
                   <Trash2 className="ml-2 size-4" />
-                </Button>
+                </Button> */}
 
                 <Button size="sm" variant="outline" asChild>
                   <Link href={ProjectUrls.editRecipe(id)}>
