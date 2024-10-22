@@ -27,13 +27,7 @@ export default async function AllRecipesContainer(props: AllRecipesContainerProp
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-[repeat(auto-fill,minmax(400px,1fr))]">
       {recipes?.map((recipe, index) => (
-        <RecipeCard
-          key={index}
-          id={recipe.id}
-          title={recipe.title}
-          imageUrl={recipe.imageUrl}
-          openInNewTab
-        />
+        <RecipeCard key={index} id={recipe.id} title={recipe.title} imageUrl={recipe.imageUrl} />
       ))}
     </div>
   );
