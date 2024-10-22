@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { pgTable, text } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const recipes = pgTable('recipes', {
   id: text()
@@ -9,4 +9,5 @@ export const recipes = pgTable('recipes', {
   description: text(),
   imageUrl: text().notNull(),
   authorId: text().notNull(),
+  createdAt: timestamp({ mode: 'date', precision: 3 }).defaultNow(),
 });

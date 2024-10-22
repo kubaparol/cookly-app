@@ -23,22 +23,22 @@ export async function createRecipe(recipe: CreateRecipeParams) {
       })
       .returning();
 
-    for (const ingredient of recipe.ingredients) {
-      await db.insert(ingredients).values({
+    await db.insert(ingredients).values(
+      recipe.ingredients.map((ingredient) => ({
         recipeId: newRecipe.id,
         name: ingredient.name,
         quantity: ingredient.quantity,
         unit: ingredient.unit,
-      });
-    }
+      })),
+    );
 
-    for (let i = 0; i < recipe.steps.length; i++) {
-      await db.insert(steps).values({
+    await db.insert(steps).values(
+      recipe.steps.map((step, index) => ({
         recipeId: newRecipe.id,
-        description: recipe.steps[i].description,
-        order: i + 1,
-      });
-    }
+        description: step.description,
+        order: index + 1,
+      })),
+    );
 
     return JSON.parse(JSON.stringify(newRecipe));
   } catch (error) {

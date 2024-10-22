@@ -1,7 +1,7 @@
 'use server';
 
 import { currentUser } from '@clerk/nextjs/server';
-import { SQL, and, count, eq } from 'drizzle-orm';
+import { SQL, and, eq } from 'drizzle-orm';
 
 import { handleError } from '@/utils';
 
@@ -16,12 +16,7 @@ export async function getCardData() {
 
     const filters: SQL[] = [eq(recipes.authorId, user.id)];
 
-    const [numberOfRecipes] = await db
-      .select({ count: count() })
-      .from(recipes)
-      .where(and(...filters));
-
-    return numberOfRecipes;
+    return await db.$count(recipes, and(...filters));
   } catch (error) {
     handleError(error);
   }

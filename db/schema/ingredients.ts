@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { integer, pgTable, text } from 'drizzle-orm/pg-core';
+import { decimal, doublePrecision, integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const ingredients = pgTable('ingredients', {
   id: text()
@@ -7,6 +7,7 @@ export const ingredients = pgTable('ingredients', {
     .default(sql`gen_random_uuid()`),
   recipeId: text().notNull(),
   name: text().notNull(),
-  quantity: integer().notNull(),
+  quantity: doublePrecision().notNull(),
   unit: text().notNull(),
+  createdAt: timestamp({ mode: 'date', precision: 3 }).defaultNow(),
 });
