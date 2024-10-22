@@ -10,3 +10,7 @@ export function StatisticCardsSkeleton() {
     </>
   );
 }
+
+export function RecipesOverviewCardSkeleton() {
+  return <Skeleton className="h-[440px]" />;
+}
