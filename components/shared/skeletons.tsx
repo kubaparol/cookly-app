@@ -31,3 +31,34 @@ export function RecipesSkeleton() {
     </>
   );
 }
+
+export function RecipeFormSkeleton() {
+  return (
+    <div className="grid gap-5">
+      <div className="grid gap-2">
+        <Skeleton className="h-[20px] w-[40px]" />
+        <Skeleton className="h-[36px]" />
+      </div>
+
+      <div className="grid gap-2">
+        <Skeleton className="h-[20px] w-[40px]" />
+        <Skeleton className="h-[128px]" />
+      </div>
+
+      <div className="grid gap-2">
+        <Skeleton className="h-[20px] w-[40px]" />
+        <Skeleton className="h-[318px]" />
+      </div>
+
+      <div className="grid gap-2">
+        <Skeleton className="h-[20px] w-[40px]" />
+        <Skeleton className="h-[106px]" />
+      </div>
+
+      <div className="grid gap-2">
+        <Skeleton className="h-[20px] w-[40px]" />
+        <Skeleton className="h-[106px]" />
+      </div>
+    </div>
+  );
+}
