@@ -18,3 +18,16 @@ export function RecipesOverviewCardSkeleton() {
 export function RecentRecipesCardSkeleton() {
   return <Skeleton className="h-[440px]" />;
 }
+
+export function RecipesSkeleton() {
+  return (
+    <>
+      <Skeleton className="aspect-[16/9]" />
+      <Skeleton className="aspect-[16/9]" />
+      <Skeleton className="aspect-[16/9]" />
+      <Skeleton className="aspect-[16/9]" />
+      <Skeleton className="aspect-[16/9]" />
+      <Skeleton className="aspect-[16/9]" />
+    </>
+  );
+}
