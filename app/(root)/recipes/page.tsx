@@ -1,11 +1,14 @@
 import { currentUser } from '@clerk/nextjs/server';
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 
 import { getAllRecipes } from '@/db';
 
 import Search from '@/components/base/Search';
+import AllRecipesContainer from '@/components/containers/AllRecipesContainer';
 import RecipeCard from '@/components/shared/RecipeCard';
 import StatusCard from '@/components/shared/StatusCard';
+import { RecipesSkeleton } from '@/components/shared/skeletons';
 import { Separator } from '@/components/ui/separator';
 
 import { PageProps } from '@/types';
@@ -38,22 +41,9 @@ export default async function RecipesPage(props: PageProps) {
           />
         </div>
       ) : (
-        <div className="grid gap-10">
-          <ul className="grid grid-cols-1 gap-6 sm:grid-cols-[repeat(auto-fill,minmax(400px,1fr))]">
-            {recipes?.map((recipe, index) => (
-              <li key={index}>
-                <RecipeCard
-                  id={recipe.id}
-                  title={recipe.title}
-                  imageUrl={recipe.imageUrl}
-                  isAuthor={user?.id === recipe.authorId}
-                />
-              </li>
-            ))}
-          </ul>
-
-          {/* <Pagination totalPages={10} className="mx-auto" /> */}
-        </div>
+        <Suspense fallback={<RecipesSkeleton />}>
+          <AllRecipesContainer query={props.searchParams.query as string} />
+        </Suspense>
       )}
     </section>
   );
