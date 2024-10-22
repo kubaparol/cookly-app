@@ -8,7 +8,7 @@ import { ProjectUrls } from '@/constants';
 import PageTitle from '@/components/base/PageTitle';
 import Search from '@/components/base/Search';
 import MyRecipesContainer from '@/components/containers/MyRecipesContainer';
-import { RecipesSkeleton } from '@/components/shared/skeletons';
+import { MyRecipesSkeleton } from '@/components/shared/skeletons';
 import { Button } from '@/components/ui/button';
 
 import { PageProps } from '@/types';
@@ -35,7 +35,7 @@ export default async function RecipesPage(props: PageProps) {
         </div>
       </header>
 
-      <Suspense fallback={<RecipesSkeleton />}>
+      <Suspense fallback={<MyRecipesSkeleton />}>
         <MyRecipesContainer query={props.searchParams.query as string} />
       </Suspense>
     </section>
