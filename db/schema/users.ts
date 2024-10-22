@@ -1,4 +1,4 @@
-import { pgTable, text } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   clerkId: text().primaryKey(),
@@ -6,4 +6,5 @@ export const users = pgTable('users', {
   lastName: text(),
   email: text(),
   imageUrl: text(),
+  createdAt: timestamp({ mode: 'date', precision: 3 }).defaultNow(),
 });
