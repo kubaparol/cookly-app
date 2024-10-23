@@ -3,6 +3,12 @@ export const ProjectUrls = Object.freeze({
   home: '/',
   recipes: '/recipes',
   recipe: (id: string) => `/recipes/${id}`,
+  mealPlanner: '/meal-planner',
+  community: '/community',
+  faq: '/faq',
+  contactUs: '/contact-us',
+  termsAndConditions: '/legals/terms-and-conditions',
+  privacyPolicy: '/legals/privacy-policy',
 
   // auth
   signIn: '/sign-in',

@@ -20,11 +20,11 @@ export const useNavLinks = () => {
       },
       {
         label: 'Meal Planner',
-        url: ProjectUrls.home,
+        url: ProjectUrls.mealPlanner,
       },
       {
         label: 'Community',
-        url: ProjectUrls.home,
+        url: ProjectUrls.community,
       },
     ],
     [],
@@ -34,19 +34,19 @@ export const useNavLinks = () => {
     () => [
       {
         label: 'FAQ',
-        url: ProjectUrls.home,
+        url: ProjectUrls.faq,
       },
       {
         label: 'Contact Us',
-        url: ProjectUrls.home,
+        url: ProjectUrls.contactUs,
       },
       {
         label: 'Terms & Conditions',
-        url: ProjectUrls.home,
+        url: ProjectUrls.termsAndConditions,
       },
       {
         label: 'Privacy Policy',
-        url: ProjectUrls.home,
+        url: ProjectUrls.privacyPolicy,
       },
     ],
     [],
