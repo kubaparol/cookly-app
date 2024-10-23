@@ -7,6 +7,7 @@ import { useNavLinks } from '@/hooks';
 
 import { ExternalUrls, ProjectUrls } from '@/constants';
 
+import NewsletterForm from '../forms/NewsletterForm';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import Logo from './Logo';
@@ -77,15 +78,8 @@ export default function Footer() {
           <div className="grid gap-4">
             <h4 className="text-lg font-semibold">Stay Updated</h4>
             <p>Subscribe to our newsletter for the latest recipes and cooking tips.</p>
-            <form className="space-y-2">
-              <Input
-                type="email"
-                placeholder="e.g., johndoe@example.com"
-                className="bg-white"
-                disabled
-              />
-              <Button disabled>Subscribe</Button>
-            </form>
+
+            <NewsletterForm />
           </div>
         </div>
 

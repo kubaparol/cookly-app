@@ -6,6 +6,8 @@ import '@/styles/globals.css';
 
 import { inter } from '@/constants';
 
+import { Toaster } from '@/components/ui/sonner';
+
 export const metadata: Metadata = {
   title: {
     template: '%s | Cookly',
@@ -24,7 +26,11 @@ export default function RootLayout(props: RootLayoutProps) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} antialiased`}>{children}</body>
+        <body className={`${inter.className} antialiased`}>
+          {children}
+
+          <Toaster position="top-right" />
+        </body>
       </html>
     </ClerkProvider>
   );
