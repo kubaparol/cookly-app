@@ -1,8 +1,11 @@
 'use server';
 
 import { currentUser } from '@clerk/nextjs/server';
+import { revalidatePath } from 'next/cache';
 
 import { handleError } from '@/utils';
+
+import { ProjectUrls } from '@/constants';
 
 import { CreateRecipeParams, ingredients, recipes, steps } from '@/db';
 import { db } from '@/db/drizzle';
@@ -39,6 +42,10 @@ export async function createRecipe(recipe: CreateRecipeParams) {
         order: index + 1,
       })),
     );
+
+    revalidatePath(ProjectUrls.dashboard);
+    revalidatePath(ProjectUrls.recipes);
+    revalidatePath(ProjectUrls.myRecipes);
 
     return JSON.parse(JSON.stringify(newRecipe));
   } catch (error) {

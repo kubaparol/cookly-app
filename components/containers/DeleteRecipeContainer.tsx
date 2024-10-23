@@ -1,64 +1,23 @@
-'use client';
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogTitle,
-} from '@radix-ui/react-alert-dialog';
-import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
-
 import { deleteRecipe } from '@/db';
 
-import { AlertDialogFooter, AlertDialogHeader } from '../ui/alert-dialog';
-import { Button } from '../ui/button';
+import DeleteRecipeForm, { DeleteRecipeFormProps } from '../forms/DeleteRecipeForm';
 
-interface DeleteRecipeContainerProps {
-  id: string | null;
-  isOpen: boolean;
+interface DeleteRecipeContainerProps extends Omit<DeleteRecipeFormProps, 'onFormSubmit'> {
+  id: string;
 }
 
 export default function DeleteRecipeContainer(props: DeleteRecipeContainerProps) {
-  const { id, isOpen } = props;
+  const { id, button, children } = props;
 
-  const router = useRouter();
-  const pathname = usePathname();
+  const deleteRecipeHandler = async () => {
+    'use server';
 
-  const closeHandler = () => {
-    router.replace(pathname);
-  };
-
-  const deleteHandler = async () => {
-    if (!id) return;
-
-    return await deleteRecipe(id);
+    await deleteRecipe(id);
   };
 
   return (
-    <AlertDialog open={true} onOpenChange={closeHandler}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>You&apos;re about to delete an recipe</AlertDialogTitle>
-
-          <AlertDialogDescription>
-            Are you sure you want to delete this recipe?
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-
-        <AlertDialogFooter>
-          <AlertDialogCancel asChild>
-            <Button variant="outline">Cancel</Button>
-          </AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Button variant="destructive" onClick={deleteHandler}>
-              Delete
-            </Button>
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <DeleteRecipeForm button={button} onFormSubmit={deleteRecipeHandler}>
+      {children}
+    </DeleteRecipeForm>
   );
 }
