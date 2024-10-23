@@ -50,9 +50,9 @@ export default function HeroSection() {
         <div className="relative mx-auto mt-24 w-full max-w-5xl px-4 sm:px-6 md:mt-32 lg:px-8">
           <div className="absolute inset-0 -rotate-2 transform rounded-lg bg-primary-200"></div>
           <div className="absolute inset-0 rotate-2 transform rounded-lg bg-primary-100"></div>
-          <div className="relative overflow-hidden rounded-lg bg-white shadow-xl">
+          <div className="relative overflow-hidden">
             <Image
-              src="https://utfs.io/f/tn9qWFoW4N1fXrHCl5NPVmK1qYxUoOFW08nMBS2ktiLuAc3w"
+              src="/hero.webp"
               alt="Application Dashboard"
               width={1280}
               height={720}
