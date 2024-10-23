@@ -17,7 +17,7 @@ import Navbar from './Navbar';
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { links } = useNavLinks();
+  const { quickLinks } = useNavLinks();
 
   const AuthButtons = (
     <>
@@ -55,7 +55,7 @@ export default function Header() {
         </Link>
 
         <div className="hidden md:block">
-          <Navbar links={links} onClick={() => setIsOpen(false)} />
+          <Navbar links={quickLinks} onClick={() => setIsOpen(false)} />
         </div>
 
         <div className="hidden md:block">{AuthButtons}</div>
@@ -69,7 +69,7 @@ export default function Header() {
             <div className="mt-8 grid gap-6">
               {AuthButtons}
 
-              <Navbar links={links} onClick={() => setIsOpen(false)} />
+              <Navbar links={quickLinks} onClick={() => setIsOpen(false)} />
             </div>
           </SheetContent>
         </Sheet>

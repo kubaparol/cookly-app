@@ -1,13 +1,20 @@
+'use client';
+
 import { Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
 import Link from 'next/link';
+
+import { useNavLinks } from '@/hooks';
 
 import { ExternalUrls, ProjectUrls } from '@/constants';
 
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import Logo from './Logo';
+import NavLink from './NavLink';
 
 export default function Footer() {
+  const { quickLinks, supportLinks } = useNavLinks();
+
   return (
     <footer className="bg-primary-100 text-primary-950">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -45,53 +52,25 @@ export default function Footer() {
 
           <div>
             <h4 className="mb-4 text-lg font-semibold">Quick Links</h4>
+
             <ul className="space-y-2">
-              <li>
-                <Link href="#" className="transition-colors hover:text-primary-400">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="transition-colors hover:text-primary-400">
-                  Recipes
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="transition-colors hover:text-primary-400">
-                  Meal Planner
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="transition-colors hover:text-primary-400">
-                  Community
-                </Link>
-              </li>
+              {quickLinks.map((link, index) => (
+                <li>
+                  <NavLink key={index} link={link} />
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
             <h4 className="mb-4 text-lg font-semibold">Support</h4>
+
             <ul className="space-y-2">
-              <li>
-                <Link href="#" className="transition-colors hover:text-primary-400">
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="transition-colors hover:text-primary-400">
-                  Contact Us
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="transition-colors hover:text-primary-400">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="transition-colors hover:text-primary-400">
-                  Terms of Service
-                </Link>
-              </li>
+              {supportLinks.map((link, index) => (
+                <li>
+                  <NavLink key={index} link={link} />
+                </li>
+              ))}
             </ul>
           </div>
 
