@@ -12,7 +12,7 @@ export default function DeleteRecipeContainer(props: DeleteRecipeContainerProps)
   const deleteRecipeHandler = async () => {
     'use server';
 
-    await deleteRecipe(id);
+    return await deleteRecipe(id);
   };
 
   return (

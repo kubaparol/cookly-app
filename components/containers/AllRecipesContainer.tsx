@@ -16,7 +16,7 @@ export default async function AllRecipesContainer(props: AllRecipesContainerProp
     return (
       <div className="flex flex-1 items-center justify-center">
         <StatusCard
-          type="alert"
+          type="sad"
           title="Recipes not found"
           message="Sorry, but we could not find the recipes you are looking for."
         />

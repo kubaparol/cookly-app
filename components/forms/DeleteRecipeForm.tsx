@@ -27,7 +27,9 @@ export default function DeleteRecipeForm(props: DeleteRecipeFormProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const deleteHandler = () => {
-    startTransition(async () => await onFormSubmit());
+    startTransition(async () => {
+      await onFormSubmit();
+    });
   };
 
   return (
