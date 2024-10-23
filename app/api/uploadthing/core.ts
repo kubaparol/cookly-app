@@ -1,6 +1,8 @@
 import { type FileRouter, createUploadthing } from 'uploadthing/next';
 import { UploadThingError } from 'uploadthing/server';
 
+import { MAX_FILE_SIZE } from '@/constants';
+
 const f = createUploadthing();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -9,7 +11,7 @@ const auth = (req: Request) => ({ id: 'fakeId' }); // Fake auth function
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
   // Define as many FileRoutes as you like, each with a unique routeSlug
-  imageUploader: f({ image: { maxFileSize: '4MB' } })
+  imageUploader: f({ image: { maxFileSize: MAX_FILE_SIZE } })
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req }) => {
       // This code runs on your server before upload

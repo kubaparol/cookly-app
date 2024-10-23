@@ -6,7 +6,9 @@ import Image from 'next/image';
 import { Dispatch, SetStateAction, useCallback } from 'react';
 import { generateClientDropzoneAccept } from 'uploadthing/client';
 
-import { convertFileToUrl } from '@/utils';
+import { cn, convertFileToUrl } from '@/utils';
+
+import { MAX_FILE_SIZE } from '@/constants';
 
 import { Button } from '@/components/ui/button';
 
@@ -14,10 +16,11 @@ type FileUploaderProps = {
   onFieldChange: (url: string) => void;
   imageUrl: string;
   setFiles: Dispatch<SetStateAction<File[]>>;
+  disabled?: boolean;
 };
 
 export default function FileUploader(props: FileUploaderProps) {
-  const { imageUrl, onFieldChange, setFiles } = props;
+  const { imageUrl, onFieldChange, setFiles, disabled } = props;
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -35,8 +38,15 @@ export default function FileUploader(props: FileUploaderProps) {
   return (
     <div
       {...getRootProps()}
-      className="bg-dark flex h-80 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border shadow-sm">
-      <input {...getInputProps()} className="cursor-pointer" />
+      className={cn(
+        'bg-dark flex h-80 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border shadow-sm',
+        disabled && 'cursor-not-allowed',
+      )}>
+      <input
+        {...getInputProps()}
+        disabled={disabled}
+        className={cn('cursor-pointer', disabled && 'cursor-not-allowed')}
+      />
 
       {imageUrl ? (
         <div className="group relative flex h-full w-full flex-1 items-center justify-center">
@@ -48,7 +58,11 @@ export default function FileUploader(props: FileUploaderProps) {
             className="w-full object-cover object-center"
           />
 
-          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <div
+            className={cn(
+              'absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 opacity-0 transition-opacity duration-300',
+              !disabled && 'group-hover:opacity-100',
+            )}>
             <div className="text-white">
               <CloudUpload size={50} />
             </div>
@@ -60,11 +74,17 @@ export default function FileUploader(props: FileUploaderProps) {
 
           <h3 className="mb-2 mt-2">Drag your photo here</h3>
 
-          <p className="mb-4 text-xs font-semibold">
-            Supported formats: <span className="font-normal">SVG, PNG, JPG</span>
-          </p>
+          <div className="mb-4 grid gap-2 text-center text-xs font-semibold">
+            <p>
+              Supported formats: <span className="font-normal">SVG, PNG, JPG</span>
+            </p>
 
-          <Button type="button" className="rounded-full">
+            <p>
+              Max file size: <span className="font-normal">{MAX_FILE_SIZE}</span>
+            </p>
+          </div>
+
+          <Button type="button" disabled={disabled} className="rounded-full">
             Select from computer
           </Button>
         </div>

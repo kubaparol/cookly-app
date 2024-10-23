@@ -6,6 +6,8 @@ import { ProjectUrls } from '@/constants';
 
 import { deleteRecipe } from '@/db';
 
+import DeleteRecipeContainer from '../containers/DeleteRecipeContainer';
+import DeleteRecipeForm from '../forms/DeleteRecipeForm';
 import { Button } from '../ui/button';
 
 interface RecipeCardProps {
@@ -18,6 +20,13 @@ interface RecipeCardProps {
 
 export default function RecipeCard(props: RecipeCardProps) {
   const { id, title, imageUrl, isAuthor, openInNewTab = false } = props;
+
+  const deleteRecipeHandler = async () => {
+    'use server';
+
+    await deleteRecipe(id);
+  };
+
   return (
     <div className="group relative overflow-hidden rounded-lg shadow-xl transition-shadow duration-300">
       <div className="relative aspect-[16/9] w-full overflow-hidden">
@@ -34,17 +43,10 @@ export default function RecipeCard(props: RecipeCardProps) {
           <div className="flex gap-4 px-4 py-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             {isAuthor && (
               <>
-                <form
-                  action={async () => {
-                    'use server';
-
-                    await deleteRecipe(id);
-                  }}>
-                  <Button size="sm" variant="destructive" type="submit">
-                    Delete
-                    <Trash2 className="ml-2 size-4" />
-                  </Button>
-                </form>
+                <DeleteRecipeContainer id={id} button={{ size: 'sm', variant: 'destructive' }}>
+                  Delete
+                  <Trash2 className="ml-2 size-4" />
+                </DeleteRecipeContainer>
 
                 <Button size="sm" variant="outline" asChild>
                   <Link href={ProjectUrls.editRecipe(id)}>

@@ -1,4 +1,4 @@
-import { getMyRecipes } from '@/db';
+import { getAllRecipes, getMyRecipes } from '@/db';
 
 import RecipeCard from '../shared/RecipeCard';
 import StatusCard from '../shared/StatusCard';
@@ -10,13 +10,13 @@ interface AllRecipesContainerProps {
 export default async function AllRecipesContainer(props: AllRecipesContainerProps) {
   const { query } = props;
 
-  const recipes = await getMyRecipes({ query });
+  const recipes = await getAllRecipes({ query });
 
   if (recipes?.length === 0) {
     return (
       <div className="flex flex-1 items-center justify-center">
         <StatusCard
-          type="alert"
+          type="sad"
           title="Recipes not found"
           message="Sorry, but we could not find the recipes you are looking for."
         />

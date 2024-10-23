@@ -20,7 +20,6 @@ export async function getAllRecipes(params: GetMyRecipesParams) {
         id: recipes.id,
         title: recipes.title,
         imageUrl: recipes.imageUrl,
-        authorId: recipes.authorId,
       })
       .from(recipes)
       .where(and(...filters));

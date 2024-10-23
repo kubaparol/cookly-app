@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { BadgeCheck, Loader2, Pencil, Plus, X } from 'lucide-react';
+import { BadgeCheck, Dot, Loader2, Pencil, Plus, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -228,7 +228,7 @@ export default function RecipeForm(props: RecipeFormProps) {
               router.replace(`${pathname}`);
             },
           }}
-          secondaryAction={{ label: 'Go Back', href: ProjectUrls.myRecipes }}
+          secondaryAction={{ label: 'See My Recipes', href: ProjectUrls.myRecipes }}
         />
       </div>
     );
@@ -249,7 +249,11 @@ export default function RecipeForm(props: RecipeFormProps) {
                 </FormLabel>
 
                 <FormControl>
-                  <Input {...field} placeholder="e.g., Classic Spaghetti Bolognese" />
+                  <Input
+                    {...field}
+                    disabled={isSubmitting}
+                    placeholder="e.g., Classic Spaghetti Bolognese"
+                  />
                 </FormControl>
 
                 <FormMessage />
@@ -268,6 +272,7 @@ export default function RecipeForm(props: RecipeFormProps) {
                   <Textarea
                     placeholder="e.g., A rich and hearty Italian pasta dish with a savory meat sauce..."
                     {...field}
+                    disabled={isSubmitting}
                     className="rounded-2xl"
                   />
                 </FormControl>
@@ -291,6 +296,7 @@ export default function RecipeForm(props: RecipeFormProps) {
                     imageUrl={field.value}
                     onFieldChange={field.onChange}
                     setFiles={setFiles}
+                    disabled={isSubmitting}
                   />
                 </FormControl>
                 <FormMessage />
@@ -314,10 +320,10 @@ export default function RecipeForm(props: RecipeFormProps) {
                   )}
 
                   {field.value.length > 0 && (
-                    <ul className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+                    <ul className="grid w-full gap-4">
                       {field.value.map((field, index) => (
                         <li key={index}>
-                          <Badge variant="secondary" className="flex justify-between gap-3">
+                          <Badge variant="secondary" className="flex w-full justify-between gap-3">
                             <p className="text-sm">
                               {field.quantity} {field.unit}{' '}
                               <span className="font-light">{field.name}</span>
@@ -331,6 +337,7 @@ export default function RecipeForm(props: RecipeFormProps) {
                                       type="button"
                                       size="icon"
                                       variant="outline"
+                                      disabled={isSubmitting}
                                       onClick={() =>
                                         setItemToEdit({
                                           item: field,
@@ -353,6 +360,7 @@ export default function RecipeForm(props: RecipeFormProps) {
                                       type="button"
                                       size="icon"
                                       variant="outline"
+                                      disabled={isSubmitting}
                                       onClick={() =>
                                         setItemIdToDelete({
                                           id: field.id,
@@ -377,6 +385,7 @@ export default function RecipeForm(props: RecipeFormProps) {
                     size="sm"
                     type="button"
                     onClick={() => setItemToAdd('ingredient')}
+                    disabled={isSubmitting}
                     className="w-fit gap-2">
                     Add Ingredient
                     <Plus className="size-4" />
@@ -423,6 +432,7 @@ export default function RecipeForm(props: RecipeFormProps) {
                                         type="button"
                                         size="icon"
                                         variant="outline"
+                                        disabled={isSubmitting}
                                         onClick={() =>
                                           setItemToEdit({
                                             item: field,
@@ -445,6 +455,7 @@ export default function RecipeForm(props: RecipeFormProps) {
                                         type="button"
                                         size="icon"
                                         variant="outline"
+                                        disabled={isSubmitting}
                                         onClick={() =>
                                           setItemIdToDelete({
                                             id: field.id,
@@ -469,6 +480,7 @@ export default function RecipeForm(props: RecipeFormProps) {
                     size="sm"
                     type="button"
                     onClick={() => setItemToAdd('step')}
+                    disabled={isSubmitting}
                     className="w-fit gap-2">
                     Add Step
                     <Plus className="size-4" />

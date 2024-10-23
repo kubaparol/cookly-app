@@ -6,8 +6,7 @@ import { cn } from '@/utils';
 
 import { ProjectUrls } from '@/constants';
 
-import { deleteRecipe } from '@/db';
-
+import DeleteRecipeContainer from '../containers/DeleteRecipeContainer';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 
@@ -74,16 +73,11 @@ export default function RecentRecipesCard(props: RecentRecipesCardProps) {
                     </Link>
                   </Button>
 
-                  <form
-                    action={async () => {
-                      'use server';
-
-                      await deleteRecipe(recipe.id);
-                    }}>
-                    <Button size="icon" variant="outline" type="submit">
-                      <Trash2 className="size-4 text-red-600" />
-                    </Button>
-                  </form>
+                  <DeleteRecipeContainer
+                    id={recipe.id}
+                    button={{ size: 'icon', variant: 'outline' }}>
+                    <Trash2 className="size-4 text-red-600" />
+                  </DeleteRecipeContainer>
                 </div>
               </div>
             ))}
