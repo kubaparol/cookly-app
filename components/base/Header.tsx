@@ -48,30 +48,32 @@ export default function Header() {
   );
 
   return (
-    <header className="wrapper flex items-center justify-between">
-      <Link href={ProjectUrls.home} title="Cookly Home">
-        <Logo className="max-w-[110px]" />
-      </Link>
+    <header className="fixed z-10 w-full bg-primary-50 shadow-md backdrop-blur-lg">
+      <div className="wrapper flex items-center justify-between">
+        <Link href={ProjectUrls.home} title="Cookly Home">
+          <Logo className="max-w-[110px]" />
+        </Link>
 
-      <div className="hidden md:block">
-        <Navbar links={links} onClick={() => setIsOpen(false)} />
+        <div className="hidden md:block">
+          <Navbar links={links} onClick={() => setIsOpen(false)} />
+        </div>
+
+        <div className="hidden md:block">{AuthButtons}</div>
+
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger className="ml-auto md:hidden">
+            <Menu />
+          </SheetTrigger>
+
+          <SheetContent side="right" className="w-full xs:w-3/4">
+            <div className="mt-8 grid gap-6">
+              {AuthButtons}
+
+              <Navbar links={links} onClick={() => setIsOpen(false)} />
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
-
-      <div className="hidden md:block">{AuthButtons}</div>
-
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger className="ml-auto md:hidden">
-          <Menu />
-        </SheetTrigger>
-
-        <SheetContent side="right" className="w-full xs:w-3/4">
-          <div className="mt-8 grid gap-6">
-            {AuthButtons}
-
-            <Navbar links={links} onClick={() => setIsOpen(false)} />
-          </div>
-        </SheetContent>
-      </Sheet>
     </header>
   );
 }
