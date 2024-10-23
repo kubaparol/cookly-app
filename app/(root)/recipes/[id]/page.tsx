@@ -40,7 +40,7 @@ export default async function RecipePage(props: PageProps) {
   }
 
   return (
-    <section className="mx-auto grid w-full max-w-7xl gap-6">
+    <section className="wrapper mx-auto grid w-full !max-w-7xl gap-6 !py-12">
       <header className="flex items-center gap-3 border-b border-primary py-4 text-primary-900">
         <UtensilsCrossed className="size-8" />
 
