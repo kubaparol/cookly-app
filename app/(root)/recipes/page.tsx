@@ -1,4 +1,3 @@
-import { currentUser } from '@clerk/nextjs/server';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
@@ -21,10 +20,8 @@ export default async function RecipesPage(props: PageProps) {
 
   const recipes = await getAllRecipes({ query });
 
-  const user = await currentUser();
-
   return (
-    <section className="flex flex-1 flex-col gap-6">
+    <section className="wrapper flex flex-1 flex-col gap-6 !py-6">
       <div className="max-w-md">
         <Search placeholder="Search recipes..." />
       </div>

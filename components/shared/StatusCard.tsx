@@ -1,10 +1,11 @@
-import { AlertTriangle, BadgeCheck } from 'lucide-react';
+import { AlertTriangle, BadgeCheck, ConciergeBellIcon, LucideProps } from 'lucide-react';
 import Link from 'next/link';
+import { ComponentType } from 'react';
 
 import { Button } from '../ui/button';
 
 interface StatusCardProps {
-  type: 'success' | 'alert';
+  type: 'success' | 'alert' | 'construction';
   title: string;
   message: string;
   primaryAction?: {
@@ -20,14 +21,25 @@ interface StatusCardProps {
 
 export default function StatusCard(props: StatusCardProps) {
   const { type, title, message, primaryAction, secondaryAction } = props;
+
+  const iconMap: Record<StatusCardProps['type'], ComponentType<LucideProps>> = {
+    success: BadgeCheck,
+    alert: AlertTriangle,
+    construction: ConciergeBellIcon,
+  };
+
+  const colorMap: Record<StatusCardProps['type'], string> = {
+    success: 'green-400',
+    alert: 'primary',
+    construction: 'primary',
+  };
+
+  const Icon = iconMap[type];
+
   return (
     <div className="grid gap-8">
       <div className="flex flex-col items-center space-y-4">
-        {type === 'success' ? (
-          <BadgeCheck className="size-36 text-green-400" />
-        ) : (
-          <AlertTriangle className={`size-36 text-primary`} />
-        )}
+        <Icon className={`size-36 text-${colorMap[type]}`} />
 
         <h1 className="text-center text-3xl font-bold text-primary-800">{title}</h1>
 
