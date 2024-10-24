@@ -13,7 +13,7 @@ export default function KeyFeaturesSection() {
             <h2 className="text-3xl font-extrabold text-primary-900 sm:text-4xl">
               Discover Key Features
             </h2>
-            <p className="mt-4 text-xl text-primary-600">
+            <p className="mt-4 text-xl text-primary-700">
               Our app offers everything you need for your culinary adventures
             </p>
           </div>
@@ -37,11 +37,11 @@ export default function KeyFeaturesSection() {
 
             <div className="relative mx-auto w-fit md:col-span-2">
               <Image
-                src="https://utfs.io/f/tn9qWFoW4N1fXrHCl5NPVmK1qYxUoOFW08nMBS2ktiLuAc3w"
+                src="/recipe.webp"
                 alt="App features overview"
                 width={800}
                 height={300}
-                className="mx-auto rounded-lg shadow-xl"
+                className="mx-auto rounded-lg bg-primary-100"
               />
               <div className="absolute -left-8 -top-8 h-24 w-24 animate-pulse rounded-full bg-primary-300 opacity-50"></div>
               <div className="absolute -bottom-8 -right-8 h-32 w-32 animate-pulse rounded-full bg-primary-400 opacity-50"></div>
@@ -74,7 +74,7 @@ function FeatureCard({
         </div>
         <div>
           <h3 className="text-lg font-semibold text-primary-900">{feature.title}</h3>
-          <p className="mt-1 text-primary-600">{feature.description}</p>
+          <p className="mt-1 text-primary-800">{feature.description}</p>
         </div>
       </div>
     </div>

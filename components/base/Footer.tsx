@@ -29,22 +29,38 @@ export default function Footer() {
 
             <div className="flex space-x-4">
               <Button asChild size="icon">
-                <Link href={ExternalUrls.facebook} target="_blank" rel="noopener noreferrer">
+                <Link
+                  href={ExternalUrls.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Facebook Link">
                   <Facebook className="h-6 w-6" />
                 </Link>
               </Button>
               <Button asChild size="icon">
-                <Link href={ExternalUrls.x} target="_blank" rel="noopener noreferrer">
+                <Link
+                  href={ExternalUrls.x}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Twitter Link">
                   <Twitter className="h-6 w-6" />
                 </Link>
               </Button>
               <Button asChild size="icon">
-                <Link href={ExternalUrls.instagram} target="_blank" rel="noopener noreferrer">
+                <Link
+                  href={ExternalUrls.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Instagram Link">
                   <Instagram className="h-6 w-6" />
                 </Link>
               </Button>
               <Button asChild size="icon">
-                <Link href={ExternalUrls.youtube} target="_blank" rel="noopener noreferrer">
+                <Link
+                  href={ExternalUrls.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="YouTube Link">
                   <Youtube className="h-6 w-6" />
                 </Link>
               </Button>
