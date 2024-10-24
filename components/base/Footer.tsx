@@ -56,8 +56,8 @@ export default function Footer() {
 
             <ul className="space-y-2">
               {quickLinks.map((link, index) => (
-                <li>
-                  <NavLink key={index} link={link} />
+                <li key={index}>
+                  <NavLink link={link} />
                 </li>
               ))}
             </ul>
@@ -68,8 +68,8 @@ export default function Footer() {
 
             <ul className="space-y-2">
               {supportLinks.map((link, index) => (
-                <li>
-                  <NavLink key={index} link={link} />
+                <li key={index}>
+                  <NavLink link={link} />
                 </li>
               ))}
             </ul>
