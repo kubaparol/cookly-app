@@ -10,7 +10,7 @@ export default function TestimonialsSection() {
             <h2 className="text-3xl font-extrabold text-primary-900 sm:text-4xl">
               What Our Users Say
             </h2>
-            <p className="mt-4 text-xl text-primary-600">
+            <p className="mt-4 text-xl text-primary-700">
               Discover how our app is changing the way people cook and share recipes
             </p>
           </div>
@@ -44,7 +44,7 @@ function TestimonialCard({
         />
         <div>
           <h3 className="font-semibold text-primary-900">{testimonial.name}</h3>
-          <p className="text-sm text-primary-600">{testimonial.role}</p>
+          <p className="text-sm text-primary-700">{testimonial.role}</p>
         </div>
       </div>
 

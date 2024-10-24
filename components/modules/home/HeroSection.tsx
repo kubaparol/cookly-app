@@ -24,24 +24,24 @@ export default function HeroSection() {
         <div className="mx-auto mt-14 grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-3">
           <div className="flex flex-col items-center">
             <BookOpen className="mb-4 h-12 w-12 text-primary-600" />
-            <h3 className="text-lg font-semibold">Create Recipes</h3>
-            <p className="mt-2 text-sm text-primary-700">
+            <h2 className="text-lg font-semibold">Create Recipes</h2>
+            <p className="mt-2 text-sm text-primary-800">
               Easily add and organize your favorite recipes
             </p>
           </div>
 
           <div className="flex flex-col items-center">
             <Share2 className="mb-4 h-12 w-12 text-primary-600" />
-            <h3 className="text-lg font-semibold">Share with Friends</h3>
-            <p className="mt-2 text-sm text-primary-700">
+            <h2 className="text-lg font-semibold">Share with Friends</h2>
+            <p className="mt-2 text-sm text-primary-800">
               Spread the joy of cooking with your network
             </p>
           </div>
 
           <div className="flex flex-col items-center">
             <Users className="mb-4 h-12 w-12 text-primary-600" />
-            <h3 className="text-lg font-semibold">Join the Community</h3>
-            <p className="mt-2 text-sm text-primary-700">
+            <h2 className="text-lg font-semibold">Join the Community</h2>
+            <p className="mt-2 text-sm text-primary-800">
               Connect with food lovers from around the world
             </p>
           </div>
@@ -56,6 +56,7 @@ export default function HeroSection() {
               alt="Application Dashboard"
               width={1280}
               height={720}
+              priority
               className="h-auto w-full"
             />
           </div>

@@ -84,11 +84,60 @@ export default function RecipeForm(props: RecipeFormProps) {
   const form = useForm<RecipeFormValues>({
     resolver: zodResolver(recipeFormSchema),
     defaultValues: defaultValues || {
-      title: '',
-      description: undefined,
+      title: 'Lemon Herb Grilled Chicken',
+      description:
+        'A flavorful and juicy grilled chicken recipe marinated with fresh lemon, herbs, and garlic. Perfect for summer cookouts or a light dinner. Serve it with a side of roasted vegetables or a fresh salad for a complete meal.',
       imageUrl: '',
-      ingredients: [],
-      steps: [],
+      ingredients: [
+        { id: '1', quantity: 4, unit: 'pieces', name: 'chicken breasts' },
+        { id: '2', quantity: 0.25, unit: 'cup', name: 'olive oil' },
+        { id: '3', quantity: 3, unit: 'tbsp', name: 'lemon juice' },
+        { id: '4', quantity: 2, unit: 'tbsp', name: 'fresh parsley, chopped' },
+        { id: '5', quantity: 1, unit: 'tbsp', name: 'fresh thyme, chopped' },
+        { id: '6', quantity: 1, unit: 'tsp', name: 'garlic powder' },
+        { id: '7', quantity: 2, unit: 'cloves', name: 'garlic, minced' },
+        { id: '8', quantity: 1, unit: 'tsp', name: 'lemon zest' },
+        { id: '9', quantity: 0.5, unit: 'tsp', name: 'salt' },
+        { id: '10', quantity: 0.25, unit: 'tsp', name: 'black pepper' },
+      ],
+      steps: [
+        {
+          id: '1',
+          order: 1,
+          description:
+            'In a bowl, whisk together the olive oil, lemon juice, chopped parsley, thyme, garlic powder, minced garlic, lemon zest, salt, and black pepper.',
+        },
+        {
+          id: '2',
+          order: 2,
+          description:
+            'Place the chicken breasts in a large resealable plastic bag or shallow dish and pour the marinade over them. Seal the bag or cover the dish and refrigerate for at least 1 hour or up to 4 hours.',
+        },
+        {
+          id: '3',
+          order: 3,
+          description:
+            'Preheat your grill to medium-high heat. Lightly oil the grill grates to prevent sticking.',
+        },
+        {
+          id: '4',
+          order: 4,
+          description:
+            'Remove the chicken from the marinade and discard the marinade. Place the chicken on the grill and cook for 6-7 minutes on each side, or until the internal temperature reaches 165°F (75°C).',
+        },
+        {
+          id: '5',
+          order: 5,
+          description:
+            'Remove the chicken from the grill and let it rest for 5 minutes before serving. Garnish with additional fresh herbs and lemon slices if desired.',
+        },
+        {
+          id: '6',
+          order: 6,
+          description:
+            'Serve the grilled chicken with your favorite side dishes and enjoy a delicious meal.',
+        },
+      ],
     },
   });
 

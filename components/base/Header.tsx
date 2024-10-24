@@ -62,7 +62,7 @@ export default function Header() {
 
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger className="ml-auto md:hidden">
-            <Menu />
+            <Menu aria-label={isOpen ? 'close menu' : 'open menu'} />
           </SheetTrigger>
 
           <SheetContent side="right" className="w-full xs:w-3/4">

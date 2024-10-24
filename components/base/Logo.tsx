@@ -15,6 +15,7 @@ export default function Logo(props: LogoProps) {
       alt="Cookly Home"
       width={150}
       height={150}
+      priority
       className={cn('', className)}
     />
   );
