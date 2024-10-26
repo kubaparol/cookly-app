@@ -82,7 +82,7 @@ The application uses **server-side actions** to manage database queries efficien
 
 ### Key Next.js Features
 
-**Cookly** leverages some of the latest Next.js features, including:
+**Cookly App** leverages some of the latest Next.js features, including:
 
 - **App Router**: Used for structured and scalable routing across the app.
 - **Route Groups**: For organizing routes and logically grouping functionality.
@@ -94,7 +94,7 @@ The application uses **server-side actions** to manage database queries efficien
 
 ## Getting Started
 
-To run the Cookly App locally, follow these steps:
+To run the **Cookly App** locally, follow these steps:
 
 1. Clone the repository:
 
