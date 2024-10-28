@@ -4,7 +4,7 @@ import StatusCard from '../shared/StatusCard';
 
 export default function UnderConstructionPlaceholder() {
   return (
-    <div className="flex h-full flex-1 items-center justify-center">
+    <div className="flex h-full flex-1 items-center justify-center py-32">
       <StatusCard
         type="construction"
         title="Coming Soon!"
