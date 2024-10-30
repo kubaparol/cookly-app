@@ -16,7 +16,7 @@ export default function ErrorPage(props: ErrorPageProps) {
         type="alert"
         title="Oops! Something went wrong"
         message="We're sorry, but it seems our app got a little mixed up. Let's try to fix it!"
-        primaryAction={{ label: 'Try again', onClick: () => console.log('Try again') }}
+        primaryAction={{ label: 'Try again', onClick: () => reset }}
       />
     </div>
   );
