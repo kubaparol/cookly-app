@@ -77,5 +77,10 @@ export function RecipeFormSkeleton() {
 }
 
 export function SettingsSkeleton() {
-  return <Skeleton className="h-[254px] md:h-[194px]" />;
+  return (
+    <div className="grid gap-8">
+      <Skeleton className="h-[318px] md:h-[226px]" />
+      <Skeleton className="h-[318px] md:h-[226px]" />
+    </div>
+  );
 }

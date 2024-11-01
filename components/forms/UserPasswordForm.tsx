@@ -8,29 +8,30 @@ import { Button } from '../ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
 
-interface UserDetailsFormProps {
-  defaultValues?: UserDetailsFormValues;
-}
+interface UserPasswordFormProps {}
 
-export const UserDetailsFormSchema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
+export const UserPasswordFormSchema = z.object({
+  currentPassword: z.string().min(1, 'Current password is required'),
+  newPassword: z
+    .string()
+    .min(1, 'New password name is required')
+    .min(8, 'Password must be at least 8 characters'),
 });
 
-export type UserDetailsFormValues = z.infer<typeof UserDetailsFormSchema>;
+export type UserPasswordFormValues = z.infer<typeof UserPasswordFormSchema>;
 
-export default function UserDetailsForm(props: UserDetailsFormProps) {
-  const { defaultValues } = props;
+export default function UserPasswordForm(props: UserPasswordFormProps) {
+  const {} = props;
 
-  const form = useForm<UserDetailsFormValues>({
-    resolver: zodResolver(UserDetailsFormSchema),
-    defaultValues: defaultValues || {
-      firstName: '',
-      lastName: '',
+  const form = useForm<UserPasswordFormValues>({
+    resolver: zodResolver(UserPasswordFormSchema),
+    defaultValues: {
+      currentPassword: '',
+      newPassword: '',
     },
   });
 
-  const submitHandler = (values: UserDetailsFormValues) => {
+  const submitHandler = (values: UserPasswordFormValues) => {
     console.log(values);
   };
 
@@ -40,13 +41,13 @@ export default function UserDetailsForm(props: UserDetailsFormProps) {
         <div className="grid gap-6 md:grid-cols-2">
           <FormField
             control={form.control}
-            name="firstName"
+            name="currentPassword"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>First Name</FormLabel>
+                <FormLabel>Current Password</FormLabel>
 
                 <FormControl className="bg-white">
-                  <Input placeholder="e.g., John" {...field} />
+                  <Input placeholder="********" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -55,13 +56,13 @@ export default function UserDetailsForm(props: UserDetailsFormProps) {
 
           <FormField
             control={form.control}
-            name="lastName"
+            name="newPassword"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Last Name</FormLabel>
+                <FormLabel>New Password</FormLabel>
 
                 <FormControl className="bg-white">
-                  <Input placeholder="e.g., Doe" {...field} />
+                  <Input placeholder="********" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
