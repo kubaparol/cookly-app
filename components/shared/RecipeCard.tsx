@@ -7,7 +7,6 @@ import { ProjectUrls } from '@/constants';
 import { deleteRecipe } from '@/db';
 
 import DeleteRecipeContainer from '../containers/DeleteRecipeContainer';
-import DeleteRecipeForm from '../forms/DeleteRecipeForm';
 import { Button } from '../ui/button';
 
 interface RecipeCardProps {
