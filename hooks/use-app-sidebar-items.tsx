@@ -1,5 +1,5 @@
 import { useClerk } from '@clerk/nextjs';
-import { Home, LucideProps, PowerIcon, ScrollText } from 'lucide-react';
+import { Home, LucideProps, PowerIcon, ScrollText, Settings } from 'lucide-react';
 import { ComponentType, useMemo } from 'react';
 
 import { ProjectUrls } from '@/constants/urls';
@@ -32,6 +32,11 @@ export const useAppSidebarItems = () => {
 
   const bottomItems = useMemo<SidebarItemEntity[]>(
     () => [
+      {
+        label: 'Settings',
+        url: ProjectUrls.settings,
+        icon: Settings,
+      },
       {
         label: 'Sign Out',
         onClick: () => signOut({ redirectUrl: ProjectUrls.home }),

@@ -19,6 +19,7 @@ export const ProjectUrls = Object.freeze({
   myRecipes: '/my-recipes',
   createRecipe: '/my-recipes/create',
   editRecipe: (id: string) => `/my-recipes/${id}/edit`,
+  settings: '/settings',
 });
 
 export const ExternalUrls = Object.freeze({

@@ -75,3 +75,7 @@ export function RecipeFormSkeleton() {
     </div>
   );
 }
+
+export function SettingsSkeleton() {
+  return <Skeleton className="h-[254px] md:h-[194px]" />;
+}
