@@ -5,7 +5,6 @@ import PageTitle from '@/components/base/PageTitle';
 import RecentRecipesCardContainer from '@/components/containers/RecentRecipesCardContainer';
 import RecipesOverviewCardContainer from '@/components/containers/RecipesOverviewCardContainer';
 import StatisticCardsContainer from '@/components/containers/StatisticCardsContainer';
-import RecentRecipesCard from '@/components/shared/RecentRecipesCard';
 import {
   RecentRecipesCardSkeleton,
   RecipesOverviewCardSkeleton,
