@@ -10,6 +10,7 @@ import { ProjectUrls } from '@/constants/urls';
 
 import AppSidebar from '../base/AppSidebar';
 import Logo from '../base/Logo';
+import UserPreviewContainer from '../containers/UserPreviewContainer';
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 
 interface AppLayoutProps {
@@ -34,22 +35,24 @@ export default function AppLayout(props: AppLayoutProps) {
             <Menu />
           </SheetTrigger>
 
-          <SheetContent side="right" className="w-full xxs:w-3/4">
+          <SheetContent side="right" className="flex h-full w-full flex-col xxs:w-3/4">
             <AppSidebar
               topItems={topItems}
               bottomItems={bottomItems}
               onClose={() => setIsOpen(false)}
             />
+
+            <UserPreviewContainer />
           </SheetContent>
         </Sheet>
       </div>
 
       <div className="flex h-screen overflow-hidden">
-        <div className="hidden w-full flex-col px-3 py-4 md:flex md:w-64 md:px-2">
+        <div className="hidden w-full flex-col gap-2 px-3 py-4 md:flex md:w-64 md:px-2">
           <Link
             href={ProjectUrls.home}
             title="Cookly Home"
-            className="mb-2 grid place-items-center rounded-md bg-primary-100 p-4">
+            className="grid place-items-center rounded-md bg-primary-100 p-4">
             <Logo className="max-w-[140px]" />
           </Link>
 
@@ -58,6 +61,8 @@ export default function AppLayout(props: AppLayoutProps) {
             bottomItems={bottomItems}
             onClose={() => setIsOpen(false)}
           />
+
+          <UserPreviewContainer />
         </div>
 
         <div className="min-h-[calc(100vh-(56px))] flex-1 overflow-y-scroll px-3 py-4 sm:px-6 md:min-h-[calc(100vh)]">
