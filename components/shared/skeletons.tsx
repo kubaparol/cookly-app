@@ -93,3 +93,21 @@ export function UserDetailsFormSkeleton() {
     </div>
   );
 }
+
+export function UserPasswordFormSkeleton() {
+  return (
+    <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4">
+        <Skeleton className="h-[18px] w-[80px]" />
+        <Skeleton className="h-[36px]" />
+      </div>
+
+      <div className="grid gap-4">
+        <Skeleton className="h-[18px] w-[80px]" />
+        <Skeleton className="h-[36px]" />
+      </div>
+
+      <Skeleton className="h-[36px] w-[64px]" />
+    </div>
+  );
+}

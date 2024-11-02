@@ -8,7 +8,9 @@ import { Button } from '../ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
 
-interface UserPasswordFormProps {}
+interface UserPasswordFormProps {
+  onFormSubmit: (values: UserPasswordFormValues) => Promise<void>;
+}
 
 export const UserPasswordFormSchema = z.object({
   currentPassword: z.string().min(1, 'Current password is required'),
@@ -21,7 +23,7 @@ export const UserPasswordFormSchema = z.object({
 export type UserPasswordFormValues = z.infer<typeof UserPasswordFormSchema>;
 
 export default function UserPasswordForm(props: UserPasswordFormProps) {
-  const {} = props;
+  const { onFormSubmit } = props;
 
   const form = useForm<UserPasswordFormValues>({
     resolver: zodResolver(UserPasswordFormSchema),
@@ -31,13 +33,9 @@ export default function UserPasswordForm(props: UserPasswordFormProps) {
     },
   });
 
-  const submitHandler = (values: UserPasswordFormValues) => {
-    console.log(values);
-  };
-
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(submitHandler)} className="grid gap-8">
+      <form onSubmit={form.handleSubmit(onFormSubmit)} className="grid gap-8">
         <div className="grid gap-6 md:grid-cols-2">
           <FormField
             control={form.control}

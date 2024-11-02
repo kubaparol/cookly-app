@@ -13,15 +13,17 @@ export default function UserDetailsContainer() {
   const { user, isLoaded } = useUser();
 
   const userDetailsHandler = useCallback(async (values: UserDetailsFormValues) => {
-    await user?.update({
-      firstName: values.firstName,
-      lastName: values.lastName,
-    });
+    try {
+      await user?.update({
+        firstName: values.firstName,
+        lastName: values.lastName,
+      });
 
-    toast.success('User details updated successfully');
+      toast.success('User details updated successfully');
+    } catch (error) {
+      toast.error('Failed to update user details');
+    }
   }, []);
-
-  if (!isLoaded) return <UserDetailsFormSkeleton />;
 
   return (
     <Card>
@@ -30,10 +32,14 @@ export default function UserDetailsContainer() {
       </CardHeader>
 
       <CardContent>
-        <UserDetailsForm
-          defaultValues={{ firstName: user?.firstName || '', lastName: user?.lastName || '' }}
-          onFormSubmit={userDetailsHandler}
-        />
+        {!isLoaded ? (
+          <UserDetailsFormSkeleton />
+        ) : (
+          <UserDetailsForm
+            defaultValues={{ firstName: user?.firstName || '', lastName: user?.lastName || '' }}
+            onFormSubmit={userDetailsHandler}
+          />
+        )}
       </CardContent>
     </Card>
   );
