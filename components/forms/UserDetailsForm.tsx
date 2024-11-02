@@ -1,10 +1,8 @@
 'use client';
 
-import { useUser } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Button } from '../ui/button';
@@ -13,6 +11,7 @@ import { Input } from '../ui/input';
 
 interface UserDetailsFormProps {
   defaultValues?: UserDetailsFormValues;
+  onFormSubmit: (values: UserDetailsFormValues) => void;
 }
 
 export const UserDetailsFormSchema = z.object({
@@ -23,9 +22,7 @@ export const UserDetailsFormSchema = z.object({
 export type UserDetailsFormValues = z.infer<typeof UserDetailsFormSchema>;
 
 export default function UserDetailsForm(props: UserDetailsFormProps) {
-  const { defaultValues } = props;
-
-  const { user } = useUser();
+  const { defaultValues, onFormSubmit } = props;
 
   const form = useForm<UserDetailsFormValues>({
     resolver: zodResolver(UserDetailsFormSchema),
@@ -35,20 +32,11 @@ export default function UserDetailsForm(props: UserDetailsFormProps) {
     },
   });
 
-  const submitHandler = async (values: UserDetailsFormValues) => {
-    await user?.update({
-      firstName: values.firstName,
-      lastName: values.lastName,
-    });
-
-    toast.success('User details updated successfully');
-  };
-
   const isSubmitting = form.formState.isSubmitting;
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(submitHandler)} className="grid gap-8">
+      <form onSubmit={form.handleSubmit(onFormSubmit)} className="grid gap-8">
         <div className="grid gap-6 md:grid-cols-2">
           <FormField
             control={form.control}
