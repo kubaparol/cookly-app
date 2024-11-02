@@ -4,6 +4,8 @@ import { useUser } from '@clerk/nextjs';
 import { useCallback } from 'react';
 import { toast } from 'sonner';
 
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
 import UserDetailsForm, { UserDetailsFormValues } from '../forms/UserDetailsForm';
 import { UserDetailsFormSkeleton } from '../shared/skeletons';
 
@@ -22,9 +24,17 @@ export default function UserDetailsContainer() {
   if (!isLoaded) return <UserDetailsFormSkeleton />;
 
   return (
-    <UserDetailsForm
-      defaultValues={{ firstName: user?.firstName || '', lastName: user?.lastName || '' }}
-      onFormSubmit={userDetailsHandler}
-    />
+    <Card>
+      <CardHeader>
+        <CardTitle>User Details</CardTitle>
+      </CardHeader>
+
+      <CardContent>
+        <UserDetailsForm
+          defaultValues={{ firstName: user?.firstName || '', lastName: user?.lastName || '' }}
+          onFormSubmit={userDetailsHandler}
+        />
+      </CardContent>
+    </Card>
   );
 }

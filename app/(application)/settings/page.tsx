@@ -15,15 +15,7 @@ export default function SettingsPage() {
       <PageTitle title="Settings" />
 
       <div className="grid gap-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>User Details</CardTitle>
-          </CardHeader>
-
-          <CardContent>
-            <UserDetailsContainer />
-          </CardContent>
-        </Card>
+        <UserDetailsContainer />
 
         <Card>
           <CardHeader>
