@@ -1,7 +1,10 @@
 'use client';
 
+import { useUser } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Button } from '../ui/button';
@@ -22,6 +25,8 @@ export type UserDetailsFormValues = z.infer<typeof UserDetailsFormSchema>;
 export default function UserDetailsForm(props: UserDetailsFormProps) {
   const { defaultValues } = props;
 
+  const { user } = useUser();
+
   const form = useForm<UserDetailsFormValues>({
     resolver: zodResolver(UserDetailsFormSchema),
     defaultValues: defaultValues || {
@@ -30,9 +35,16 @@ export default function UserDetailsForm(props: UserDetailsFormProps) {
     },
   });
 
-  const submitHandler = (values: UserDetailsFormValues) => {
-    console.log(values);
+  const submitHandler = async (values: UserDetailsFormValues) => {
+    await user?.update({
+      firstName: values.firstName,
+      lastName: values.lastName,
+    });
+
+    toast.success('User details updated successfully');
   };
+
+  const isSubmitting = form.formState.isSubmitting;
 
   return (
     <Form {...form}>
@@ -46,7 +58,7 @@ export default function UserDetailsForm(props: UserDetailsFormProps) {
                 <FormLabel>First Name</FormLabel>
 
                 <FormControl className="bg-white">
-                  <Input placeholder="e.g., John" {...field} />
+                  <Input placeholder="e.g., John" disabled={isSubmitting} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -61,7 +73,7 @@ export default function UserDetailsForm(props: UserDetailsFormProps) {
                 <FormLabel>Last Name</FormLabel>
 
                 <FormControl className="bg-white">
-                  <Input placeholder="e.g., Doe" {...field} />
+                  <Input placeholder="e.g., Doe" disabled={isSubmitting} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -69,8 +81,9 @@ export default function UserDetailsForm(props: UserDetailsFormProps) {
           />
         </div>
 
-        <Button type="submit" className="w-fit">
-          Save
+        <Button type="submit" disabled={isSubmitting} className="w-fit">
+          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {form.formState.isSubmitting ? 'Submitting...' : 'Save'}
         </Button>
       </form>
     </Form>
