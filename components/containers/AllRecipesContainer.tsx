@@ -1,4 +1,4 @@
-import { getAllRecipes, getMyRecipes } from '@/db';
+import { getAllRecipes } from '@/db';
 
 import RecipeCard from '../shared/RecipeCard';
 import StatusCard from '../shared/StatusCard';

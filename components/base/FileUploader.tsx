@@ -8,7 +8,7 @@ import { generateClientDropzoneAccept } from 'uploadthing/client';
 
 import { cn, convertFileToUrl } from '@/utils';
 
-import { MAX_FILE_SIZE } from '@/constants';
+import { MAX_UPLOADTHING_FILE_SIZE } from '@/constants';
 
 import { Button } from '@/components/ui/button';
 
@@ -80,7 +80,7 @@ export default function FileUploader(props: FileUploaderProps) {
             </p>
 
             <p>
-              Max file size: <span className="font-normal">{MAX_FILE_SIZE}</span>
+              Max file size: <span className="font-normal">{MAX_UPLOADTHING_FILE_SIZE}</span>
             </p>
           </div>
 

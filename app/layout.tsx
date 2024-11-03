@@ -29,7 +29,7 @@ export default function RootLayout(props: RootLayoutProps) {
         <body className={`${inter.className} antialiased`}>
           {children}
 
-          <Toaster position="top-right" />
+          <Toaster position="top-right" richColors />
         </body>
       </html>
     </ClerkProvider>

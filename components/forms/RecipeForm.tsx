@@ -1,8 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { BadgeCheck, Dot, Loader2, Pencil, Plus, X } from 'lucide-react';
-import Link from 'next/link';
+import { Loader2, Pencil, Plus, X } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';

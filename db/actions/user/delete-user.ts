@@ -7,19 +7,15 @@ import { handleError } from '@/utils';
 import { users } from '@/db';
 import { db } from '@/db/drizzle';
 
-import { UpdateUserParams } from './types';
-
-export async function updateUser(clerkId: string, user: UpdateUserParams) {
+export async function deleteUser(clerkId: string) {
   try {
-    const [updatedUser] = await db
-      .update(users)
-      .set(user)
-      .where(eq(users.clerkId, clerkId))
-      .returning();
+    const [deletedUser] = await db.delete(users).where(eq(users.clerkId, clerkId)).returning();
 
-    if (!updatedUser) throw new Error('User update failed');
+    if (!deletedUser) {
+      throw new Error('User not found');
+    }
 
-    return JSON.parse(JSON.stringify(updatedUser));
+    return deletedUser ? JSON.parse(JSON.stringify(deletedUser)) : null;
   } catch (error) {
     handleError(error);
   }
