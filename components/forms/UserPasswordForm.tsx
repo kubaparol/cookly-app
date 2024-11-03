@@ -1,12 +1,16 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
+import { ClerkError } from '@/types';
+
+import { PasswordInput } from '../base/PasswordInput';
 import { Button } from '../ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Input } from '../ui/input';
 
 interface UserPasswordFormProps {
   onFormSubmit: (values: UserPasswordFormValues) => Promise<void>;
@@ -33,9 +37,24 @@ export default function UserPasswordForm(props: UserPasswordFormProps) {
     },
   });
 
+  const submitHandler = async (values: UserPasswordFormValues) => {
+    try {
+      await onFormSubmit(values);
+
+      toast.success('User password updated successfully');
+      form.reset();
+    } catch (error) {
+      const message = (error as ClerkError).errors[0].message;
+
+      toast.error(message);
+    }
+  };
+
+  const isSubmitting = form.formState.isSubmitting;
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onFormSubmit)} className="grid gap-8">
+      <form onSubmit={form.handleSubmit(submitHandler)} className="grid gap-8">
         <div className="grid gap-6 md:grid-cols-2">
           <FormField
             control={form.control}
@@ -45,7 +64,7 @@ export default function UserPasswordForm(props: UserPasswordFormProps) {
                 <FormLabel>Current Password</FormLabel>
 
                 <FormControl className="bg-white">
-                  <Input placeholder="********" {...field} />
+                  <PasswordInput placeholder="********" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -60,7 +79,7 @@ export default function UserPasswordForm(props: UserPasswordFormProps) {
                 <FormLabel>New Password</FormLabel>
 
                 <FormControl className="bg-white">
-                  <Input placeholder="********" {...field} />
+                  <PasswordInput placeholder="********" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -68,8 +87,9 @@ export default function UserPasswordForm(props: UserPasswordFormProps) {
           />
         </div>
 
-        <Button type="submit" className="w-fit">
-          Save
+        <Button type="submit" disabled={isSubmitting} className="w-fit">
+          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {form.formState.isSubmitting ? 'Submitting...' : 'Save'}
         </Button>
       </form>
     </Form>
