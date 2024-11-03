@@ -17,6 +17,12 @@ export default function UserDetailsContainer() {
         firstName: values.firstName,
         lastName: values.lastName,
       });
+
+      if (typeof values.profileImage !== 'string') {
+        await user?.setProfileImage({
+          file: values.profileImage,
+        });
+      }
     },
     [user],
   );
@@ -32,7 +38,11 @@ export default function UserDetailsContainer() {
           <UserDetailsFormSkeleton />
         ) : (
           <UserDetailsForm
-            defaultValues={{ firstName: user?.firstName || '', lastName: user?.lastName || '' }}
+            defaultValues={{
+              profileImage: user?.imageUrl,
+              firstName: user?.firstName || '',
+              lastName: user?.lastName || '',
+            }}
             onFormSubmit={userDetailsHandler}
           />
         )}

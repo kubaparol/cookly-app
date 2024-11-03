@@ -4,9 +4,11 @@ import Image from 'next/image';
 
 import { ProjectUrls } from '@/constants';
 
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 
 export default function UserPreviewContainer() {
   const { signOut } = useClerk();
@@ -28,13 +30,17 @@ export default function UserPreviewContainer() {
         </>
       ) : (
         <>
-          <Image
+          {/* <Image
             src={user?.imageUrl || ''}
             alt={`Profile picture of ${name}`}
             width={32}
             height={32}
             className="rounded-full"
-          />
+          /> */}
+
+          <Avatar className="size-8">
+            <AvatarImage src={user?.imageUrl || ''} alt={`Profile picture of ${name}`} />
+          </Avatar>
 
           <div className="grid">
             <p title={name} className="truncate text-sm">
