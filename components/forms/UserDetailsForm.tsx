@@ -15,8 +15,14 @@ interface UserDetailsFormProps {
 }
 
 export const UserDetailsFormSchema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
+  firstName: z
+    .string()
+    .min(1, 'First name is required')
+    .max(256, 'First name must be less than 256 characters'),
+  lastName: z
+    .string()
+    .min(1, 'Last name is required')
+    .max(256, 'Last name must be less than 256 characters'),
 });
 
 export type UserDetailsFormValues = z.infer<typeof UserDetailsFormSchema>;
