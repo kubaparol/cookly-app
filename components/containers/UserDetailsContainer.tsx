@@ -2,7 +2,6 @@
 
 import { useUser } from '@clerk/nextjs';
 import { useCallback } from 'react';
-import { toast } from 'sonner';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -14,16 +13,10 @@ export default function UserDetailsContainer() {
 
   const userDetailsHandler = useCallback(
     async (values: UserDetailsFormValues) => {
-      try {
-        await user?.update({
-          firstName: values.firstName,
-          lastName: values.lastName,
-        });
-
-        toast.success('User details updated successfully');
-      } catch (error) {
-        toast.error('Failed to update user details');
-      }
+      await user?.update({
+        firstName: values.firstName,
+        lastName: values.lastName,
+      });
     },
     [user],
   );

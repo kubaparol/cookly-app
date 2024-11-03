@@ -2,11 +2,8 @@
 
 import { useUser } from '@clerk/nextjs';
 import { useCallback } from 'react';
-import { toast } from 'sonner';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
-import { ClerkError } from '@/types';
 
 import UserPasswordForm, { UserPasswordFormValues } from '../forms/UserPasswordForm';
 import { UserPasswordFormSkeleton } from '../shared/skeletons';

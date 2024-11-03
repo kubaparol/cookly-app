@@ -3,7 +3,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
+
+import { ClerkError } from '@/types';
 
 import { Button } from '../ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
@@ -11,7 +14,7 @@ import { Input } from '../ui/input';
 
 interface UserDetailsFormProps {
   defaultValues?: UserDetailsFormValues;
-  onFormSubmit: (values: UserDetailsFormValues) => void;
+  onFormSubmit: (values: UserDetailsFormValues) => Promise<void>;
 }
 
 export const UserDetailsFormSchema = z.object({
@@ -38,11 +41,23 @@ export default function UserDetailsForm(props: UserDetailsFormProps) {
     },
   });
 
+  const submitHandler = async (values: UserDetailsFormValues) => {
+    try {
+      await onFormSubmit(values);
+
+      toast.success('User details updated successfully');
+    } catch (error) {
+      const message = (error as ClerkError).errors[0].message;
+
+      toast.error(message);
+    }
+  };
+
   const isSubmitting = form.formState.isSubmitting;
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onFormSubmit)} className="grid gap-8">
+      <form onSubmit={form.handleSubmit(submitHandler)} className="grid gap-8">
         <div className="grid gap-6 md:grid-cols-2">
           <FormField
             control={form.control}
