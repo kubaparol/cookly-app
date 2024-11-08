@@ -64,7 +64,7 @@ dependencies:
     version: 0.451.0(react@18.3.1)
   next:
     specifier: 14.2.15
-    version: 14.2.15(react-dom@18.3.1)(react@18.3.1)
+    version: 14.2.15(@playwright/test@1.48.2)(react-dom@18.3.1)(react@18.3.1)
   next-themes:
     specifier: ^0.3.0
     version: 0.3.0(react-dom@18.3.1)(react@18.3.1)
@@ -106,6 +106,9 @@ dependencies:
     version: 3.23.8
 
 devDependencies:
+  '@playwright/test':
+    specifier: ^1.48.2
+    version: 1.48.2
   '@trivago/prettier-plugin-sort-imports':
     specifier: ^4.3.0
     version: 4.3.0(prettier@3.3.3)
@@ -325,7 +328,7 @@ packages:
       '@clerk/shared': 2.9.0(react-dom@18.3.1)(react@18.3.1)
       '@clerk/types': 4.25.0
       crypto-js: 4.2.0
-      next: 14.2.15(react-dom@18.3.1)(react@18.3.1)
+      next: 14.2.15(@playwright/test@1.48.2)(react-dom@18.3.1)(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       server-only: 0.0.1
@@ -1252,6 +1255,13 @@ packages:
     requiresBuild: true
     optional: true
 
+  /@playwright/test@1.48.2:
+    resolution: {integrity: sha512-54w1xCWfXuax7dz4W2M9uw0gDyh+ti/0K/MxcCUxChFh37kkdxPdfZDw5QBbuPUJHr1CiHJ1hXgSs+GgeQc5Zw==}
+    engines: {node: '>=18'}
+    hasBin: true
+    dependencies:
+      playwright: 1.48.2
+
   /@radix-ui/number@1.1.0:
     resolution: {integrity: sha512-V3gRzhVNU1ldS5XhAPTom1fOIo4ccrjjJgmE+LI2h/WaFpHmx0MQApT+KZHnx8abG6Avtfcz4WoEciMnpFT3HQ==}
     dev: false
@@ -2114,7 +2124,7 @@ packages:
     dependencies:
       '@uploadthing/shared': 7.0.3
       file-selector: 0.6.0
-      next: 14.2.15(react-dom@18.3.1)(react@18.3.1)
+      next: 14.2.15(@playwright/test@1.48.2)(react-dom@18.3.1)(react@18.3.1)
       react: 18.3.1
       uploadthing: 7.1.0(next@14.2.15)(tailwindcss@3.4.13)
     dev: false
@@ -3464,6 +3474,13 @@ packages:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
     dev: true
 
+  /fsevents@2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
+    requiresBuild: true
+    optional: true
+
   /fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
@@ -4128,7 +4145,7 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
     dev: false
 
-  /next@14.2.15(react-dom@18.3.1)(react@18.3.1):
+  /next@14.2.15(@playwright/test@1.48.2)(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-h9ctmOokpoDphRvMGnwOJAedT6zKhwqyZML9mDtspgf4Rh3Pn7UTYKqePNoDvhsWBAO5GoPNYshnAUGIazVGmw==}
     engines: {node: '>=18.17.0'}
     hasBin: true
@@ -4147,6 +4164,7 @@ packages:
         optional: true
     dependencies:
       '@next/env': 14.2.15
+      '@playwright/test': 1.48.2
       '@swc/helpers': 0.5.5
       busboy: 1.6.0
       caniuse-lite: 1.0.30001667
@@ -4377,6 +4395,20 @@ packages:
   /pirates@4.0.6:
     resolution: {integrity: sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==}
     engines: {node: '>= 6'}
+
+  /playwright-core@1.48.2:
+    resolution: {integrity: sha512-sjjw+qrLFlriJo64du+EK0kJgZzoQPsabGF4lBvsid+3CNIZIYLgnMj9V6JY5VhM2Peh20DJWIVpVljLLnlawA==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  /playwright@1.48.2:
+    resolution: {integrity: sha512-NjYvYgp4BPmiwfe31j4gHLa3J7bD2WiBz8Lk2RoSsmX38SVIARZ18VYjxLjAcDsAhA+F4iSEXTSGgjua0rrlgQ==}
+    engines: {node: '>=18'}
+    hasBin: true
+    dependencies:
+      playwright-core: 1.48.2
+    optionalDependencies:
+      fsevents: 2.3.2
 
   /possible-typed-array-names@1.0.0:
     resolution: {integrity: sha512-d7Uw+eZoloe0EHDIYoe+bQ5WXnGMOpmiZFTuMWCwpjzzkL2nTjcKiAk4hh8TjnGye2TwWOk3UXucZ+3rbmBa8Q==}
@@ -5375,7 +5407,7 @@ packages:
       '@uploadthing/mime-types': 0.3.0
       '@uploadthing/shared': 7.0.3
       effect: 3.7.2
-      next: 14.2.15(react-dom@18.3.1)(react@18.3.1)
+      next: 14.2.15(@playwright/test@1.48.2)(react-dom@18.3.1)(react@18.3.1)
       tailwindcss: 3.4.13
     dev: false
 

@@ -255,7 +255,7 @@ export default function RecipeForm(props: RecipeFormProps) {
                   />
                 </FormControl>
 
-                <FormMessage />
+                <FormMessage data-testid="error-message" />
               </FormItem>
             )}
           />
@@ -275,7 +275,8 @@ export default function RecipeForm(props: RecipeFormProps) {
                     className="rounded-2xl"
                   />
                 </FormControl>
-                <FormMessage />
+
+                <FormMessage data-testid="error-message" />
               </FormItem>
             )}
           />
@@ -298,7 +299,8 @@ export default function RecipeForm(props: RecipeFormProps) {
                     disabled={isSubmitting}
                   />
                 </FormControl>
-                <FormMessage />
+
+                <FormMessage data-testid="error-message" />
               </FormItem>
             )}
           />
@@ -321,7 +323,7 @@ export default function RecipeForm(props: RecipeFormProps) {
                   {field.value.length > 0 && (
                     <ul className="grid w-full gap-4">
                       {field.value.map((field, index) => (
-                        <li key={index}>
+                        <li key={index} data-testid="ingredient">
                           <Badge variant="secondary" className="flex w-full justify-between gap-3">
                             <p className="text-sm">
                               {field.quantity} {field.unit}{' '}
@@ -391,7 +393,7 @@ export default function RecipeForm(props: RecipeFormProps) {
                   </Button>
                 </div>
 
-                <FormMessage />
+                <FormMessage data-testid="error-message" />
               </FormItem>
             )}
           />
@@ -416,7 +418,7 @@ export default function RecipeForm(props: RecipeFormProps) {
                       {field.value
                         .sort((a, b) => a.order - b.order)
                         .map((field, index) => (
-                          <li key={field.id}>
+                          <li key={field.id} data-testid="step">
                             <Badge variant="secondary" className="flex justify-between gap-3">
                               <p className="text-sm font-light">
                                 <span className="font-semibold">{index + 1}.</span>{' '}
@@ -486,7 +488,7 @@ export default function RecipeForm(props: RecipeFormProps) {
                   </Button>
                 </div>
 
-                <FormMessage />
+                <FormMessage data-testid="error-message" />
               </FormItem>
             )}
           />
