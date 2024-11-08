@@ -28,12 +28,10 @@ test.beforeEach(async ({ page }) => {
   await page.getByRole('link', { name: 'Login' }).click();
 
   const email = page.getByLabel('Email address');
-  await email.fill('kubciop33@gmail.com');
 
   await page.getByRole('button', { name: 'Continue' }).click();
 
   const password = page.getByLabel('Password', { exact: true });
-  await password.fill('kubciop33@gmail.com');
 
   await page.getByRole('button', { name: 'Continue' }).click();
 
