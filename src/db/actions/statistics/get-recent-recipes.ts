@@ -1,7 +1,6 @@
 'use server';
 
 import { currentUser } from '@clerk/nextjs/server';
-import dayjs from 'dayjs';
 import { SQL, and, asc, eq } from 'drizzle-orm';
 
 import { handleError } from '@/utils';

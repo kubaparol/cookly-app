@@ -6,9 +6,7 @@ import { cn } from '@/utils';
 import { Button } from '../ui/button';
 import { Input, InputProps } from '../ui/input';
 
-interface PasswordInputProps extends InputProps {}
-
-const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>((props, ref) => {
+const PasswordInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const { className, ...rest } = props;
 
   const [showPassword, setShowPassword] = useState(false);
@@ -42,5 +40,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>((props, r
     </div>
   );
 });
+
+PasswordInput.displayName = 'PasswordInput';
 
 export { PasswordInput };

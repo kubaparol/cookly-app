@@ -7,17 +7,13 @@ import { Button } from '../ui/button';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
 
-interface NewsletterFormProps {}
-
 export const NewsletterFormSchema = z.object({
   email: z.string().email('Invalid email address'),
 });
 
 export type NewsletterFormValues = z.infer<typeof NewsletterFormSchema>;
 
-export default function NewsletterForm(props: NewsletterFormProps) {
-  const {} = props;
-
+export default function NewsletterForm() {
   const form = useForm<NewsletterFormValues>({
     resolver: zodResolver(NewsletterFormSchema),
     defaultValues: {
@@ -25,7 +21,7 @@ export default function NewsletterForm(props: NewsletterFormProps) {
     },
   });
 
-  const submitHandler = (values: NewsletterFormValues) => {
+  const submitHandler = () => {
     form.reset();
     toast.success('You have been successfully added to the newsletter!');
   };
