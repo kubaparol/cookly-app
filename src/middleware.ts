@@ -1,6 +1,6 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-import { ProjectUrls } from './constants';
+import { ProjectUrls } from '@/constants';
 
 const isPublicRoute = createRouteMatcher([
   // project routes

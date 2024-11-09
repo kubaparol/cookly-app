@@ -12,9 +12,9 @@ import { recipes } from '@/db/schema';
 import { RecipesOverviewChartData } from '@/components/shared/RecipesOverviewCard';
 
 export async function getRecipesOverview() {
-  try {
-    const user = await currentUser();
+  const user = await currentUser();
 
+  try {
     if (!user) throw new Error('User not found');
 
     const filters: SQL[] = [eq(recipes.authorId, user.id)];

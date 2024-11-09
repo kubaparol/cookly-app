@@ -9,7 +9,6 @@ import { ExternalUrls, ProjectUrls } from '@/constants';
 
 import NewsletterForm from '../forms/NewsletterForm';
 import { Button } from '../ui/button';
-import { Input } from '../ui/input';
 import Logo from './Logo';
 import NavLink from './NavLink';
 

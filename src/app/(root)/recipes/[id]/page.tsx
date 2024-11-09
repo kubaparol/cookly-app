@@ -12,18 +12,20 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
 
   const recipe = await getOneRecipe(id);
 
+  if (!recipe) return {};
+
   return {
-    title: recipe?.title,
+    title: recipe.title,
     description: recipe?.description,
     openGraph: {
-      title: recipe?.title,
-      ...(recipe?.description && { description: recipe.description }),
+      title: recipe.title,
+      ...(recipe.description && { description: recipe.description }),
       images: [
         {
-          url: recipe?.imageUrl!,
+          url: recipe.imageUrl,
           width: 800,
           height: 600,
-          alt: `${recipe?.title} picture`,
+          alt: `${recipe.title} picture`,
         },
       ],
     },
