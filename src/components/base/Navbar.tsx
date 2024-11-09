@@ -18,7 +18,7 @@ export default function Navbar(props: NavbarProps) {
     <nav {...rest} className={cn('', className)}>
       <ul className="flex flex-col gap-2 md:flex-row md:gap-8">
         {links.map((link, index) => (
-          <li key={index}>
+          <li key={index} onClick={onClose}>
             <NavLink link={link} />
           </li>
         ))}

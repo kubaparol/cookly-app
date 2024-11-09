@@ -4,8 +4,6 @@ import Link from 'next/link';
 
 import { ProjectUrls } from '@/constants';
 
-import { deleteRecipe } from '@/db';
-
 import DeleteRecipeContainer from '../containers/DeleteRecipeContainer';
 import { Button } from '../ui/button';
 
@@ -19,12 +17,6 @@ interface RecipeCardProps {
 
 export default function RecipeCard(props: RecipeCardProps) {
   const { id, title, imageUrl, isAuthor, openInNewTab = false } = props;
-
-  const deleteRecipeHandler = async () => {
-    'use server';
-
-    await deleteRecipe(id);
-  };
 
   return (
     <div className="group relative overflow-hidden rounded-lg shadow-xl transition-shadow duration-300">

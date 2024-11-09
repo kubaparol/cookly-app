@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { decimal, doublePrecision, integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { doublePrecision, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const ingredients = pgTable('ingredients', {
   id: text()

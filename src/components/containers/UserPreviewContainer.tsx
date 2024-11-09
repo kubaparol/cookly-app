@@ -1,6 +1,5 @@
 import { useClerk, useUser } from '@clerk/nextjs';
 import { LogOut } from 'lucide-react';
-import Image from 'next/image';
 
 import { ProjectUrls } from '@/constants';
 

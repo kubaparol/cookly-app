@@ -1,7 +1,6 @@
 'use server';
 
 import { currentUser } from '@clerk/nextjs/server';
-import dayjs from 'dayjs';
 import { SQL, and, asc, eq } from 'drizzle-orm';
 
 import { handleError } from '@/utils';
@@ -10,9 +9,9 @@ import { db } from '@/db/drizzle';
 import { recipes } from '@/db/schema';
 
 export async function getRecentRecipes() {
-  try {
-    const user = await currentUser();
+  const user = await currentUser();
 
+  try {
     if (!user) throw new Error('User not found');
 
     const filters: SQL[] = [eq(recipes.authorId, user.id)];
