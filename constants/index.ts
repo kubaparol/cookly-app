@@ -1,5 +1,5 @@
 export * from './clerk';
-export * from './fonts';
+// export * from './fonts';
 export * from './units';
 export * from './uploadthing';
 export * from './urls';
