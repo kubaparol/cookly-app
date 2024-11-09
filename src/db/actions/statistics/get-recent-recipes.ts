@@ -9,9 +9,9 @@ import { db } from '@/db/drizzle';
 import { recipes } from '@/db/schema';
 
 export async function getRecentRecipes() {
-  try {
-    const user = await currentUser();
+  const user = await currentUser();
 
+  try {
     if (!user) throw new Error('User not found');
 
     const filters: SQL[] = [eq(recipes.authorId, user.id)];
