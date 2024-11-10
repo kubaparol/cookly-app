@@ -67,7 +67,7 @@ export default function RecipeFormContainer() {
     } else {
       console.log('Final step submitted');
     }
-  }, [currentStep]); // Only re-create if currentStep changes
+  }, [currentStep]);
 
   return (
     <div className="grid flex-1 grid-cols-[auto,_1fr] gap-3 xs:gap-6 lg:gap-12">

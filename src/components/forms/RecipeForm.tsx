@@ -66,7 +66,7 @@ export default function RecipeForm(props: RecipeFormProps) {
 
   const [isCreationSuccess, setIsCreationSuccess] = useState(isSuccess);
 
-  const [files, setFiles] = useState<File[]>([]);
+  const [files] = useState<File[]>([]);
 
   const [itemToAdd, setItemToAdd] = useState<'ingredient' | 'step' | null>(null);
 
@@ -293,9 +293,9 @@ export default function RecipeForm(props: RecipeFormProps) {
 
                 <FormControl>
                   <FileUploader
-                    imageUrl={field.value}
+                    value={field.value}
                     onFieldChange={field.onChange}
-                    setFiles={setFiles}
+                    // setFiles={setFiles}
                     disabled={isSubmitting}
                   />
                 </FormControl>
