@@ -2,13 +2,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { cuisineTypes } from '@/constants';
+import { categories, cuisineTypes } from '@/constants';
 import { mealTypes } from '@/constants/meal-types';
 
 import FileUploader from '../base/FileUploader';
 import { Button } from '../ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
+import { MultiSelect } from '../ui/multi-select';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Textarea } from '../ui/textarea';
 
@@ -25,7 +26,7 @@ export const BasicInformationStepFormSchema = z.object({
   image: z.any(),
   cuisineType: z.string().min(1, 'Cuisine Type is required'),
   mealType: z.string().min(1, 'Meal Type is required'),
-  category: z.string().min(1, 'Category is required'),
+  categories: z.array(z.string()).min(1, 'At least one category is required'),
 });
 
 export type BasicInformationStepFormValues = z.infer<typeof BasicInformationStepFormSchema>;
@@ -161,25 +162,18 @@ export default function BasicInformationStepForm(props: BasicInformationStepForm
 
         <FormField
           control={form.control}
-          name="category"
+          name="categories"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category</FormLabel>
+              <FormLabel>Categories</FormLabel>
 
               <FormControl>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <SelectTrigger>
-                    <SelectValue {...field} placeholder="e.g., Quick" />
-                  </SelectTrigger>
-
-                  <SelectContent>
-                    {mealTypes.map((type) => (
-                      <SelectItem key={type.value} value={type.value}>
-                        {type.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <MultiSelect
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  options={categories}
+                  placeholder="e.g., Vegetarian"
+                />
               </FormControl>
 
               <FormMessage />
