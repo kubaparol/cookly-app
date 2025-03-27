@@ -45,7 +45,7 @@ export default function BasicInformationStepForm(props: BasicInformationStepForm
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onFormSubmit)} className="grid gap-5">
+      <form onSubmit={form.handleSubmit(onFormSubmit)} className="grid h-fit gap-5">
         <FormField
           control={form.control}
           name="title"
