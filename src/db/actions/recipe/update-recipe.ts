@@ -12,7 +12,6 @@ import {
   UpdateRecipeParams,
   equipment,
   ingredients,
-  nutritionalInfo,
   recipes,
   steps,
   substitutions,
@@ -36,6 +35,10 @@ export async function updateRecipe(recipe: UpdateRecipeParams) {
         restTime: recipe.restTime ? parseInt(recipe.restTime) : null,
         activeTime: recipe.activeTime ? parseInt(recipe.activeTime) : null,
         servings: parseInt(recipe.servings),
+        calories: recipe.calories ? parseInt(recipe.calories) : null,
+        protein: recipe.protein ? parseInt(recipe.protein) : null,
+        carbs: recipe.carbs ? parseInt(recipe.carbs) : null,
+        fat: recipe.fat ? parseInt(recipe.fat) : null,
       })
       .where(eq(recipes.id, recipe.id))
       .returning();
@@ -58,11 +61,6 @@ export async function updateRecipe(recipe: UpdateRecipeParams) {
       .select()
       .from(equipment)
       .where(eq(equipment.recipeId, newRecipe.id));
-
-    const existingNutritionalInfo = await db
-      .select()
-      .from(nutritionalInfo)
-      .where(eq(nutritionalInfo.recipeId, newRecipe.id));
 
     await updateOrInsertEntities(
       ingredients,
@@ -100,27 +98,6 @@ export async function updateRecipe(recipe: UpdateRecipeParams) {
       'id',
       newRecipe.id,
     );
-
-    if (recipe.nutritionalInfo) {
-      const nutritionalData = {
-        recipeId: newRecipe.id,
-        calories: recipe.nutritionalInfo.calories
-          ? parseInt(recipe.nutritionalInfo.calories)
-          : null,
-        protein: recipe.nutritionalInfo.protein ? parseInt(recipe.nutritionalInfo.protein) : null,
-        carbs: recipe.nutritionalInfo.carbs ? parseInt(recipe.nutritionalInfo.carbs) : null,
-        fat: recipe.nutritionalInfo.fat ? parseInt(recipe.nutritionalInfo.fat) : null,
-      };
-
-      if (existingNutritionalInfo.length > 0) {
-        await db
-          .update(nutritionalInfo)
-          .set(nutritionalData)
-          .where(eq(nutritionalInfo.recipeId, newRecipe.id));
-      } else {
-        await db.insert(nutritionalInfo).values(nutritionalData);
-      }
-    }
 
     revalidatePath(ProjectUrls.dashboard);
     revalidatePath(ProjectUrls.recipes);

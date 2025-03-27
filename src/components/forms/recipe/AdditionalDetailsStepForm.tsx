@@ -236,80 +236,93 @@ export default function AdditionalDetailsStepForm() {
         />
       </div>
 
-      <div className="rounded-lg border bg-card p-4 shadow-sm">
-        <FormLabel>Nutritional Information (per serving)</FormLabel>
+      <div className="grid grid-cols-1 gap-4 rounded-lg border bg-card p-4 shadow-sm sm:grid-cols-2">
+        <FormField
+          control={control}
+          name="calories"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Calories</FormLabel>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <FormField
-            control={control}
-            name="nutritionalInfo.calories"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <InputNumeric {...field} placeholder="Calories" mode="natural" min={0} step={1} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormControl>
+                <InputNumeric
+                  {...field}
+                  placeholder="Calories"
+                  mode="natural"
+                  min={0}
+                  step={1}
+                  unit="kcal"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <FormField
-            control={control}
-            name="nutritionalInfo.protein"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <InputNumeric
-                    placeholder="Protein (g)"
-                    value={field.value}
-                    onChange={field.onChange}
-                    mode="floating"
-                    min={0}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <FormField
+          control={control}
+          name="protein"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Protein</FormLabel>
+              <FormControl>
+                <InputNumeric
+                  {...field}
+                  placeholder="Protein (g)"
+                  mode="natural"
+                  min={0}
+                  step={1}
+                  unit="g"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <FormField
-            control={control}
-            name="nutritionalInfo.carbs"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <InputNumeric
-                    placeholder="Carbs (g)"
-                    value={field.value}
-                    onChange={field.onChange}
-                    mode="floating"
-                    min={0}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <FormField
+          control={control}
+          name="carbs"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Carbs</FormLabel>
 
-          <FormField
-            control={control}
-            name="nutritionalInfo.fat"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <InputNumeric
-                    placeholder="Fat (g)"
-                    value={field.value}
-                    onChange={field.onChange}
-                    mode="floating"
-                    min={0}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+              <FormControl>
+                <InputNumeric
+                  {...field}
+                  placeholder="Carbs (g)"
+                  mode="natural"
+                  min={0}
+                  step={1}
+                  unit="g"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={control}
+          name="fat"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Fat</FormLabel>
+
+              <FormControl>
+                <InputNumeric
+                  {...field}
+                  placeholder="Fat (g)"
+                  mode="natural"
+                  min={0}
+                  step={1}
+                  unit="g"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
 
       <div className="rounded-lg border bg-card p-4 shadow-sm">

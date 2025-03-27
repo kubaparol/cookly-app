@@ -14,15 +14,6 @@ CREATE TABLE IF NOT EXISTS "ingredients" (
 	"createdAt" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "nutritional_info" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"recipeId" uuid NOT NULL,
-	"calories" integer,
-	"protein" integer,
-	"carbs" integer,
-	"fat" integer
-);
---> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "recipes" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"title" text NOT NULL,
@@ -48,6 +39,10 @@ CREATE TABLE IF NOT EXISTS "recipes" (
 	"seasonality" text,
 	"costLevel" text,
 	"notes" text,
+	"calories" integer,
+	"protein" integer,
+	"carbs" integer,
+	"fat" integer,
 	"termsAccepted" boolean DEFAULT false NOT NULL,
 	"createdAt" timestamp DEFAULT now() NOT NULL
 );
@@ -90,12 +85,6 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "ingredients" ADD CONSTRAINT "ingredients_recipeId_recipes_id_fk" FOREIGN KEY ("recipeId") REFERENCES "public"."recipes"("id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "nutritional_info" ADD CONSTRAINT "nutritional_info_recipeId_recipes_id_fk" FOREIGN KEY ("recipeId") REFERENCES "public"."recipes"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

@@ -112,24 +112,19 @@ export const additionalDetailsStepFormSchema = z.object({
     )
     .optional()
     .transform((val) => val || []),
-  nutritionalInfo: z
-    .object({
-      calories: z.string().regex(/^\d*$/, 'Must be a valid number').optional(),
-      protein: z
-        .string()
-        .regex(/^(\d*\.?\d*)$/, 'Must be a valid number')
-        .optional(),
-      carbs: z
-        .string()
-        .regex(/^(\d*\.?\d*)$/, 'Must be a valid number')
-        .optional(),
-      fat: z
-        .string()
-        .regex(/^(\d*\.?\d*)$/, 'Must be a valid number')
-        .optional(),
-    })
-    .optional()
-    .transform((val) => val || {}),
+  calories: z.string().regex(/^\d*$/, 'Must be a valid number').optional(),
+  protein: z
+    .string()
+    .regex(/^(\d*\.?\d*)$/, 'Must be a valid number')
+    .optional(),
+  carbs: z
+    .string()
+    .regex(/^(\d*\.?\d*)$/, 'Must be a valid number')
+    .optional(),
+  fat: z
+    .string()
+    .regex(/^(\d*\.?\d*)$/, 'Must be a valid number')
+    .optional(),
   allergens: z.array(z.string()).optional(),
   seasonality: z.string().optional(),
   costLevel: z.string().optional(),

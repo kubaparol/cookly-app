@@ -29,6 +29,10 @@ export const recipes = pgTable('recipes', {
   seasonality: text(),
   costLevel: text(),
   notes: text(),
+  calories: integer(),
+  protein: integer(),
+  carbs: integer(),
+  fat: integer(),
   termsAccepted: boolean().notNull().default(false),
   createdAt: timestamp().defaultNow().notNull(),
 });

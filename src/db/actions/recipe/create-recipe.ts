@@ -7,7 +7,7 @@ import { handleError } from '@/utils';
 
 import { ProjectUrls } from '@/constants';
 
-import { equipment, ingredients, nutritionalInfo, recipes, steps, substitutions, tips } from '@/db';
+import { equipment, ingredients, recipes, steps, substitutions, tips } from '@/db';
 import { db } from '@/db/drizzle';
 
 import { RecipeFormValues } from '@/components/forms/recipe/schemas';
@@ -28,6 +28,10 @@ export async function createRecipe(recipe: RecipeFormValues) {
         restTime: recipe.restTime ? parseInt(recipe.restTime) : null,
         activeTime: recipe.activeTime ? parseInt(recipe.activeTime) : null,
         servings: parseInt(recipe.servings),
+        calories: recipe.calories ? parseInt(recipe.calories) : null,
+        protein: recipe.protein ? parseInt(recipe.protein) : null,
+        carbs: recipe.carbs ? parseInt(recipe.carbs) : null,
+        fat: recipe.fat ? parseInt(recipe.fat) : null,
       })
       .returning();
 
@@ -72,18 +76,6 @@ export async function createRecipe(recipe: RecipeFormValues) {
           recipeId: newRecipe.id,
         })),
       );
-    }
-
-    if (recipe.nutritionalInfo) {
-      await db.insert(nutritionalInfo).values({
-        recipeId: newRecipe.id,
-        calories: recipe.nutritionalInfo.calories
-          ? parseInt(recipe.nutritionalInfo.calories)
-          : null,
-        protein: recipe.nutritionalInfo.protein ? parseInt(recipe.nutritionalInfo.protein) : null,
-        carbs: recipe.nutritionalInfo.carbs ? parseInt(recipe.nutritionalInfo.carbs) : null,
-        fat: recipe.nutritionalInfo.fat ? parseInt(recipe.nutritionalInfo.fat) : null,
-      });
     }
 
     revalidatePath(ProjectUrls.dashboard);

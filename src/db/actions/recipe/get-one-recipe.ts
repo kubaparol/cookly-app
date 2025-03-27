@@ -5,15 +5,7 @@ import { SQL, and, eq } from 'drizzle-orm';
 import { handleError } from '@/utils';
 
 import { db } from '@/db/drizzle';
-import {
-  equipment,
-  ingredients,
-  nutritionalInfo,
-  recipes,
-  steps,
-  substitutions,
-  tips,
-} from '@/db/schema';
+import { equipment, ingredients, recipes, steps, substitutions, tips } from '@/db/schema';
 
 export async function getOneRecipe(id: string) {
   try {
@@ -62,16 +54,6 @@ export async function getOneRecipe(id: string) {
       .from(tips)
       .where(eq(tips.recipeId, id));
 
-    const nutritionalInfoData = await db
-      .select({
-        calories: nutritionalInfo.calories,
-        protein: nutritionalInfo.protein,
-        carbs: nutritionalInfo.carbs,
-        fat: nutritionalInfo.fat,
-      })
-      .from(nutritionalInfo)
-      .where(eq(nutritionalInfo.recipeId, id));
-
     const equipmentData = await db
       .select({
         id: equipment.id,
@@ -89,7 +71,10 @@ export async function getOneRecipe(id: string) {
       steps: stepsData,
       substitutions: substitutionsData,
       tips: tipsData,
-      nutritionalInfo: nutritionalInfoData[0] || {},
+      calories: recipeData.calories?.toString() || '',
+      protein: recipeData.protein?.toString() || '',
+      carbs: recipeData.carbs?.toString() || '',
+      fat: recipeData.fat?.toString() || '',
       preparationTime: recipeData.preparationTime.toString(),
       cookingTime: recipeData.cookingTime.toString(),
       restTime: recipeData.restTime?.toString(),

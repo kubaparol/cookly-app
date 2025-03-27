@@ -27,7 +27,7 @@ export default async function EditRecipePage(props: PageProps) {
           type="Update"
           defaultValues={{
             ...recipe,
-            description: recipe.description || undefined,
+            description: recipe.description || '',
             notes: recipe.notes || undefined,
             servingSize: recipe.servingSize || undefined,
             yield: recipe.yield || undefined,
@@ -37,12 +37,10 @@ export default async function EditRecipePage(props: PageProps) {
             makeAheadInstructions: recipe.makeAheadInstructions || undefined,
             substitutions: recipe.substitutions || [],
             tipsAndTricks: recipe.tips || [],
-            nutritionalInfo: {
-              calories: recipe.nutritionalInfo?.calories?.toString() || undefined,
-              protein: recipe.nutritionalInfo?.protein?.toString() || undefined,
-              carbs: recipe.nutritionalInfo?.carbs?.toString() || undefined,
-              fat: recipe.nutritionalInfo?.fat?.toString() || undefined,
-            },
+            calories: recipe.calories || undefined,
+            protein: recipe.protein || undefined,
+            carbs: recipe.carbs || undefined,
+            fat: recipe.fat || undefined,
             allergens: recipe.allergens || undefined,
             seasonality: recipe.seasonality || undefined,
             costLevel: recipe.costLevel || undefined,

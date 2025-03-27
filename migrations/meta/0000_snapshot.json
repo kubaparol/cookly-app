@@ -1,5 +1,5 @@
 {
-  "id": "06ad5752-d3e9-465d-a848-b8bdf4205de9",
+  "id": "a04324a7-de0a-4d76-a6ba-ead3f186860a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -110,67 +110,6 @@
             "id"
           ],
           "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.nutritional_info": {
-      "name": "nutritional_info",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "recipeId": {
-          "name": "recipeId",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "calories": {
-          "name": "calories",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "protein": {
-          "name": "protein",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "carbs": {
-          "name": "carbs",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "fat": {
-          "name": "fat",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "nutritional_info_recipeId_recipes_id_fk": {
-          "name": "nutritional_info_recipeId_recipes_id_fk",
-          "tableFrom": "nutritional_info",
-          "tableTo": "recipes",
-          "columnsFrom": [
-            "recipeId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -323,6 +262,30 @@
         "notes": {
           "name": "notes",
           "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "calories": {
+          "name": "calories",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "protein": {
+          "name": "protein",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "carbs": {
+          "name": "carbs",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fat": {
+          "name": "fat",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },

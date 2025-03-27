@@ -1,5 +1,5 @@
 import type { ChangeEvent, FC, KeyboardEvent } from 'react';
-import { useCallback, useId } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 
 import { cn } from '@/utils';
 
@@ -35,6 +35,8 @@ export type Props = {
   placeholder?: string;
   /** Additional className for the container */
   className?: string;
+  /** Optional unit to display next to the input value */
+  unit?: string;
 };
 
 const patternMapping = {
@@ -53,9 +55,18 @@ export const InputNumeric: FC<Props> = ({
   mode = Modes.scientific,
   placeholder,
   className,
+  unit,
 }) => {
   const id = useId();
   const { error } = useFormField();
+  const unitRef = useRef<HTMLSpanElement>(null);
+  const [unitWidth, setUnitWidth] = useState(0);
+
+  useEffect(() => {
+    if (unitRef.current) {
+      setUnitWidth(unitRef.current.offsetWidth);
+    }
+  }, [unit]);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
@@ -81,25 +92,46 @@ export const InputNumeric: FC<Props> = ({
     },
     [onChange],
   );
+
   const pattern = patternMapping[mode];
 
+  const showUnit = unit && value && !error;
+
+  const dynamicPadding = useMemo(() => {
+    if (showUnit && unitWidth > 0) {
+      return { paddingRight: `${unitWidth + 14}px` };
+    }
+    return {};
+  }, [showUnit, unitWidth]);
+
   return (
-    <input
-      inputMode="decimal"
-      autoComplete="off"
-      pattern={pattern}
-      onChange={handleChange}
-      onKeyDown={handleKeyDown}
-      value={value !== undefined ? value : ''}
-      type="text"
-      id={id}
-      className={cn(
-        'flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
-        'text-right tabular-nums',
-        error && 'border-destructive focus-visible:ring-destructive',
-        className,
+    <div className="relative flex items-center">
+      <input
+        inputMode="decimal"
+        autoComplete="off"
+        pattern={pattern}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        value={value !== undefined ? value : ''}
+        type="text"
+        id={id}
+        className={cn(
+          'flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
+          'text-right tabular-nums',
+          error && 'border-destructive focus-visible:ring-destructive',
+          className,
+        )}
+        placeholder={placeholder}
+        style={dynamicPadding}
+      />
+
+      {showUnit && (
+        <span
+          ref={unitRef}
+          className="pointer-events-none absolute right-3 text-sm text-muted-foreground">
+          {unit}
+        </span>
       )}
-      placeholder={placeholder}
-    />
+    </div>
   );
 };
