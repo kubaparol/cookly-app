@@ -8,4 +8,5 @@ export type GetMyRecipesParams = {
   search?: string;
   page?: number;
   limit?: number;
+  query?: string;
 };
