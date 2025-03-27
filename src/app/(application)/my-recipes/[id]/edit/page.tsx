@@ -29,6 +29,26 @@ export default async function EditRecipePage(props: PageProps) {
             ...recipe,
             description: recipe.description || undefined,
             notes: recipe.notes || undefined,
+            servingSize: recipe.servingSize || undefined,
+            yield: recipe.yield || undefined,
+            equipment: recipe.equipment || undefined,
+            storageInstructions: recipe.storageInstructions || undefined,
+            reheatingInstructions: recipe.reheatingInstructions || undefined,
+            makeAheadInstructions: recipe.makeAheadInstructions || undefined,
+            tipsAndTricks: recipe.tipsAndTricks?.map((tip) => ({ description: tip })) || [],
+            substitutions:
+              recipe.substitutions?.map((sub) => {
+                const [original, substitute] = sub.split(' -> ');
+                return { original, substitute };
+              }) || undefined,
+            nutritionalInfo:
+              recipe.nutritionalInfo?.reduce((acc, curr) => {
+                const [key, value] = curr.split(': ');
+                return { ...acc, [key]: value };
+              }, {}) || undefined,
+            allergens: recipe.allergens || undefined,
+            seasonality: recipe.seasonality || undefined,
+            costLevel: recipe.costLevel || undefined,
           }}
         />
       )}

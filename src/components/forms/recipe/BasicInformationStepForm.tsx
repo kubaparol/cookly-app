@@ -79,10 +79,7 @@ export default function BasicInformationStepForm() {
         name="imageUrl"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>
-              <span className="text-[18px] text-red-500">*</span>
-              Image
-            </FormLabel>
+            <FormLabel>Image</FormLabel>
 
             <FormControl>
               <FileUploader onFieldChange={onImageChange} value={field.value} />

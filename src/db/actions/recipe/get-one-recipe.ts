@@ -46,7 +46,18 @@ export async function getOneRecipe(id: string) {
       steps: stepsData,
       preparationTime: recipeData.preparationTime.toString(),
       cookingTime: recipeData.cookingTime.toString(),
+      restTime: recipeData.restTime?.toString(),
+      activeTime: recipeData.activeTime?.toString(),
       servings: recipeData.servings.toString(),
+      substitutions: recipeData.substitutions,
+      tipsAndTricks: recipeData.tipsAndTricks,
+      nutritionalInfo: recipeData.nutritionalInfo,
+      servingSize: recipeData.servingSize,
+      yield: recipeData.yield,
+      equipment: recipeData.equipment,
+      storageInstructions: recipeData.storageInstructions,
+      reheatingInstructions: recipeData.reheatingInstructions,
+      makeAheadInstructions: recipeData.makeAheadInstructions,
     };
   } catch (error) {
     handleError(error);

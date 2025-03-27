@@ -1,7 +1,7 @@
 import { PlusCircle, Trash2 } from 'lucide-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import { units } from '@/constants/units';
+import { units } from '@/constants';
 
 import { Button } from '../../ui/button';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form';

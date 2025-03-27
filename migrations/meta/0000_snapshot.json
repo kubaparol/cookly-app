@@ -1,5 +1,5 @@
 {
-  "id": "0391f879-49f0-4422-85f6-59894e47736f",
+  "id": "dc55469e-ac2e-4fac-ad72-33ee90893f8d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -131,11 +131,35 @@
           "primaryKey": false,
           "notNull": true
         },
+        "rest_time": {
+          "name": "rest_time",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "active_time": {
+          "name": "active_time",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "servings": {
           "name": "servings",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
+        },
+        "serving_size": {
+          "name": "serving_size",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "yield": {
+          "name": "yield",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "difficulty": {
           "name": "difficulty",
@@ -149,11 +173,78 @@
           "primaryKey": false,
           "notNull": true
         },
+        "equipment": {
+          "name": "equipment",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "storage_instructions": {
+          "name": "storage_instructions",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reheating_instructions": {
+          "name": "reheating_instructions",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "make_ahead_instructions": {
+          "name": "make_ahead_instructions",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "substitutions": {
+          "name": "substitutions",
+          "type": "jsonb[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tips_and_tricks": {
+          "name": "tips_and_tricks",
+          "type": "jsonb[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nutritional_info": {
+          "name": "nutritional_info",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "allergens": {
+          "name": "allergens",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seasonality": {
+          "name": "seasonality",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cost_level": {
+          "name": "cost_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "notes": {
           "name": "notes",
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "terms_accepted": {
+          "name": "terms_accepted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         },
         "created_at": {
           "name": "created_at",
