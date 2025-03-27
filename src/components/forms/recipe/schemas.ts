@@ -9,8 +9,8 @@ export const basicInformationStepFormSchema = z.object({
     .string()
     .min(10, 'Description must be at least 10 characters')
     .max(500, 'Description must be at most 500 characters')
-    .optional(),
-  imageUrl: z.string(),
+    .or(z.literal('')),
+  imageUrl: z.string().min(1, 'Image is required'),
   cuisineType: z.string().min(1, 'Cuisine Type is required'),
   mealType: z.string().min(1, 'Meal Type is required'),
   categories: z.array(z.string()).min(1, 'At least one category is required'),
@@ -20,17 +20,38 @@ export const timeServingsStepFormSchema = z.object({
   preparationTime: z
     .string()
     .min(1, 'Preparation time is required')
-    .regex(/^\d+$/, 'Must be a valid number'),
+    .regex(/^\d+$/, 'Must be a valid number')
+    .refine((value) => Number(value) >= 1, {
+      message: 'Must be at least 1 minute',
+    }),
   cookingTime: z
     .string()
     .min(1, 'Cooking time is required')
-    .regex(/^\d+$/, 'Must be a valid number'),
-  restTime: z.string().regex(/^\d*$/, 'Must be a valid number').optional(),
-  activeTime: z.string().regex(/^\d*$/, 'Must be a valid number').optional(),
+    .regex(/^\d+$/, 'Must be a valid number')
+    .refine((value) => Number(value) >= 1, {
+      message: 'Must be at least 1 minute',
+    }),
+  restTime: z
+    .string()
+    .regex(/^\d*$/, 'Must be a valid number')
+    .refine((value) => value === '' || Number(value) >= 1, {
+      message: 'Must be at least 1 minute',
+    })
+    .optional(),
+  activeTime: z
+    .string()
+    .regex(/^\d*$/, 'Must be a valid number')
+    .refine((value) => value === '' || Number(value) >= 1, {
+      message: 'Must be at least 1 minute',
+    })
+    .optional(),
   servings: z
     .string()
     .min(1, 'Number of servings is required')
-    .regex(/^\d+$/, 'Must be a valid number'),
+    .regex(/^\d*$/, 'Must be a valid number')
+    .refine((value) => value === '' || Number(value) >= 1, {
+      message: 'Must be at least 1 minute',
+    }),
   servingSize: z.string().min(1, 'Serving size is required').optional(),
   yield: z.string().min(1, 'Yield is required').optional(),
 });
@@ -38,7 +59,13 @@ export const timeServingsStepFormSchema = z.object({
 export const ingredientsStepFormSchema = z.object({
   ingredients: z.array(
     z.object({
-      quantity: z.string().min(1, 'Quantity is required'),
+      quantity: z
+        .string()
+        .min(1, 'Quantity is required')
+        .regex(/^\d*$/, 'Must be a valid number')
+        .refine((value) => value === '' || Number(value) >= 1, {
+          message: 'Must be at least 1',
+        }),
       unit: z.string().min(1, 'Unit is required'),
       name: z.string().min(1, 'Ingredient name is required'),
     }),
@@ -57,15 +84,22 @@ export const additionalDetailsStepFormSchema = z.object({
   difficulty: z.string().min(1, 'Difficulty level is required'),
   dietaryTags: z.array(z.string()).min(1, 'At least one dietary tag is required'),
   notes: z.string().optional(),
-  equipment: z.array(z.string()).optional(),
+  equipment: z
+    .array(
+      z.object({
+        name: z.string().min(1, 'Equipment name is required'),
+      }),
+    )
+    .optional()
+    .transform((val) => val || []),
   storageInstructions: z.string().optional(),
   reheatingInstructions: z.string().optional(),
   makeAheadInstructions: z.string().optional(),
   substitutions: z
     .array(
       z.object({
-        original: z.string(),
-        substitute: z.string(),
+        original: z.string().min(1, 'Original ingredient is required'),
+        substitute: z.string().min(1, 'Substitute ingredient is required'),
       }),
     )
     .optional()
@@ -73,14 +107,20 @@ export const additionalDetailsStepFormSchema = z.object({
   tipsAndTricks: z
     .array(
       z.object({
-        description: z.string(),
+        description: z.string().min(1, 'Tip description is required'),
       }),
     )
     .optional()
     .transform((val) => val || []),
   nutritionalInfo: z
     .object({
-      calories: z.string().optional(),
+      calories: z
+        .string()
+        .regex(/^\d*$/, 'Must be a valid number')
+        .refine((value) => value === '' || Number(value) >= 1, {
+          message: 'Must be at least 1',
+        })
+        .optional(),
       protein: z.string().optional(),
       carbs: z.string().optional(),
       fat: z.string().optional(),

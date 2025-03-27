@@ -14,7 +14,7 @@ import { Textarea } from '../../ui/textarea';
 import { BasicInformationStepFormValues } from './schemas';
 
 export default function BasicInformationStepForm() {
-  const { control, setValue } = useFormContext<BasicInformationStepFormValues>();
+  const { control, setValue, clearErrors } = useFormContext<BasicInformationStepFormValues>();
 
   const { startUpload } = useUploadThing('imageUploader');
 
@@ -31,6 +31,7 @@ export default function BasicInformationStepForm() {
     const uploadedImageUrl = uploadedImages[0].url;
 
     setValue('imageUrl', uploadedImageUrl);
+    clearErrors('imageUrl');
   };
 
   return (
@@ -79,7 +80,10 @@ export default function BasicInformationStepForm() {
         name="imageUrl"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Image</FormLabel>
+            <FormLabel>
+              <span className="text-[18px] text-red-500">*</span>
+              Image
+            </FormLabel>
 
             <FormControl>
               <FileUploader onFieldChange={onImageChange} value={field.value} />

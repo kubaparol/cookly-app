@@ -12,11 +12,7 @@ import { Textarea } from '../../ui/textarea';
 import { AdditionalDetailsStepFormValues } from './schemas';
 
 export default function AdditionalDetailsStepForm() {
-  const { control, watch, setValue } = useFormContext<AdditionalDetailsStepFormValues>();
-
-  const equipment = watch('equipment') || [];
-  const substitutions = watch('substitutions') || [];
-  const tipsAndTricks = watch('tipsAndTricks') || [];
+  const { control } = useFormContext<AdditionalDetailsStepFormValues>();
 
   const {
     fields: substitutionFields,
@@ -36,38 +32,14 @@ export default function AdditionalDetailsStepForm() {
     name: 'tipsAndTricks',
   });
 
-  const handleAddEquipment = () => {
-    setValue('equipment', [...equipment, '']);
-  };
-
-  const handleRemoveEquipment = (index: number) => {
-    setValue(
-      'equipment',
-      equipment.filter((_, i) => i !== index),
-    );
-  };
-
-  const handleEquipmentChange = (index: number, value: string) => {
-    const newEquipment = [...equipment];
-    newEquipment[index] = value;
-    setValue('equipment', newEquipment);
-  };
-
-  const handleSubstitutionChange = (
-    index: number,
-    field: 'original' | 'substitute',
-    value: string,
-  ) => {
-    const newSubstitutions = [...substitutions];
-    newSubstitutions[index] = { ...newSubstitutions[index], [field]: value };
-    setValue('substitutions', newSubstitutions);
-  };
-
-  const handleTipChange = (index: number, value: string) => {
-    const newTips = [...tipsAndTricks];
-    newTips[index] = { description: value };
-    setValue('tipsAndTricks', newTips);
-  };
+  const {
+    fields: equipmentFields,
+    append: appendEquipment,
+    remove: removeEquipment,
+  } = useFieldArray({
+    control,
+    name: 'equipment',
+  });
 
   return (
     <div className="grid h-fit gap-5">
@@ -167,31 +139,44 @@ export default function AdditionalDetailsStepForm() {
               variant="outline"
               size="sm"
               className="flex items-center gap-2"
-              onClick={handleAddEquipment}>
+              onClick={() => appendEquipment({ name: '' })}>
               <PlusCircle className="h-4 w-4" />
               Add Equipment
             </Button>
           </div>
 
-          {equipment.map((item, index) => (
-            <div key={index} className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr,auto]">
-              <FormControl>
-                <Input
-                  placeholder="e.g., Blender, Food processor"
-                  value={item}
-                  onChange={(e) => handleEquipmentChange(index, e.target.value)}
-                />
-              </FormControl>
+          {equipmentFields.map((field, index) => (
+            <div key={field.id} className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr,auto]">
+              <FormField
+                control={control}
+                name={`equipment.${index}.name`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      <span className="text-[18px] text-red-500">*</span>
+                      Equipment {index + 1}
+                    </FormLabel>
 
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="h-9 w-9 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                onClick={() => handleRemoveEquipment(index)}>
-                <Trash2 className="h-5 w-5" />
-                <span className="sr-only">Remove equipment</span>
-              </Button>
+                    <FormControl>
+                      <Input {...field} placeholder="e.g., Blender, Food processor" />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="flex items-start justify-end pt-8">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-9 w-9 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                  onClick={() => removeEquipment(index)}>
+                  <Trash2 className="h-5 w-5" />
+                  <span className="sr-only">Remove equipment</span>
+                </Button>
+              </div>
             </div>
           ))}
         </div>
@@ -384,32 +369,58 @@ export default function AdditionalDetailsStepForm() {
           </div>
 
           {substitutionFields.map((field, index) => (
-            <div key={field.id} className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr,1fr,auto]">
-              <FormControl>
-                <Input
-                  placeholder="Original ingredient"
-                  value={substitutions[index]?.original || ''}
-                  onChange={(e) => handleSubstitutionChange(index, 'original', e.target.value)}
-                />
-              </FormControl>
+            <div
+              key={field.id}
+              className="grid grid-cols-1 gap-4 rounded-lg border bg-card p-4 shadow-sm sm:grid-cols-[1fr,1fr,auto]">
+              <FormField
+                control={control}
+                name={`substitutions.${index}.original`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      <span className="text-[18px] text-red-500">*</span>
+                      Original Ingredient
+                    </FormLabel>
 
-              <FormControl>
-                <Input
-                  placeholder="Substitute"
-                  value={substitutions[index]?.substitute || ''}
-                  onChange={(e) => handleSubstitutionChange(index, 'substitute', e.target.value)}
-                />
-              </FormControl>
+                    <FormControl>
+                      <Input {...field} placeholder="e.g., All-purpose flour" />
+                    </FormControl>
 
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="h-9 w-9 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                onClick={() => removeSubstitution(index)}>
-                <Trash2 className="h-5 w-5" />
-                <span className="sr-only">Remove substitution</span>
-              </Button>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={control}
+                name={`substitutions.${index}.substitute`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      <span className="text-[18px] text-red-500">*</span>
+                      Substitute
+                    </FormLabel>
+
+                    <FormControl>
+                      <Input {...field} placeholder="e.g., Almond flour" />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="flex items-start justify-end pt-8">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-9 w-9 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                  onClick={() => removeSubstitution(index)}>
+                  <Trash2 className="h-5 w-5" />
+                  <span className="sr-only">Remove substitution</span>
+                </Button>
+              </div>
             </div>
           ))}
         </div>
@@ -431,24 +442,43 @@ export default function AdditionalDetailsStepForm() {
           </div>
 
           {tipFields.map((field, index) => (
-            <div key={field.id} className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr,auto]">
-              <FormControl>
-                <Input
-                  placeholder="Enter a cooking tip"
-                  value={tipsAndTricks[index]?.description || ''}
-                  onChange={(e) => handleTipChange(index, e.target.value)}
-                />
-              </FormControl>
+            <div
+              key={field.id}
+              className="grid grid-cols-1 gap-4 rounded-lg border bg-card p-4 shadow-sm sm:grid-cols-[1fr,auto]">
+              <FormField
+                control={control}
+                name={`tipsAndTricks.${index}.description`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      <span className="text-[18px] text-red-500">*</span>
+                      Tip {index + 1}
+                    </FormLabel>
 
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="h-9 w-9 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                onClick={() => removeTip(index)}>
-                <Trash2 className="h-5 w-5" />
-                <span className="sr-only">Remove tip</span>
-              </Button>
+                    <FormControl>
+                      <Textarea
+                        {...field}
+                        placeholder="e.g., For best results, let the dough rest for at least 30 minutes."
+                        className="min-h-[100px] w-full resize-y"
+                      />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="flex items-start justify-end pt-10">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-9 w-9 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                  onClick={() => removeTip(index)}>
+                  <Trash2 className="h-5 w-5" />
+                  <span className="sr-only">Remove tip</span>
+                </Button>
+              </div>
             </div>
           ))}
         </div>

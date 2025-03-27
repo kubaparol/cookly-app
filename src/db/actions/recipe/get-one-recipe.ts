@@ -5,7 +5,15 @@ import { SQL, and, eq } from 'drizzle-orm';
 import { handleError } from '@/utils';
 
 import { db } from '@/db/drizzle';
-import { ingredients, nutritionalInfo, recipes, steps, substitutions, tips } from '@/db/schema';
+import {
+  equipment,
+  ingredients,
+  nutritionalInfo,
+  recipes,
+  steps,
+  substitutions,
+  tips,
+} from '@/db/schema';
 
 export async function getOneRecipe(id: string) {
   try {
@@ -64,6 +72,14 @@ export async function getOneRecipe(id: string) {
       .from(nutritionalInfo)
       .where(eq(nutritionalInfo.recipeId, id));
 
+    const equipmentData = await db
+      .select({
+        id: equipment.id,
+        name: equipment.name,
+      })
+      .from(equipment)
+      .where(eq(equipment.recipeId, id));
+
     return {
       ...recipeData,
       ingredients: ingredientsData.map((ingredient) => ({
@@ -81,7 +97,7 @@ export async function getOneRecipe(id: string) {
       servings: recipeData.servings.toString(),
       servingSize: recipeData.servingSize,
       yield: recipeData.yield,
-      equipment: recipeData.equipment,
+      equipment: equipmentData,
       storageInstructions: recipeData.storageInstructions,
       reheatingInstructions: recipeData.reheatingInstructions,
       makeAheadInstructions: recipeData.makeAheadInstructions,

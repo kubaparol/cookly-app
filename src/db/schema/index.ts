@@ -1,3 +1,4 @@
+export * from './equipment';
 export * from './ingredients';
 export * from './nutritional_info';
 export * from './recipes';

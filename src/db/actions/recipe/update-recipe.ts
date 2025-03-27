@@ -10,6 +10,7 @@ import { ProjectUrls } from '@/constants';
 
 import {
   UpdateRecipeParams,
+  equipment,
   ingredients,
   nutritionalInfo,
   recipes,
@@ -28,30 +29,13 @@ export async function updateRecipe(recipe: UpdateRecipeParams) {
     const [newRecipe] = await db
       .update(recipes)
       .set({
-        title: recipe.title,
-        description: recipe.description,
-        imageUrl: recipe.imageUrl,
+        ...recipe,
         authorId: user.id,
-        cuisineType: recipe.cuisineType,
-        mealType: recipe.mealType,
-        categories: recipe.categories,
         preparationTime: parseInt(recipe.preparationTime),
         cookingTime: parseInt(recipe.cookingTime),
         restTime: recipe.restTime ? parseInt(recipe.restTime) : null,
         activeTime: recipe.activeTime ? parseInt(recipe.activeTime) : null,
         servings: parseInt(recipe.servings),
-        servingSize: recipe.servingSize,
-        yield: recipe.yield,
-        difficulty: recipe.difficulty,
-        dietaryTags: recipe.dietaryTags,
-        equipment: recipe.equipment,
-        storageInstructions: recipe.storageInstructions,
-        reheatingInstructions: recipe.reheatingInstructions,
-        makeAheadInstructions: recipe.makeAheadInstructions,
-        allergens: recipe.allergens,
-        seasonality: recipe.seasonality,
-        costLevel: recipe.costLevel,
-        notes: recipe.notes,
       })
       .where(eq(recipes.id, recipe.id))
       .returning();
@@ -69,6 +53,11 @@ export async function updateRecipe(recipe: UpdateRecipeParams) {
       .where(eq(substitutions.recipeId, newRecipe.id));
 
     const existingTips = await db.select().from(tips).where(eq(tips.recipeId, newRecipe.id));
+
+    const existingEquipment = await db
+      .select()
+      .from(equipment)
+      .where(eq(equipment.recipeId, newRecipe.id));
 
     const existingNutritionalInfo = await db
       .select()
@@ -100,6 +89,14 @@ export async function updateRecipe(recipe: UpdateRecipeParams) {
       tips,
       existingTips,
       recipe.tipsAndTricks || [],
+      'id',
+      newRecipe.id,
+    );
+
+    await updateOrInsertEntities(
+      equipment,
+      existingEquipment,
+      recipe.equipment || [],
       'id',
       newRecipe.id,
     );

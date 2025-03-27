@@ -22,7 +22,6 @@ export const recipes = pgTable('recipes', {
   yield: text(),
   difficulty: text().notNull(),
   dietaryTags: text().array().notNull(),
-  equipment: text().array(),
   storageInstructions: text(),
   reheatingInstructions: text(),
   makeAheadInstructions: text(),

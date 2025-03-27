@@ -25,14 +25,9 @@ export default function PreparationStepsForm() {
             name={`steps.${index}.description`}
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-2">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-medium text-primary-foreground">
-                    {index + 1}
-                  </span>
-                  <span>
-                    <span className="mr-1 text-sm font-medium text-destructive">*</span>
-                    Step {index + 1}
-                  </span>
+                <FormLabel>
+                  <span className="text-[18px] text-red-500">*</span>
+                  Step {index + 1}
                 </FormLabel>
 
                 <FormControl>

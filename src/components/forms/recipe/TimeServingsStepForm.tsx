@@ -1,5 +1,6 @@
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { InputNumeric } from '../../base/InputNumeric';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form';
 import { Input } from '../../ui/input';
 import { TimeServingsStepFormValues } from './schemas';
@@ -39,7 +40,7 @@ export default function TimeServingsStepForm() {
               </FormLabel>
 
               <FormControl>
-                <Input {...field} type="number" min="0" placeholder="e.g., 15" />
+                <InputNumeric {...field} mode="natural" min={0} step={1} placeholder="e.g., 15" />
               </FormControl>
 
               <FormMessage />
@@ -58,7 +59,7 @@ export default function TimeServingsStepForm() {
               </FormLabel>
 
               <FormControl>
-                <Input {...field} type="number" min="0" placeholder="e.g., 30" />
+                <InputNumeric {...field} mode="natural" min={0} step={1} placeholder="e.g., 30" />
               </FormControl>
 
               <FormMessage />
@@ -74,7 +75,7 @@ export default function TimeServingsStepForm() {
               <FormLabel>Rest Time (minutes)</FormLabel>
 
               <FormControl>
-                <Input {...field} type="number" min="0" placeholder="e.g., 10" />
+                <InputNumeric {...field} mode="natural" min={0} step={1} placeholder="e.g., 10" />
               </FormControl>
 
               <FormMessage />
@@ -92,7 +93,7 @@ export default function TimeServingsStepForm() {
               <FormLabel>Active Time (minutes)</FormLabel>
 
               <FormControl>
-                <Input {...field} type="number" min="0" placeholder="e.g., 20" />
+                <InputNumeric {...field} mode="natural" min={0} step={1} placeholder="e.g., 20" />
               </FormControl>
 
               <FormMessage />
@@ -111,7 +112,7 @@ export default function TimeServingsStepForm() {
               </FormLabel>
 
               <FormControl>
-                <Input {...field} type="number" min="1" placeholder="e.g., 4" />
+                <InputNumeric {...field} mode="natural" min={0} step={1} placeholder="e.g., 4" />
               </FormControl>
 
               <FormMessage />

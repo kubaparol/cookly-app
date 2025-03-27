@@ -3,6 +3,8 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { units } from '@/constants';
 
+import { InputNumeric } from '@/components/base/InputNumeric';
+
 import { Button } from '../../ui/button';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form';
 import { Input } from '../../ui/input';
@@ -29,12 +31,14 @@ export default function IngredientsStepForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center">
-                  <span className="mr-1 text-sm font-medium text-destructive">*</span>
+                  <span className="text-[18px] text-red-500">*</span>
                   Quantity
                 </FormLabel>
+
                 <FormControl>
-                  <Input {...field} placeholder="e.g., 2" className="w-full" />
+                  <InputNumeric {...field} mode="natural" min={0} step={1} placeholder="e.g., 2" />
                 </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}
@@ -46,9 +50,10 @@ export default function IngredientsStepForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center">
-                  <span className="mr-1 text-sm font-medium text-destructive">*</span>
+                  <span className="text-[18px] text-red-500">*</span>
                   Unit
                 </FormLabel>
+
                 <FormControl>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <SelectTrigger className="w-full">
@@ -70,6 +75,7 @@ export default function IngredientsStepForm() {
                     </SelectContent>
                   </Select>
                 </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}
@@ -81,12 +87,14 @@ export default function IngredientsStepForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center">
-                  <span className="mr-1 text-sm font-medium text-destructive">*</span>
+                  <span className="text-[18px] text-red-500">*</span>
                   Ingredient
                 </FormLabel>
+
                 <FormControl>
                   <Input {...field} placeholder="e.g., all-purpose flour" className="w-full" />
                 </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}
