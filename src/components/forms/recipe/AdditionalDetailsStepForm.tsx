@@ -3,6 +3,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { allergens, costLevels, dietaryTags, difficultyLevels, seasons } from '@/constants';
 
+import { InputNumeric } from '../../base/InputNumeric';
 import { Button } from '../../ui/button';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form';
 import { Input } from '../../ui/input';
@@ -236,55 +237,79 @@ export default function AdditionalDetailsStepForm() {
       </div>
 
       <div className="rounded-lg border bg-card p-4 shadow-sm">
-        <FormField
-          control={control}
-          name="nutritionalInfo"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Nutritional Information (per serving)</FormLabel>
+        <FormLabel>Nutritional Information (per serving)</FormLabel>
 
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <FormField
+            control={control}
+            name="nutritionalInfo.calories"
+            render={({ field }) => (
+              <FormItem>
                 <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="Calories"
-                    value={field.value?.calories || ''}
-                    onChange={(e) => field.onChange({ ...field.value, calories: e.target.value })}
-                  />
+                  <InputNumeric {...field} placeholder="Calories" mode="natural" min={0} step={1} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
+          <FormField
+            control={control}
+            name="nutritionalInfo.protein"
+            render={({ field }) => (
+              <FormItem>
                 <FormControl>
-                  <Input
-                    {...field}
+                  <InputNumeric
                     placeholder="Protein (g)"
-                    value={field.value?.protein || ''}
-                    onChange={(e) => field.onChange({ ...field.value, protein: e.target.value })}
+                    value={field.value}
+                    onChange={field.onChange}
+                    mode="floating"
+                    min={0}
                   />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
+          <FormField
+            control={control}
+            name="nutritionalInfo.carbs"
+            render={({ field }) => (
+              <FormItem>
                 <FormControl>
-                  <Input
-                    {...field}
+                  <InputNumeric
                     placeholder="Carbs (g)"
-                    value={field.value?.carbs || ''}
-                    onChange={(e) => field.onChange({ ...field.value, carbs: e.target.value })}
+                    value={field.value}
+                    onChange={field.onChange}
+                    mode="floating"
+                    min={0}
                   />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
+          <FormField
+            control={control}
+            name="nutritionalInfo.fat"
+            render={({ field }) => (
+              <FormItem>
                 <FormControl>
-                  <Input
-                    {...field}
+                  <InputNumeric
                     placeholder="Fat (g)"
-                    value={field.value?.fat || ''}
-                    onChange={(e) => field.onChange({ ...field.value, fat: e.target.value })}
+                    value={field.value}
+                    onChange={field.onChange}
+                    mode="floating"
+                    min={0}
                   />
                 </FormControl>
-              </div>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
       </div>
 
       <div className="rounded-lg border bg-card p-4 shadow-sm">
