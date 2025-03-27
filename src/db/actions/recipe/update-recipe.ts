@@ -8,7 +8,15 @@ import { handleError } from '@/utils';
 
 import { ProjectUrls } from '@/constants';
 
-import { UpdateRecipeParams, ingredients, recipes, steps } from '@/db';
+import {
+  UpdateRecipeParams,
+  ingredients,
+  nutritionalInfo,
+  recipes,
+  steps,
+  substitutions,
+  tips,
+} from '@/db';
 import { db } from '@/db/drizzle';
 
 export async function updateRecipe(recipe: UpdateRecipeParams) {
@@ -40,11 +48,6 @@ export async function updateRecipe(recipe: UpdateRecipeParams) {
         storageInstructions: recipe.storageInstructions,
         reheatingInstructions: recipe.reheatingInstructions,
         makeAheadInstructions: recipe.makeAheadInstructions,
-        substitutions: recipe.substitutions?.map((sub) => `${sub.original} -> ${sub.substitute}`),
-        tipsAndTricks: recipe.tipsAndTricks?.map((tip) => tip.description),
-        nutritionalInfo: recipe.nutritionalInfo
-          ? Object.entries(recipe.nutritionalInfo).map(([key, value]) => `${key}: ${value}`)
-          : [],
         allergens: recipe.allergens,
         seasonality: recipe.seasonality,
         costLevel: recipe.costLevel,
@@ -60,6 +63,18 @@ export async function updateRecipe(recipe: UpdateRecipeParams) {
 
     const existingSteps = await db.select().from(steps).where(eq(steps.recipeId, newRecipe.id));
 
+    const existingSubstitutions = await db
+      .select()
+      .from(substitutions)
+      .where(eq(substitutions.recipeId, newRecipe.id));
+
+    const existingTips = await db.select().from(tips).where(eq(tips.recipeId, newRecipe.id));
+
+    const existingNutritionalInfo = await db
+      .select()
+      .from(nutritionalInfo)
+      .where(eq(nutritionalInfo.recipeId, newRecipe.id));
+
     await updateOrInsertEntities(
       ingredients,
       existingIngredients,
@@ -72,6 +87,43 @@ export async function updateRecipe(recipe: UpdateRecipeParams) {
     );
 
     await updateOrInsertEntities(steps, existingSteps, recipe.steps, 'id', newRecipe.id);
+
+    await updateOrInsertEntities(
+      substitutions,
+      existingSubstitutions,
+      recipe.substitutions || [],
+      'id',
+      newRecipe.id,
+    );
+
+    await updateOrInsertEntities(
+      tips,
+      existingTips,
+      recipe.tipsAndTricks || [],
+      'id',
+      newRecipe.id,
+    );
+
+    if (recipe.nutritionalInfo) {
+      const nutritionalData = {
+        recipeId: newRecipe.id,
+        calories: recipe.nutritionalInfo.calories
+          ? parseInt(recipe.nutritionalInfo.calories)
+          : null,
+        protein: recipe.nutritionalInfo.protein ? parseInt(recipe.nutritionalInfo.protein) : null,
+        carbs: recipe.nutritionalInfo.carbs ? parseInt(recipe.nutritionalInfo.carbs) : null,
+        fat: recipe.nutritionalInfo.fat ? parseInt(recipe.nutritionalInfo.fat) : null,
+      };
+
+      if (existingNutritionalInfo.length > 0) {
+        await db
+          .update(nutritionalInfo)
+          .set(nutritionalData)
+          .where(eq(nutritionalInfo.recipeId, newRecipe.id));
+      } else {
+        await db.insert(nutritionalInfo).values(nutritionalData);
+      }
+    }
 
     revalidatePath(ProjectUrls.dashboard);
     revalidatePath(ProjectUrls.recipes);

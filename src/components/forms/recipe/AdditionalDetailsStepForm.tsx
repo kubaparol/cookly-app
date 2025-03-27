@@ -15,6 +15,8 @@ export default function AdditionalDetailsStepForm() {
   const { control, watch, setValue } = useFormContext<AdditionalDetailsStepFormValues>();
 
   const equipment = watch('equipment') || [];
+  const substitutions = watch('substitutions') || [];
+  const tipsAndTricks = watch('tipsAndTricks') || [];
 
   const {
     fields: substitutionFields,
@@ -49,6 +51,22 @@ export default function AdditionalDetailsStepForm() {
     const newEquipment = [...equipment];
     newEquipment[index] = value;
     setValue('equipment', newEquipment);
+  };
+
+  const handleSubstitutionChange = (
+    index: number,
+    field: 'original' | 'substitute',
+    value: string,
+  ) => {
+    const newSubstitutions = [...substitutions];
+    newSubstitutions[index] = { ...newSubstitutions[index], [field]: value };
+    setValue('substitutions', newSubstitutions);
+  };
+
+  const handleTipChange = (index: number, value: string) => {
+    const newTips = [...tipsAndTricks];
+    newTips[index] = { description: value };
+    setValue('tipsAndTricks', newTips);
   };
 
   return (
@@ -368,11 +386,19 @@ export default function AdditionalDetailsStepForm() {
           {substitutionFields.map((field, index) => (
             <div key={field.id} className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr,1fr,auto]">
               <FormControl>
-                <Input {...field} placeholder="Original ingredient" />
+                <Input
+                  placeholder="Original ingredient"
+                  value={substitutions[index]?.original || ''}
+                  onChange={(e) => handleSubstitutionChange(index, 'original', e.target.value)}
+                />
               </FormControl>
 
               <FormControl>
-                <Input {...field} placeholder="Substitute" />
+                <Input
+                  placeholder="Substitute"
+                  value={substitutions[index]?.substitute || ''}
+                  onChange={(e) => handleSubstitutionChange(index, 'substitute', e.target.value)}
+                />
               </FormControl>
 
               <Button
@@ -407,7 +433,11 @@ export default function AdditionalDetailsStepForm() {
           {tipFields.map((field, index) => (
             <div key={field.id} className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr,auto]">
               <FormControl>
-                <Input {...field} placeholder="Enter a cooking tip" />
+                <Input
+                  placeholder="Enter a cooking tip"
+                  value={tipsAndTricks[index]?.description || ''}
+                  onChange={(e) => handleTipChange(index, e.target.value)}
+                />
               </FormControl>
 
               <Button

@@ -3,11 +3,11 @@ import { integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { recipes } from './recipes';
 
 export const steps = pgTable('steps', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  recipeId: uuid('recipe_id')
+  id: uuid().primaryKey().defaultRandom(),
+  recipeId: uuid()
     .notNull()
     .references(() => recipes.id),
-  description: text('description').notNull(),
-  order: integer('order').notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
+  description: text().notNull(),
+  order: integer().notNull(),
+  createdAt: timestamp().defaultNow().notNull(),
 });

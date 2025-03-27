@@ -68,14 +68,16 @@ export const additionalDetailsStepFormSchema = z.object({
         substitute: z.string(),
       }),
     )
-    .optional(),
+    .optional()
+    .transform((val) => val || []),
   tipsAndTricks: z
     .array(
       z.object({
         description: z.string(),
       }),
     )
-    .optional(),
+    .optional()
+    .transform((val) => val || []),
   nutritionalInfo: z
     .object({
       calories: z.string().optional(),
@@ -83,7 +85,8 @@ export const additionalDetailsStepFormSchema = z.object({
       carbs: z.string().optional(),
       fat: z.string().optional(),
     })
-    .optional(),
+    .optional()
+    .transform((val) => val || {}),
   allergens: z.array(z.string()).optional(),
   seasonality: z.string().optional(),
   costLevel: z.string().optional(),

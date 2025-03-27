@@ -7,7 +7,7 @@ import { handleError } from '@/utils';
 
 import { ProjectUrls } from '@/constants';
 
-import { ingredients, recipes, steps } from '@/db';
+import { ingredients, nutritionalInfo, recipes, steps, substitutions, tips } from '@/db';
 import { db } from '@/db/drizzle';
 
 import { RecipeFormValues } from '@/components/forms/recipe/schemas';
@@ -41,11 +41,6 @@ export async function createRecipe(recipe: RecipeFormValues) {
         storageInstructions: recipe.storageInstructions,
         reheatingInstructions: recipe.reheatingInstructions,
         makeAheadInstructions: recipe.makeAheadInstructions,
-        substitutions: recipe.substitutions?.map((sub) => `${sub.original} -> ${sub.substitute}`),
-        tipsAndTricks: recipe.tipsAndTricks?.map((tip) => tip.description),
-        nutritionalInfo: recipe.nutritionalInfo
-          ? Object.entries(recipe.nutritionalInfo).map(([key, value]) => `${key}: ${value}`)
-          : [],
         allergens: recipe.allergens,
         seasonality: recipe.seasonality,
         costLevel: recipe.costLevel,
@@ -69,6 +64,37 @@ export async function createRecipe(recipe: RecipeFormValues) {
         order: index + 1,
       })),
     );
+
+    if (recipe.substitutions && recipe.substitutions.length > 0) {
+      await db.insert(substitutions).values(
+        recipe.substitutions.map((sub) => ({
+          recipeId: newRecipe.id,
+          original: sub.original,
+          substitute: sub.substitute,
+        })),
+      );
+    }
+
+    if (recipe.tipsAndTricks && recipe.tipsAndTricks.length > 0) {
+      await db.insert(tips).values(
+        recipe.tipsAndTricks.map((tip) => ({
+          recipeId: newRecipe.id,
+          description: tip.description,
+        })),
+      );
+    }
+
+    if (recipe.nutritionalInfo) {
+      await db.insert(nutritionalInfo).values({
+        recipeId: newRecipe.id,
+        calories: recipe.nutritionalInfo.calories
+          ? parseInt(recipe.nutritionalInfo.calories)
+          : null,
+        protein: recipe.nutritionalInfo.protein ? parseInt(recipe.nutritionalInfo.protein) : null,
+        carbs: recipe.nutritionalInfo.carbs ? parseInt(recipe.nutritionalInfo.carbs) : null,
+        fat: recipe.nutritionalInfo.fat ? parseInt(recipe.nutritionalInfo.fat) : null,
+      });
+    }
 
     revalidatePath(ProjectUrls.dashboard);
     revalidatePath(ProjectUrls.recipes);

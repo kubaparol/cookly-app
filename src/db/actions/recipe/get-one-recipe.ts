@@ -5,7 +5,7 @@ import { SQL, and, eq } from 'drizzle-orm';
 import { handleError } from '@/utils';
 
 import { db } from '@/db/drizzle';
-import { ingredients, recipes, steps } from '@/db/schema';
+import { ingredients, nutritionalInfo, recipes, steps, substitutions, tips } from '@/db/schema';
 
 export async function getOneRecipe(id: string) {
   try {
@@ -37,6 +37,33 @@ export async function getOneRecipe(id: string) {
       .from(steps)
       .where(eq(steps.recipeId, id));
 
+    const substitutionsData = await db
+      .select({
+        id: substitutions.id,
+        original: substitutions.original,
+        substitute: substitutions.substitute,
+      })
+      .from(substitutions)
+      .where(eq(substitutions.recipeId, id));
+
+    const tipsData = await db
+      .select({
+        id: tips.id,
+        description: tips.description,
+      })
+      .from(tips)
+      .where(eq(tips.recipeId, id));
+
+    const nutritionalInfoData = await db
+      .select({
+        calories: nutritionalInfo.calories,
+        protein: nutritionalInfo.protein,
+        carbs: nutritionalInfo.carbs,
+        fat: nutritionalInfo.fat,
+      })
+      .from(nutritionalInfo)
+      .where(eq(nutritionalInfo.recipeId, id));
+
     return {
       ...recipeData,
       ingredients: ingredientsData.map((ingredient) => ({
@@ -44,14 +71,14 @@ export async function getOneRecipe(id: string) {
         quantity: ingredient.quantity.toString(),
       })),
       steps: stepsData,
+      substitutions: substitutionsData,
+      tips: tipsData,
+      nutritionalInfo: nutritionalInfoData[0] || {},
       preparationTime: recipeData.preparationTime.toString(),
       cookingTime: recipeData.cookingTime.toString(),
       restTime: recipeData.restTime?.toString(),
       activeTime: recipeData.activeTime?.toString(),
       servings: recipeData.servings.toString(),
-      substitutions: recipeData.substitutions,
-      tipsAndTricks: recipeData.tipsAndTricks,
-      nutritionalInfo: recipeData.nutritionalInfo,
       servingSize: recipeData.servingSize,
       yield: recipeData.yield,
       equipment: recipeData.equipment,

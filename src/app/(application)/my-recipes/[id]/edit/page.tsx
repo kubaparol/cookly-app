@@ -35,17 +35,14 @@ export default async function EditRecipePage(props: PageProps) {
             storageInstructions: recipe.storageInstructions || undefined,
             reheatingInstructions: recipe.reheatingInstructions || undefined,
             makeAheadInstructions: recipe.makeAheadInstructions || undefined,
-            tipsAndTricks: recipe.tipsAndTricks?.map((tip) => ({ description: tip })) || [],
-            substitutions:
-              recipe.substitutions?.map((sub) => {
-                const [original, substitute] = sub.split(' -> ');
-                return { original, substitute };
-              }) || undefined,
-            nutritionalInfo:
-              recipe.nutritionalInfo?.reduce((acc, curr) => {
-                const [key, value] = curr.split(': ');
-                return { ...acc, [key]: value };
-              }, {}) || undefined,
+            substitutions: recipe.substitutions || [],
+            tipsAndTricks: recipe.tips || [],
+            nutritionalInfo: {
+              calories: recipe.nutritionalInfo?.calories?.toString() || undefined,
+              protein: recipe.nutritionalInfo?.protein?.toString() || undefined,
+              carbs: recipe.nutritionalInfo?.carbs?.toString() || undefined,
+              fat: recipe.nutritionalInfo?.fat?.toString() || undefined,
+            },
             allergens: recipe.allergens || undefined,
             seasonality: recipe.seasonality || undefined,
             costLevel: recipe.costLevel || undefined,
