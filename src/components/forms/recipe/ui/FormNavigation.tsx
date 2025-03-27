@@ -29,14 +29,14 @@ export default function FormNavigation({
   };
 
   return (
-    <div className="flex items-center justify-between gap-4 p-4">
+    <div className="sticky bottom-0 z-50 flex items-center justify-between gap-4 rounded-t-lg border-x border-t border-border bg-gradient-to-b from-background/80 to-background p-4 shadow-lg backdrop-blur-sm">
       {!isFirstStep && (
-        <Button type="button" variant="outline" size="default" onClick={onBackStep}>
+        <Button type="button" variant="outline" size="lg" onClick={onBackStep}>
           Back
         </Button>
       )}
 
-      <Button type="button" size="default" onClick={handleNext} className="ml-auto">
+      <Button type="button" size="lg" onClick={handleNext} className="ml-auto">
         {isLastStep ? 'Submit Recipe' : 'Next'}
       </Button>
     </div>

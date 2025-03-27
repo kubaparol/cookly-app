@@ -1,3 +1,4 @@
+import { PlusCircle, Trash2 } from 'lucide-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { units } from '@/constants/units';
@@ -17,23 +18,23 @@ export default function IngredientsStepForm() {
   });
 
   return (
-    <div className="grid h-fit gap-5">
+    <div className="space-y-6">
       {fields.map((field, index) => (
-        <div key={field.id} className="grid grid-cols-[1fr,_1fr,_2fr,_auto] gap-4">
+        <div
+          key={field.id}
+          className="grid grid-cols-1 gap-4 rounded-lg border bg-card p-4 shadow-sm sm:grid-cols-[1fr,1fr,2fr,auto]">
           <FormField
             control={control}
             name={`ingredients.${index}.quantity`}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  <span className="text-[18px] text-red-500">*</span>
+                <FormLabel className="flex items-center">
+                  <span className="mr-1 text-sm font-medium text-destructive">*</span>
                   Quantity
                 </FormLabel>
-
                 <FormControl>
-                  <Input {...field} placeholder="e.g., 2" />
+                  <Input {...field} placeholder="e.g., 2" className="w-full" />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
@@ -44,20 +45,21 @@ export default function IngredientsStepForm() {
             name={`ingredients.${index}.unit`}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  <span className="text-[18px] text-red-500">*</span>
+                <FormLabel className="flex items-center">
+                  <span className="mr-1 text-sm font-medium text-destructive">*</span>
                   Unit
                 </FormLabel>
-
                 <FormControl>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue {...field} placeholder="e.g., cups" />
                     </SelectTrigger>
                     <SelectContent>
                       {units.map((group) => (
                         <div key={group.label}>
-                          <div className="px-2 py-1.5 text-xs font-semibold">{group.label}</div>
+                          <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
+                            {group.label}
+                          </div>
                           {group.options.map((unit) => (
                             <SelectItem key={unit.value} value={unit.value}>
                               {unit.label}
@@ -68,7 +70,6 @@ export default function IngredientsStepForm() {
                     </SelectContent>
                   </Select>
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
@@ -79,33 +80,39 @@ export default function IngredientsStepForm() {
             name={`ingredients.${index}.name`}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  <span className="text-[18px] text-red-500">*</span>
+                <FormLabel className="flex items-center">
+                  <span className="mr-1 text-sm font-medium text-destructive">*</span>
                   Ingredient
                 </FormLabel>
-
                 <FormControl>
-                  <Input {...field} placeholder="e.g., all-purpose flour" />
+                  <Input {...field} placeholder="e.g., all-purpose flour" className="w-full" />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <Button
-            type="button"
-            variant="destructive"
-            size="icon"
-            className="mt-8"
-            onClick={() => remove(index)}>
-            -
-          </Button>
+          <div className="flex items-end justify-end pb-1">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="h-9 w-9 text-destructive hover:bg-destructive/10 hover:text-destructive"
+              onClick={() => remove(index)}>
+              <Trash2 className="h-5 w-5" />
+              <span className="sr-only">Remove ingredient</span>
+            </Button>
+          </div>
         </div>
       ))}
 
-      <Button type="button" size="sm" onClick={() => append({ quantity: '', unit: '', name: '' })}>
-        Add next ingredient
+      <Button
+        type="button"
+        variant="outline"
+        className="mt-2 flex w-full items-center justify-center gap-2"
+        onClick={() => append({ quantity: '', unit: '', name: '' })}>
+        <PlusCircle className="h-4 w-4" />
+        Add ingredient
       </Button>
     </div>
   );

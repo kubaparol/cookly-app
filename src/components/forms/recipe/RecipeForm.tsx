@@ -53,8 +53,8 @@ export default function RecipeForm(props: RecipeFormProps) {
       preparationTime: '',
       cookingTime: '',
       servings: '',
-      ingredients: [{ quantity: '', unit: '', name: '' }],
-      steps: [{ description: '' }],
+      ingredients: [],
+      steps: [],
       difficulty: '',
       dietaryTags: [],
       notes: '',
@@ -131,17 +131,17 @@ export default function RecipeForm(props: RecipeFormProps) {
           stepsLength={stepsLength}
         />
 
-        <CurrentStepComponent />
-
-        <div className="mt-auto">
-          <FormNavigation
-            onNextStep={handleNextStep}
-            onBackStep={handleBackStep}
-            isFirstStep={isFirstStep}
-            isLastStep={isLastStep}
-            currentStepSchema={currentStepSchema}
-          />
+        <div className="flex-1 pb-8">
+          <CurrentStepComponent />
         </div>
+
+        <FormNavigation
+          onNextStep={handleNextStep}
+          onBackStep={handleBackStep}
+          isFirstStep={isFirstStep}
+          isLastStep={isLastStep}
+          currentStepSchema={currentStepSchema}
+        />
       </div>
     </FormProvider>
   );

@@ -17,7 +17,7 @@ export default async function EditRecipePage(props: PageProps) {
   const recipe = await getOneRecipe(id);
 
   return (
-    <section className="grid gap-6">
+    <section className="flex h-full flex-col gap-6">
       <PageTitle title="Edit Recipe" />
 
       {/* <Suspense fallback={<RecipeFormSkeleton />}> */}
