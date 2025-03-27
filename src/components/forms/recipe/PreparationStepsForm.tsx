@@ -68,7 +68,7 @@ export default function PreparationStepsForm() {
         className="mt-2 flex w-full items-center justify-center gap-2"
         onClick={() => append({ description: '' })}>
         <PlusCircle className="h-4 w-4" />
-        Add step
+        Add next step
       </Button>
     </div>
   );

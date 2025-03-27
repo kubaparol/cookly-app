@@ -1,5 +1,5 @@
 {
-  "id": "8bfb3a77-8578-4749-8413-330d87fcc363",
+  "id": "0391f879-49f0-4422-85f6-59894e47736f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -10,14 +10,14 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "recipeId": {
-          "name": "recipeId",
-          "type": "text",
+        "recipe_id": {
+          "name": "recipe_id",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -39,16 +39,30 @@
           "primaryKey": false,
           "notNull": true
         },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp (3)",
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "ingredients_recipe_id_recipes_id_fk": {
+          "name": "ingredients_recipe_id_recipes_id_fk",
+          "tableFrom": "ingredients",
+          "tableTo": "recipes",
+          "columnsFrom": [
+            "recipe_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -58,7 +72,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true,
           "default": "gen_random_uuid()"
@@ -75,26 +89,26 @@
           "primaryKey": false,
           "notNull": false
         },
-        "imageUrl": {
-          "name": "imageUrl",
+        "image_url": {
+          "name": "image_url",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "authorId": {
-          "name": "authorId",
+        "author_id": {
+          "name": "author_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "cuisineType": {
-          "name": "cuisineType",
+        "cuisine_type": {
+          "name": "cuisine_type",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "mealType": {
-          "name": "mealType",
+        "meal_type": {
+          "name": "meal_type",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -105,14 +119,14 @@
           "primaryKey": false,
           "notNull": true
         },
-        "preparationTime": {
-          "name": "preparationTime",
+        "preparation_time": {
+          "name": "preparation_time",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "cookingTime": {
-          "name": "cookingTime",
+        "cooking_time": {
+          "name": "cooking_time",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -129,8 +143,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "dietaryTags": {
-          "name": "dietaryTags",
+        "dietary_tags": {
+          "name": "dietary_tags",
           "type": "text[]",
           "primaryKey": false,
           "notNull": true
@@ -141,16 +155,30 @@
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp (3)",
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "recipes_author_id_users_clerk_id_fk": {
+          "name": "recipes_author_id_users_clerk_id_fk",
+          "tableFrom": "recipes",
+          "tableTo": "users",
+          "columnsFrom": [
+            "author_id"
+          ],
+          "columnsTo": [
+            "clerk_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -160,14 +188,14 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "recipeId": {
-          "name": "recipeId",
-          "type": "text",
+        "recipe_id": {
+          "name": "recipe_id",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -183,16 +211,30 @@
           "primaryKey": false,
           "notNull": true
         },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp (3)",
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "steps_recipe_id_recipes_id_fk": {
+          "name": "steps_recipe_id_recipes_id_fk",
+          "tableFrom": "steps",
+          "tableTo": "recipes",
+          "columnsFrom": [
+            "recipe_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -200,20 +242,20 @@
       "name": "users",
       "schema": "",
       "columns": {
-        "clerkId": {
-          "name": "clerkId",
+        "clerk_id": {
+          "name": "clerk_id",
           "type": "text",
           "primaryKey": true,
           "notNull": true
         },
-        "firstName": {
-          "name": "firstName",
+        "first_name": {
+          "name": "first_name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "lastName": {
-          "name": "lastName",
+        "last_name": {
+          "name": "last_name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -224,17 +266,17 @@
           "primaryKey": false,
           "notNull": false
         },
-        "imageUrl": {
-          "name": "imageUrl",
+        "image_url": {
+          "name": "image_url",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp (3)",
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         }
       },

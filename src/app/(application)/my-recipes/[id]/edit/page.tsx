@@ -21,7 +21,17 @@ export default async function EditRecipePage(props: PageProps) {
       <PageTitle title="Edit Recipe" />
 
       {/* <Suspense fallback={<RecipeFormSkeleton />}> */}
-      {recipe && <RecipeForm id={id} type="Update" defaultValues={recipe} />}
+      {recipe && (
+        <RecipeForm
+          id={id}
+          type="Update"
+          defaultValues={{
+            ...recipe,
+            description: recipe.description || undefined,
+            notes: recipe.notes || undefined,
+          }}
+        />
+      )}
       {/* </Suspense> */}
     </section>
   );

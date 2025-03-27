@@ -235,10 +235,11 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
           onEscapeKeyDown={() => setIsPopoverOpen(false)}>
           <Command>
             <CommandInput placeholder="Search..." onKeyDown={handleInputKeyDown} />
+
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
 
-              <CommandGroup>
+              <CommandGroup className="max-h-[250px] overflow-y-auto">
                 {options.map((option) => {
                   const isSelected = selectedValues.includes(option.value);
                   return (
@@ -248,26 +249,26 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
                       className="cursor-pointer">
                       <div
                         className={cn(
-                          'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
+                          'mr-2 flex size-5 items-center justify-center rounded-sm border border-primary',
                           isSelected
                             ? 'bg-primary text-primary-foreground'
                             : 'opacity-50 [&_svg]:invisible',
                         )}>
-                        <CheckIcon className="h-4 w-4" />
+                        <CheckIcon className="!size-3" strokeWidth={4} />
                       </div>
 
-                      {option.icon && (
-                        <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                      )}
+                      {option.icon && <option.icon className="mr-2 size-5 text-muted-foreground" />}
 
                       <span>{option.label}</span>
                     </CommandItem>
                   );
                 })}
               </CommandGroup>
+            </CommandList>
 
-              <CommandSeparator />
+            <CommandSeparator />
 
+            <CommandList>
               <CommandGroup>
                 <div className="flex items-center justify-between">
                   {selectedValues.length > 0 && (

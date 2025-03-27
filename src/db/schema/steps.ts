@@ -1,12 +1,13 @@
-import { sql } from 'drizzle-orm';
-import { integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+
+import { recipes } from './recipes';
 
 export const steps = pgTable('steps', {
-  id: text()
-    .primaryKey()
-    .default(sql`gen_random_uuid()`),
-  recipeId: text().notNull(),
-  description: text().notNull(),
-  order: integer().notNull(),
-  createdAt: timestamp({ mode: 'date', precision: 3 }).defaultNow(),
+  id: uuid('id').primaryKey().defaultRandom(),
+  recipeId: uuid('recipe_id')
+    .notNull()
+    .references(() => recipes.id),
+  description: text('description').notNull(),
+  order: integer('order').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
 });

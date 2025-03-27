@@ -19,7 +19,7 @@ import FormNavigation from './ui/FormNavigation';
 interface RecipeFormProps {
   type: 'Create' | 'Update';
   id?: string;
-  defaultValues?: Partial<any>;
+  defaultValues?: Partial<RecipeFormValues>;
   isSuccess?: boolean;
 }
 
@@ -53,8 +53,8 @@ export default function RecipeForm(props: RecipeFormProps) {
       preparationTime: '',
       cookingTime: '',
       servings: '',
-      ingredients: [],
-      steps: [],
+      ingredients: [{ name: '', quantity: '', unit: '' }],
+      steps: [{ description: '' }],
       difficulty: '',
       dietaryTags: [],
       notes: '',

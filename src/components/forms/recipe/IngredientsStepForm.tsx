@@ -112,7 +112,7 @@ export default function IngredientsStepForm() {
         className="mt-2 flex w-full items-center justify-center gap-2"
         onClick={() => append({ quantity: '', unit: '', name: '' })}>
         <PlusCircle className="h-4 w-4" />
-        Add ingredient
+        Add another ingredient
       </Button>
     </div>
   );
