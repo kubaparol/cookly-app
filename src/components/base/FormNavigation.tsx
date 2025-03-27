@@ -29,13 +29,14 @@ export default function FormNavigation({
   };
 
   return (
-    <div className="flex gap-4">
+    <div className="flex items-center justify-between gap-4 p-4">
       {!isFirstStep && (
-        <Button type="button" variant="outline" size="sm" onClick={onBackStep}>
+        <Button type="button" variant="outline" size="default" onClick={onBackStep}>
           Back
         </Button>
       )}
-      <Button type="button" size="sm" onClick={handleNext}>
+
+      <Button type="button" size="default" onClick={handleNext} className="ml-auto">
         {isLastStep ? 'Submit Recipe' : 'Next'}
       </Button>
     </div>

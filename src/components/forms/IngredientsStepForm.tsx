@@ -114,7 +114,7 @@ export default function IngredientsStepForm() {
       ))}
 
       <Button type="button" size="sm" onClick={() => append({ quantity: '', unit: '', name: '' })}>
-        Add Ingredient
+        Add next ingredient
       </Button>
     </div>
   );

@@ -100,7 +100,7 @@ export default function RecipeFormContainer() {
       notes: '',
       termsAccepted: false,
     },
-    mode: 'onBlur',
+    mode: 'onChange',
   });
 
   const { Component, schema } = getStepByValue(currentStep);
@@ -127,16 +127,12 @@ export default function RecipeFormContainer() {
 
   return (
     <FormProvider {...methods}>
-      <div className="grid flex-1 grid-cols-[auto,_1fr] gap-3 xs:gap-6 lg:gap-12">
-        <Stepper
-          steps={steps}
-          currentStep={currentStep}
-          onSetStep={(step) => setCurrentStep(step as StepValue)}
-        />
+      <div className="flex flex-1 flex-col gap-3 xs:gap-6 lg:gap-12">
+        <Stepper steps={steps} currentStep={currentStep} />
 
-        <div className="grid h-fit gap-5">
-          <Component />
+        <Component />
 
+        <div className="mt-auto">
           <FormNavigation
             onNextStep={handleNextStep}
             onBackStep={handleBackStep}
