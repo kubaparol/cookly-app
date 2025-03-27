@@ -1,36 +1,20 @@
 import { useFormContext } from 'react-hook-form';
-import { z } from 'zod';
 
 import { useUploadThing } from '@/lib/uploadthing';
 
 import { categories, cuisineTypes } from '@/constants';
 import { mealTypes } from '@/constants/meal-types';
 
-import FileUploader from '../base/FileUploader';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Input } from '../ui/input';
-import { MultiSelect } from '../ui/multi-select';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { Textarea } from '../ui/textarea';
-
-export const BasicInformationStepFormSchema = z.object({
-  title: z
-    .string()
-    .min(3, 'Title must be at least 3 characters')
-    .max(255, 'Title must be at most 255 characters'),
-  description: z
-    .string()
-    .min(10, 'Description must be at least 10 characters')
-    .max(500, 'Description must be at most 500 characters')
-    .optional(),
-  imageUrl: z.string().min(1, 'Image is required'),
-  cuisineType: z.string().min(1, 'Cuisine Type is required'),
-  mealType: z.string().min(1, 'Meal Type is required'),
-  categories: z.array(z.string()).min(1, 'At least one category is required'),
-});
+import FileUploader from '../../base/FileUploader';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form';
+import { Input } from '../../ui/input';
+import { MultiSelect } from '../../ui/multi-select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
+import { Textarea } from '../../ui/textarea';
+import { BasicInformationStepFormValues } from './schemas';
 
 export default function BasicInformationStepForm() {
-  const { control, setValue } = useFormContext();
+  const { control, setValue } = useFormContext<BasicInformationStepFormValues>();
 
   const { startUpload } = useUploadThing('imageUploader');
 

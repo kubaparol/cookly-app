@@ -39,8 +39,14 @@ export async function getOneRecipe(id: string) {
 
     return {
       ...recipeData,
-      ingredients: ingredientsData,
+      ingredients: ingredientsData.map((ingredient) => ({
+        ...ingredient,
+        quantity: ingredient.quantity.toString(),
+      })),
       steps: stepsData,
+      preparationTime: recipeData.preparationTime.toString(),
+      cookingTime: recipeData.cookingTime.toString(),
+      servings: recipeData.servings.toString(),
     };
   } catch (error) {
     handleError(error);

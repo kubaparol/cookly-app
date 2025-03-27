@@ -1,26 +1,11 @@
 import { useFormContext } from 'react-hook-form';
-import { z } from 'zod';
 
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Input } from '../ui/input';
-
-export const TimeServingsStepFormSchema = z.object({
-  preparationTime: z
-    .string()
-    .min(1, 'Preparation time is required')
-    .regex(/^\d+$/, 'Must be a valid number'),
-  cookingTime: z
-    .string()
-    .min(1, 'Cooking time is required')
-    .regex(/^\d+$/, 'Must be a valid number'),
-  servings: z
-    .string()
-    .min(1, 'Number of servings is required')
-    .regex(/^\d+$/, 'Must be a valid number'),
-});
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form';
+import { Input } from '../../ui/input';
+import { TimeServingsStepFormValues } from './schemas';
 
 export default function TimeServingsStepForm() {
-  const { control } = useFormContext();
+  const { control } = useFormContext<TimeServingsStepFormValues>();
 
   return (
     <div className="grid h-fit gap-5">

@@ -1,21 +1,15 @@
 import { useFormContext } from 'react-hook-form';
-import { z } from 'zod';
 
 import { dietaryTags, difficultyLevels } from '@/constants';
 
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { MultiSelect } from '../ui/multi-select';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { Textarea } from '../ui/textarea';
-
-export const AdditionalDetailsStepFormSchema = z.object({
-  difficulty: z.string().min(1, 'Difficulty level is required'),
-  dietaryTags: z.array(z.string()).min(1, 'At least one dietary tag is required'),
-  notes: z.string().optional(),
-});
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form';
+import { MultiSelect } from '../../ui/multi-select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
+import { Textarea } from '../../ui/textarea';
+import { AdditionalDetailsStepFormValues } from './schemas';
 
 export default function AdditionalDetailsStepForm() {
-  const { control } = useFormContext();
+  const { control } = useFormContext<AdditionalDetailsStepFormValues>();
 
   return (
     <div className="grid h-fit gap-5">

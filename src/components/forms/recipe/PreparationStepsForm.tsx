@@ -1,20 +1,13 @@
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { z } from 'zod';
 
-import { Button } from '../ui/button';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Textarea } from '../ui/textarea';
-
-export const PreparationStepsFormSchema = z.object({
-  steps: z.array(
-    z.object({
-      description: z.string().min(1, 'Step description is required'),
-    }),
-  ),
-});
+import { Button } from '../../ui/button';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form';
+import { Textarea } from '../../ui/textarea';
+import { PreparationStepsFormValues } from './schemas';
 
 export default function PreparationStepsForm() {
-  const { control } = useFormContext();
+  const { control } = useFormContext<PreparationStepsFormValues>();
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'steps',

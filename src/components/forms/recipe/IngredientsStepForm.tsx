@@ -1,25 +1,16 @@
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { z } from 'zod';
 
 import { units } from '@/constants/units';
 
-import { Button } from '../ui/button';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Input } from '../ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-
-export const IngredientsStepFormSchema = z.object({
-  ingredients: z.array(
-    z.object({
-      quantity: z.string().min(1, 'Quantity is required'),
-      unit: z.string().min(1, 'Unit is required'),
-      name: z.string().min(1, 'Ingredient name is required'),
-    }),
-  ),
-});
+import { Button } from '../../ui/button';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form';
+import { Input } from '../../ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
+import { IngredientsStepFormValues } from './schemas';
 
 export default function IngredientsStepForm() {
-  const { control } = useFormContext();
+  const { control } = useFormContext<IngredientsStepFormValues>();
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'ingredients',

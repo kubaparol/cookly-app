@@ -7,10 +7,12 @@ import { handleError } from '@/utils';
 
 import { ProjectUrls } from '@/constants';
 
-import { CreateRecipeParams, ingredients, recipes, steps } from '@/db';
+import { ingredients, recipes, steps } from '@/db';
 import { db } from '@/db/drizzle';
 
-export async function createRecipe(recipe: CreateRecipeParams) {
+import { RecipeFormValues } from '@/components/forms/recipe/schemas';
+
+export async function createRecipe(recipe: RecipeFormValues) {
   try {
     const user = await currentUser();
 
@@ -23,6 +25,15 @@ export async function createRecipe(recipe: CreateRecipeParams) {
         description: recipe.description,
         imageUrl: recipe.imageUrl,
         authorId: user.id,
+        cuisineType: recipe.cuisineType,
+        mealType: recipe.mealType,
+        categories: recipe.categories,
+        preparationTime: parseInt(recipe.preparationTime),
+        cookingTime: parseInt(recipe.cookingTime),
+        servings: parseInt(recipe.servings),
+        difficulty: recipe.difficulty,
+        dietaryTags: recipe.dietaryTags,
+        notes: recipe.notes,
       })
       .returning();
 
@@ -30,7 +41,7 @@ export async function createRecipe(recipe: CreateRecipeParams) {
       recipe.ingredients.map((ingredient) => ({
         recipeId: newRecipe.id,
         name: ingredient.name,
-        quantity: ingredient.quantity,
+        quantity: parseFloat(ingredient.quantity),
         unit: ingredient.unit,
       })),
     );

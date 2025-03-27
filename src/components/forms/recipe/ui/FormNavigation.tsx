@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Button } from '../ui/button';
+import { Button } from '../../../ui/button';
 
 interface FormNavigationProps {
   onNextStep: () => void;

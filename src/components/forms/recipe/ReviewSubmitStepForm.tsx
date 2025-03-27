@@ -1,17 +1,11 @@
 import { useFormContext } from 'react-hook-form';
-import { z } from 'zod';
 
-import { Checkbox } from '../ui/checkbox';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-
-export const ReviewSubmitStepFormSchema = z.object({
-  termsAccepted: z.boolean().refine((val) => val === true, {
-    message: 'You must accept the terms and conditions',
-  }),
-});
+import { Checkbox } from '../../ui/checkbox';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form';
+import { ReviewSubmitStepFormValues } from './schemas';
 
 export default function ReviewSubmitStepForm() {
-  const { control } = useFormContext();
+  const { control } = useFormContext<ReviewSubmitStepFormValues>();
 
   return (
     <div className="grid h-fit gap-5">

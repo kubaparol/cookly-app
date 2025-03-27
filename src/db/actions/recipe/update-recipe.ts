@@ -2,8 +2,11 @@
 
 import { currentUser } from '@clerk/nextjs/server';
 import { eq } from 'drizzle-orm';
+import { revalidatePath } from 'next/cache';
 
 import { handleError } from '@/utils';
+
+import { ProjectUrls } from '@/constants';
 
 import { UpdateRecipeParams, ingredients, recipes, steps } from '@/db';
 import { db } from '@/db/drizzle';
@@ -21,6 +24,15 @@ export async function updateRecipe(recipe: UpdateRecipeParams) {
         description: recipe.description,
         imageUrl: recipe.imageUrl,
         authorId: user.id,
+        cuisineType: recipe.cuisineType,
+        mealType: recipe.mealType,
+        categories: recipe.categories,
+        preparationTime: parseInt(recipe.preparationTime),
+        cookingTime: parseInt(recipe.cookingTime),
+        servings: parseInt(recipe.servings),
+        difficulty: recipe.difficulty,
+        dietaryTags: recipe.dietaryTags,
+        notes: recipe.notes,
       })
       .where(eq(recipes.id, recipe.id))
       .returning();
@@ -35,12 +47,20 @@ export async function updateRecipe(recipe: UpdateRecipeParams) {
     await updateOrInsertEntities(
       ingredients,
       existingIngredients,
-      recipe.ingredients,
+      recipe.ingredients.map((ingredient) => ({
+        ...ingredient,
+        quantity: parseFloat(ingredient.quantity),
+      })),
       'id',
       newRecipe.id,
     );
 
     await updateOrInsertEntities(steps, existingSteps, recipe.steps, 'id', newRecipe.id);
+
+    revalidatePath(ProjectUrls.dashboard);
+    revalidatePath(ProjectUrls.recipes);
+    revalidatePath(ProjectUrls.myRecipes);
+    revalidatePath(ProjectUrls.editRecipe(newRecipe.id));
 
     return JSON.parse(JSON.stringify(newRecipe));
   } catch (error) {

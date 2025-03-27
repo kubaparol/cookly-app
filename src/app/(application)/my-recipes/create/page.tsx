@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 import PageTitle from '@/components/base/PageTitle';
-import RecipeFormContainerV2 from '@/components/containers/RecipeFormContainerV2';
+import RecipeForm from '@/components/forms/recipe/RecipeForm';
 
 import { PageProps } from '@/types';
 
@@ -16,9 +16,7 @@ export default function CreateRecipePage(props: PageProps) {
     <section className="flex h-full flex-col gap-6">
       {!isSuccess && <PageTitle title="Create Recipe" />}
 
-      {/* <RecipeForm type="Create" isSuccess={props.searchParams.success === 'true'} /> */}
-
-      <RecipeFormContainerV2 />
+      <RecipeForm type="Create" isSuccess={props.searchParams.success === 'true'} />
     </section>
   );
 }

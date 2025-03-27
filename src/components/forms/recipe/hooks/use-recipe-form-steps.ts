@@ -1,15 +1,19 @@
 import { useCallback, useState } from 'react';
 
-import AdditionalDetailsStepForm, {
-  AdditionalDetailsStepFormSchema,
-} from '../../AdditionalDetailsStepForm';
-import BasicInformationStepForm, {
-  BasicInformationStepFormSchema,
-} from '../../BasicInformationStepForm';
-import IngredientsStepForm, { IngredientsStepFormSchema } from '../../IngredientsStepForm';
-import PreparationStepsForm, { PreparationStepsFormSchema } from '../../PreparationStepsForm';
-import ReviewSubmitStepForm, { ReviewSubmitStepFormSchema } from '../../ReviewSubmitStepForm';
-import TimeServingsStepForm, { TimeServingsStepFormSchema } from '../../TimeServingsStepForm';
+import AdditionalDetailsStepForm from '../AdditionalDetailsStepForm';
+import BasicInformationStepForm from '../BasicInformationStepForm';
+import IngredientsStepForm from '../IngredientsStepForm';
+import PreparationStepsForm from '../PreparationStepsForm';
+import ReviewSubmitStepForm from '../ReviewSubmitStepForm';
+import TimeServingsStepForm from '../TimeServingsStepForm';
+import {
+  additionalDetailsStepFormSchema,
+  basicInformationStepFormSchema,
+  ingredientsStepFormSchema,
+  preparationStepsFormSchema,
+  reviewSubmitStepFormSchema,
+  timeServingsStepFormSchema,
+} from '../schemas';
 
 export const useRecipeFormSteps = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -17,32 +21,32 @@ export const useRecipeFormSteps = () => {
   const steps = [
     {
       label: 'Basic Information',
-      schema: BasicInformationStepFormSchema,
+      schema: basicInformationStepFormSchema,
       Component: BasicInformationStepForm,
     },
     {
       label: 'Time & Servings',
-      schema: TimeServingsStepFormSchema,
+      schema: timeServingsStepFormSchema,
       Component: TimeServingsStepForm,
     },
     {
       label: 'Ingredients',
-      schema: IngredientsStepFormSchema,
+      schema: ingredientsStepFormSchema,
       Component: IngredientsStepForm,
     },
     {
       label: 'Preparation Steps',
-      schema: PreparationStepsFormSchema,
+      schema: preparationStepsFormSchema,
       Component: PreparationStepsForm,
     },
     {
       label: 'Additional Details',
-      schema: AdditionalDetailsStepFormSchema,
+      schema: additionalDetailsStepFormSchema,
       Component: AdditionalDetailsStepForm,
     },
     {
       label: 'Review & Submit',
-      schema: ReviewSubmitStepFormSchema,
+      schema: reviewSubmitStepFormSchema,
       Component: ReviewSubmitStepForm,
     },
   ] as const;

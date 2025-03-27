@@ -1,0 +1,79 @@
+import { z } from 'zod';
+
+export const additionalDetailsStepFormSchema = z.object({
+  difficulty: z.string().min(1, 'Difficulty level is required'),
+  dietaryTags: z.array(z.string()).min(1, 'At least one dietary tag is required'),
+  notes: z.string().optional(),
+});
+
+export const basicInformationStepFormSchema = z.object({
+  title: z
+    .string()
+    .min(3, 'Title must be at least 3 characters')
+    .max(255, 'Title must be at most 255 characters'),
+  description: z
+    .string()
+    .min(10, 'Description must be at least 10 characters')
+    .max(500, 'Description must be at most 500 characters')
+    .optional(),
+  imageUrl: z.string().min(1, 'Image is required'),
+  cuisineType: z.string().min(1, 'Cuisine Type is required'),
+  mealType: z.string().min(1, 'Meal Type is required'),
+  categories: z.array(z.string()).min(1, 'At least one category is required'),
+});
+
+export const ingredientsStepFormSchema = z.object({
+  ingredients: z.array(
+    z.object({
+      quantity: z.string().min(1, 'Quantity is required'),
+      unit: z.string().min(1, 'Unit is required'),
+      name: z.string().min(1, 'Ingredient name is required'),
+    }),
+  ),
+});
+
+export const preparationStepsFormSchema = z.object({
+  steps: z.array(
+    z.object({
+      description: z.string().min(1, 'Step description is required'),
+    }),
+  ),
+});
+
+export const reviewSubmitStepFormSchema = z.object({
+  termsAccepted: z.boolean().refine((val) => val === true, {
+    message: 'You must accept the terms and conditions',
+  }),
+});
+
+export const timeServingsStepFormSchema = z.object({
+  preparationTime: z
+    .string()
+    .min(1, 'Preparation time is required')
+    .regex(/^\d+$/, 'Must be a valid number'),
+  cookingTime: z
+    .string()
+    .min(1, 'Cooking time is required')
+    .regex(/^\d+$/, 'Must be a valid number'),
+  servings: z
+    .string()
+    .min(1, 'Number of servings is required')
+    .regex(/^\d+$/, 'Must be a valid number'),
+});
+
+export const recipeFormSchema = z.object({
+  ...basicInformationStepFormSchema.shape,
+  ...timeServingsStepFormSchema.shape,
+  ...ingredientsStepFormSchema.shape,
+  ...preparationStepsFormSchema.shape,
+  ...additionalDetailsStepFormSchema.shape,
+  ...reviewSubmitStepFormSchema.shape,
+});
+
+export type AdditionalDetailsStepFormValues = z.infer<typeof additionalDetailsStepFormSchema>;
+export type BasicInformationStepFormValues = z.infer<typeof basicInformationStepFormSchema>;
+export type IngredientsStepFormValues = z.infer<typeof ingredientsStepFormSchema>;
+export type PreparationStepsFormValues = z.infer<typeof preparationStepsFormSchema>;
+export type ReviewSubmitStepFormValues = z.infer<typeof reviewSubmitStepFormSchema>;
+export type TimeServingsStepFormValues = z.infer<typeof timeServingsStepFormSchema>;
+export type RecipeFormValues = z.infer<typeof recipeFormSchema>;
