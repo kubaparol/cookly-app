@@ -1,89 +1,66 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Button } from '../ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Textarea } from '../ui/textarea';
 
-const stepSchema = z.object({
-  description: z.string().min(3, 'Step description is required'),
-});
-
 export const PreparationStepsFormSchema = z.object({
-  steps: z.array(stepSchema).min(1, 'At least one preparation step is required'),
+  steps: z.array(
+    z.object({
+      description: z.string().min(1, 'Step description is required'),
+    }),
+  ),
 });
 
-export type PreparationStepsFormValues = z.infer<typeof PreparationStepsFormSchema>;
-
-interface PreparationStepsFormProps {
-  onFormSubmit: (values: PreparationStepsFormValues) => void;
-}
-
-export default function PreparationStepsForm(props: PreparationStepsFormProps) {
-  const { onFormSubmit } = props;
-
-  const form = useForm<PreparationStepsFormValues>({
-    resolver: zodResolver(PreparationStepsFormSchema),
-    defaultValues: {
-      steps: [{ description: '' }],
-    },
-  });
-
+export default function PreparationStepsForm() {
+  const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
-    control: form.control,
+    control,
     name: 'steps',
   });
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onFormSubmit)} className="grid h-fit gap-5">
-        <div className="mb-2 flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Preparation Steps</h3>
+    <div className="grid h-fit gap-5">
+      {fields.map((field, index) => (
+        <div key={field.id} className="grid grid-cols-[1fr,_auto] gap-4">
+          <FormField
+            control={control}
+            name={`steps.${index}.description`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <span className="text-[18px] text-red-500">*</span>
+                  Step {index + 1}
+                </FormLabel>
+
+                <FormControl>
+                  <Textarea
+                    {...field}
+                    placeholder="e.g., In a large pot, bring water to a boil and add salt."
+                    className="min-h-[100px]"
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <Button
             type="button"
-            size="sm"
-            variant="outline"
-            onClick={() => append({ description: '' })}>
-            Add Step
+            variant="destructive"
+            size="icon"
+            className="mt-8"
+            onClick={() => remove(index)}>
+            -
           </Button>
         </div>
+      ))}
 
-        {fields.map((field, index) => (
-          <div key={field.id} className="rounded-lg border border-border p-4">
-            <div className="mb-2 flex items-center justify-between">
-              <h4 className="font-medium">Step {index + 1}</h4>
-              {fields.length > 1 && (
-                <Button type="button" size="sm" variant="destructive" onClick={() => remove(index)}>
-                  Remove
-                </Button>
-              )}
-            </div>
-
-            <FormField
-              control={form.control}
-              name={`steps.${index}.description`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      placeholder="e.g., Preheat the oven to 350°F (175°C)"
-                      className="h-24"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        ))}
-
-        <Button type="submit" size="sm" className="w-fit">
-          Next
-        </Button>
-      </form>
-    </Form>
+      <Button type="button" size="sm" onClick={() => append({ description: '' })}>
+        Add Step
+      </Button>
+    </div>
   );
 }
