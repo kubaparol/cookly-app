@@ -206,7 +206,9 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
               </div>
             ) : (
               <div className="mx-auto flex w-full items-center justify-between">
-                <span className="pointer-events-none">{placeholder}</span>
+                <span className={cn('pointer-events-none font-normal text-muted-foreground')}>
+                  {placeholder}
+                </span>
 
                 <svg
                   width="15"
