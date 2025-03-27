@@ -1,24 +1,22 @@
 import { Progress } from '../ui/progress';
 
-export interface StepItem {
-  label: string;
-  value: string;
-}
-
 export interface StepperProps {
-  steps: readonly StepItem[];
-  currentStep: string;
+  currentStepLabel: string;
+  currentStepIndex: number;
+  stepsLength: number;
 }
 
-export default function Stepper({ steps, currentStep }: StepperProps) {
-  const currentIndex = steps.findIndex((step) => step.value === currentStep);
-  const progress = ((currentIndex + 1) / steps.length) * 100;
-
+export default function Stepper({ currentStepLabel, currentStepIndex, stepsLength }: StepperProps) {
+  const progress = ((currentStepIndex + 1) / stepsLength) * 100;
   return (
-    <div className="grid w-full gap-2">
-      <span className="ml-auto text-center text-sm text-muted-foreground">
-        {currentIndex + 1}/{steps.length}
-      </span>
+    <div className="grid gap-1">
+      <div className="mb-2 flex items-center justify-between">
+        <span className="text-sm font-medium">
+          Step {currentStepIndex + 1} of {stepsLength}
+        </span>
+
+        <span className="text-sm font-medium">{currentStepLabel}</span>
+      </div>
 
       <Progress value={progress} />
     </div>

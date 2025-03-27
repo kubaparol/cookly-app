@@ -1,6 +1,8 @@
 import { useFormContext } from 'react-hook-form';
 import { z } from 'zod';
 
+import { useUploadThing } from '@/lib/uploadthing';
+
 import { categories, cuisineTypes } from '@/constants';
 import { mealTypes } from '@/constants/meal-types';
 
@@ -21,14 +23,31 @@ export const BasicInformationStepFormSchema = z.object({
     .min(10, 'Description must be at least 10 characters')
     .max(500, 'Description must be at most 500 characters')
     .optional(),
-  image: z.any(),
+  imageUrl: z.string().min(1, 'Image is required'),
   cuisineType: z.string().min(1, 'Cuisine Type is required'),
   mealType: z.string().min(1, 'Meal Type is required'),
   categories: z.array(z.string()).min(1, 'At least one category is required'),
 });
 
 export default function BasicInformationStepForm() {
-  const { control } = useFormContext();
+  const { control, setValue } = useFormContext();
+
+  const { startUpload } = useUploadThing('imageUploader');
+
+  const onImageChange = async (file: File | null) => {
+    if (!file) {
+      setValue('imageUrl', '');
+      return;
+    }
+
+    const uploadedImages = await startUpload([file]);
+
+    if (!uploadedImages) return;
+
+    const uploadedImageUrl = uploadedImages[0].url;
+
+    setValue('imageUrl', uploadedImageUrl);
+  };
 
   return (
     <div className="grid h-fit gap-5">
@@ -73,7 +92,7 @@ export default function BasicInformationStepForm() {
 
       <FormField
         control={control}
-        name="image"
+        name="imageUrl"
         render={({ field }) => (
           <FormItem>
             <FormLabel>
@@ -82,7 +101,7 @@ export default function BasicInformationStepForm() {
             </FormLabel>
 
             <FormControl>
-              <FileUploader onFieldChange={field.onChange} value={field.value} />
+              <FileUploader onFieldChange={onImageChange} value={field.value} />
             </FormControl>
 
             <FormMessage data-testid="error-message" />
@@ -95,7 +114,10 @@ export default function BasicInformationStepForm() {
         name="cuisineType"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Cuisine Type</FormLabel>
+            <FormLabel>
+              <span className="text-[18px] text-red-500">*</span>
+              Cuisine Type
+            </FormLabel>
 
             <FormControl>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -123,6 +145,7 @@ export default function BasicInformationStepForm() {
         name="mealType"
         render={({ field }) => (
           <FormItem>
+            <span className="text-[18px] text-red-500">*</span>
             <FormLabel>Meal Type</FormLabel>
 
             <FormControl>
@@ -151,6 +174,7 @@ export default function BasicInformationStepForm() {
         name="categories"
         render={({ field }) => (
           <FormItem>
+            <span className="text-[18px] text-red-500">*</span>
             <FormLabel>Categories</FormLabel>
 
             <FormControl>
