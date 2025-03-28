@@ -28,6 +28,7 @@ export default function RecipeForm(props: RecipeFormProps) {
   const { type, id, defaultValues, isSuccess = false } = props;
 
   const [isCreationSuccess, setIsCreationSuccess] = useState(isSuccess);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -84,34 +85,39 @@ export default function RecipeForm(props: RecipeFormProps) {
       goToNextStep();
     } else {
       const formData = methods.getValues();
+      setIsSubmitting(true);
 
-      if (type === 'Create') {
-        const result = await createRecipe(formData);
+      try {
+        if (type === 'Create') {
+          const result = await createRecipe(formData);
 
-        if (result.success) {
-          const params = new URLSearchParams();
-          params.set('success', 'true');
+          if (result.success) {
+            const params = new URLSearchParams();
+            params.set('success', 'true');
 
-          router.replace(`${pathname}?${params.toString()}`);
-          methods.reset();
-        } else {
-          toast.error(result.message);
+            router.replace(`${pathname}?${params.toString()}`);
+            methods.reset();
+          } else {
+            toast.error(result.message);
+          }
         }
-      }
 
-      if (type === 'Update') {
-        const result = await updateRecipe({
-          id: id!,
-          ...formData,
-        });
+        if (type === 'Update') {
+          const result = await updateRecipe({
+            id: id!,
+            ...formData,
+          });
 
-        if (result.success) {
-          router.push(ProjectUrls.myRecipes);
-          toast.success('Recipe updated successfully');
-          methods.reset();
-        } else {
-          toast.error(result.message);
+          if (result.success) {
+            router.push(ProjectUrls.myRecipes);
+            toast.success('Recipe updated successfully');
+            methods.reset();
+          } else {
+            toast.error(result.message);
+          }
         }
+      } finally {
+        setIsSubmitting(false);
       }
     }
   }, [goToNextStep, id, isLastStep, methods, pathname, router, type]);
@@ -158,6 +164,7 @@ export default function RecipeForm(props: RecipeFormProps) {
           isFirstStep={isFirstStep}
           isLastStep={isLastStep}
           currentStepSchema={currentStepSchema}
+          isSubmitting={isSubmitting}
         />
       </div>
     </FormProvider>
