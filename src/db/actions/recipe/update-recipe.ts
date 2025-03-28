@@ -4,8 +4,6 @@ import { currentUser } from '@clerk/nextjs/server';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
-import { handleError } from '@/utils';
-
 import { ProjectUrls } from '@/constants';
 
 import {
@@ -19,7 +17,9 @@ import {
 } from '@/db';
 import { db } from '@/db/drizzle';
 
-export async function updateRecipe(recipe: UpdateRecipeParams) {
+import { ServerActionResponse } from '@/types';
+
+export async function updateRecipe(recipe: UpdateRecipeParams): Promise<ServerActionResponse> {
   try {
     const user = await currentUser();
 
@@ -104,9 +104,14 @@ export async function updateRecipe(recipe: UpdateRecipeParams) {
     revalidatePath(ProjectUrls.myRecipes);
     revalidatePath(ProjectUrls.editRecipe(newRecipe.id));
 
-    return JSON.parse(JSON.stringify(newRecipe));
+    return {
+      success: true,
+    };
   } catch (error) {
-    handleError(error);
+    return {
+      success: false,
+      message: `Failed to update recipe: ${typeof error === 'string' ? error : JSON.stringify(error)}`,
+    };
   }
 }
 

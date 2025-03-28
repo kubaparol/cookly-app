@@ -1,25 +1,24 @@
-import { Home, LucideProps, ScrollText, Settings } from 'lucide-react';
-import { ComponentType, useMemo } from 'react';
+import { LayoutDashboardIcon, LucideIcon, ScrollText, SettingsIcon } from 'lucide-react';
+import { useMemo } from 'react';
 
 import { ProjectUrls } from '@/constants/urls';
 
-export interface SidebarItemEntity {
-  label: string;
-  url?: string;
-  onClick?: () => void;
-  icon: ComponentType<LucideProps>;
+export interface AppSidebarItem {
+  title: string;
+  url: string;
+  icon: LucideIcon;
 }
 
 export const useAppSidebarItems = () => {
-  const topItems = useMemo<SidebarItemEntity[]>(
+  const main = useMemo<AppSidebarItem[]>(
     () => [
       {
-        label: 'Dashboard',
+        title: 'Dashboard',
         url: ProjectUrls.dashboard,
-        icon: Home,
+        icon: LayoutDashboardIcon,
       },
       {
-        label: 'My Recipes',
+        title: 'My Recipes',
         url: ProjectUrls.myRecipes,
         icon: ScrollText,
       },
@@ -27,15 +26,16 @@ export const useAppSidebarItems = () => {
     [],
   );
 
-  const bottomItems = useMemo<SidebarItemEntity[]>(
+  const secondary = useMemo<AppSidebarItem[]>(
     () => [
       {
-        label: 'Settings',
+        title: 'Settings',
         url: ProjectUrls.settings,
-        icon: Settings,
+        icon: SettingsIcon,
       },
     ],
     [],
   );
-  return { topItems, bottomItems };
+
+  return { main, secondary };
 };

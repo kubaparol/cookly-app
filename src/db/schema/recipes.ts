@@ -1,5 +1,11 @@
+import { relations } from 'drizzle-orm';
 import { boolean, integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
+import { equipment } from './equipment';
+import { ingredients } from './ingredients';
+import { steps } from './steps';
+import { substitutions } from './substitutions';
+import { tips } from './tips';
 import { users } from './users';
 
 export const recipes = pgTable('recipes', {
@@ -36,3 +42,11 @@ export const recipes = pgTable('recipes', {
   termsAccepted: boolean().notNull().default(false),
   createdAt: timestamp().defaultNow().notNull(),
 });
+
+export const recipesRelations = relations(recipes, ({ many }) => ({
+  ingredients: many(ingredients),
+  steps: many(steps),
+  equipment: many(equipment),
+  substitutions: many(substitutions),
+  tips: many(tips),
+}));

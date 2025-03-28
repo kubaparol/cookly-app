@@ -1,5 +1,7 @@
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { getTotalCookingTime } from '@/utils';
+
 import { InputNumeric } from '../../base/InputNumeric';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form';
 import { Input } from '../../ui/input';
@@ -23,12 +25,15 @@ export default function TimeServingsStepForm() {
     name: 'restTime',
   });
 
-  const totalTime =
-    (Number(preparationTime) || 0) + (Number(cookingTime) || 0) + (Number(restTime) || 0);
+  const totalTime = getTotalCookingTime({
+    preparationTime,
+    cookingTime,
+    restTime,
+  });
 
   return (
     <div className="grid h-fit gap-5">
-      <div className="grid grid-cols-1 gap-4 rounded-lg border bg-card p-4 shadow-sm sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 rounded-lg border bg-card p-4 shadow-sm sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
         <FormField
           control={control}
           name="preparationTime"

@@ -15,14 +15,12 @@ export async function getAllRecipes(params: GetMyRecipesParams) {
   try {
     const filters: SQL[] = [...(query ? [ilike(recipes.title, `%${query}%`)] : [])];
 
-    return await db
-      .select({
-        id: recipes.id,
-        title: recipes.title,
-        imageUrl: recipes.imageUrl,
-      })
-      .from(recipes)
-      .where(and(...filters));
+    return await db.query.recipes.findMany({
+      where: and(...filters),
+      with: {
+        ingredients: true,
+      },
+    });
   } catch (error) {
     handleError(error);
   }

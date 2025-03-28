@@ -22,7 +22,7 @@ export default async function RecipesPage(props: PageProps) {
       <Separator />
 
       <Suspense fallback={<AllRecipesSkeleton />}>
-        <AllRecipesContainer query={props.searchParams.query as string} />
+        <AllRecipesContainer query={props.searchParams?.query as string} />
       </Suspense>
     </section>
   );

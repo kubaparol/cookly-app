@@ -1,15 +1,12 @@
 import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import { ReactNode } from 'react';
 
 import '@/styles/globals.css';
 
-import { Toaster } from '@/components/ui/sonner';
+import { inter } from '@/constants';
 
-export const inter = Inter({
-  subsets: ['latin'],
-});
+import { Toaster } from '@/components/ui/sonner';
 
 export const metadata: Metadata = {
   title: {

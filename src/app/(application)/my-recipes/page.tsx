@@ -1,43 +1,30 @@
-import { PlusIcon } from 'lucide-react';
 import { Metadata } from 'next';
-import Link from 'next/link';
-import { Suspense } from 'react';
 
-import { ProjectUrls } from '@/constants';
-
-import PageTitle from '@/components/base/PageTitle';
 import Search from '@/components/base/Search';
-import MyRecipesContainer from '@/components/containers/MyRecipesContainer';
-import { MyRecipesSkeleton } from '@/components/shared/skeletons';
-import { Button } from '@/components/ui/button';
+import Filters from '@/components/modules/recipes/Filters';
 
 import { PageProps } from '@/types';
+
+import MyRecipesList from './MyRecipesList';
 
 export const metadata: Metadata = {
   title: 'My Recipes',
 };
 
-export default async function RecipesPage(props: PageProps) {
+export default function RecipesPage({ searchParams }: PageProps) {
   return (
-    <section className="flex h-full flex-1 flex-col gap-10 pb-8">
-      <header className="grid gap-3">
-        <PageTitle title="My Recipes" />
+    <section className="flex h-full flex-1 flex-col gap-6 pb-8">
+      <div className="rounded-lg border bg-card p-4 shadow-sm">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div className="w-full sm:max-w-[400px]">
+            <Search placeholder="Search recipes..." />
+          </div>
 
-        <div className="flex flex-col-reverse items-center gap-4 sm:flex-row sm:gap-8">
-          <Search placeholder="Search recipes..." />
-
-          <Button asChild className="w-full sm:w-fit">
-            <Link href={ProjectUrls.createRecipe} className="gap-3">
-              Create Recipe
-              <PlusIcon className="size-5" />
-            </Link>
-          </Button>
+          <Filters />
         </div>
-      </header>
+      </div>
 
-      <Suspense fallback={<MyRecipesSkeleton />}>
-        <MyRecipesContainer query={props.searchParams.query as string} />
-      </Suspense>
+      <MyRecipesList searchParams={searchParams} />
     </section>
   );
 }

@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { ProjectUrls } from '@/constants';
 
@@ -27,6 +28,7 @@ export default function RecipeForm(props: RecipeFormProps) {
   const { type, id, defaultValues, isSuccess = false } = props;
 
   const [isCreationSuccess, setIsCreationSuccess] = useState(isSuccess);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -83,28 +85,40 @@ export default function RecipeForm(props: RecipeFormProps) {
       goToNextStep();
     } else {
       const formData = methods.getValues();
+      setIsSubmitting(true);
 
-      if (type === 'Create') {
-        await createRecipe(formData);
+      try {
+        if (type === 'Create') {
+          const result = await createRecipe(formData);
 
-        const params = new URLSearchParams();
-        params.set('success', 'true');
+          if (result.success) {
+            const params = new URLSearchParams();
+            params.set('success', 'true');
 
-        router.replace(`${pathname}?${params.toString()}`);
+            router.replace(`${pathname}?${params.toString()}`);
+            methods.reset();
+          } else {
+            toast.error(result.message);
+          }
+        }
 
-        setIsCreationSuccess(true);
+        if (type === 'Update') {
+          const result = await updateRecipe({
+            id: id!,
+            ...formData,
+          });
+
+          if (result.success) {
+            router.push(ProjectUrls.myRecipes);
+            toast.success('Recipe updated successfully');
+            methods.reset();
+          } else {
+            toast.error(result.message);
+          }
+        }
+      } finally {
+        setIsSubmitting(false);
       }
-
-      if (type === 'Update') {
-        await updateRecipe({
-          id: id!,
-          ...formData,
-        });
-
-        router.push(ProjectUrls.myRecipes);
-      }
-
-      methods.reset();
     }
   }, [goToNextStep, id, isLastStep, methods, pathname, router, type]);
 
@@ -150,6 +164,7 @@ export default function RecipeForm(props: RecipeFormProps) {
           isFirstStep={isFirstStep}
           isLastStep={isLastStep}
           currentStepSchema={currentStepSchema}
+          isSubmitting={isSubmitting}
         />
       </div>
     </FormProvider>
