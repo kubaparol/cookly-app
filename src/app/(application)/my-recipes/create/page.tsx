@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function CreateRecipePage(props: PageProps) {
   return (
     <section className="flex h-full flex-col gap-6">
-      <RecipeForm type="Create" isSuccess={props.searchParams.success === 'true'} />
+      <RecipeForm type="Create" isSuccess={props.searchParams?.success === 'true'} />
     </section>
   );
 }
