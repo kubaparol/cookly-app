@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
-import PageTitle from '@/components/base/PageTitle';
 import RecentRecipesCardContainer from '@/components/containers/RecentRecipesCardContainer';
 import RecipesOverviewCardContainer from '@/components/containers/RecipesOverviewCardContainer';
 import StatisticCardsContainer from '@/components/containers/StatisticCardsContainer';
@@ -18,8 +17,6 @@ export const metadata: Metadata = {
 export default function DashboardPage() {
   return (
     <section className="grid gap-2 sm:gap-6">
-      <PageTitle title="Dashboard" />
-
       <div className="grid gap-2 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
         <Suspense fallback={<StatisticCardsSkeleton />}>
           <StatisticCardsContainer />

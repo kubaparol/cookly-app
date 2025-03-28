@@ -5,7 +5,6 @@ import { Suspense } from 'react';
 
 import { ProjectUrls } from '@/constants';
 
-import PageTitle from '@/components/base/PageTitle';
 import Search from '@/components/base/Search';
 import MyRecipesContainer from '@/components/containers/MyRecipesContainer';
 import { MyRecipesSkeleton } from '@/components/shared/skeletons';
@@ -21,8 +20,6 @@ export default async function RecipesPage(props: PageProps) {
   return (
     <section className="flex h-full flex-1 flex-col gap-10 pb-8">
       <header className="grid gap-3">
-        <PageTitle title="My Recipes" />
-
         <div className="flex flex-col-reverse items-center gap-4 sm:flex-row sm:gap-8">
           <Search placeholder="Search recipes..." />
 

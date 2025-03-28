@@ -1,17 +1,8 @@
-'use client';
+import { ReactNode } from 'react';
 
-import { Menu } from 'lucide-react';
-import Link from 'next/link';
-import { ReactNode, useState } from 'react';
-
-import { useAppSidebarItems } from '@/hooks';
-
-import { ProjectUrls } from '@/constants/urls';
-
-import AppSidebar from '../base/AppSidebar';
-import Logo from '../base/Logo';
-import UserPreviewContainer from '../containers/UserPreviewContainer';
-import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
+import { SidebarInset, SidebarProvider } from '../ui/sidebar';
+import { AppSidebar } from './components/AppSidebar';
+import { SiteHeader } from './components/SiteHeader';
 
 interface AppLayoutProps {
   readonly children: ReactNode;
@@ -19,54 +10,16 @@ interface AppLayoutProps {
 
 export default function AppLayout(props: AppLayoutProps) {
   const { children } = props;
-  const [isOpen, setIsOpen] = useState(false);
-
-  const { topItems, bottomItems } = useAppSidebarItems();
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden">
-      <div className="flex justify-between border-b px-6 py-2 md:hidden">
-        <Link href={ProjectUrls.home} title="Cookly Home">
-          <Logo className="max-w-[100px]" />
-        </Link>
+    <SidebarProvider>
+      <AppSidebar variant="inset" />
 
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger className="ml-auto md:hidden">
-            <Menu />
-          </SheetTrigger>
+      <SidebarInset>
+        <SiteHeader />
 
-          <SheetContent side="right" className="flex h-full w-full flex-col xxs:w-3/4">
-            <AppSidebar
-              topItems={topItems}
-              bottomItems={bottomItems}
-              onClose={() => setIsOpen(false)}
-            />
-
-            <UserPreviewContainer />
-          </SheetContent>
-        </Sheet>
-      </div>
-
-      <div className="flex flex-1 overflow-hidden">
-        <div className="hidden w-full flex-col gap-2 px-3 py-4 md:flex md:w-64 md:px-2">
-          <Link
-            href={ProjectUrls.home}
-            title="Cookly Home"
-            className="grid place-items-center rounded-md bg-primary-100 p-4">
-            <Logo className="max-w-[140px]" />
-          </Link>
-
-          <AppSidebar
-            topItems={topItems}
-            bottomItems={bottomItems}
-            onClose={() => setIsOpen(false)}
-          />
-
-          <UserPreviewContainer />
-        </div>
-
-        <div className="flex-1 overflow-y-auto px-3 py-4 sm:px-6">{children}</div>
-      </div>
-    </div>
+        {children}
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

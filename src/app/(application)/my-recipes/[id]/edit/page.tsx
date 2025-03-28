@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 
 import { getOneRecipe } from '@/db';
 
-import PageTitle from '@/components/base/PageTitle';
 import RecipeForm from '@/components/forms/recipe/RecipeForm';
 
 import { PageProps } from '@/types';
@@ -18,9 +17,6 @@ export default async function EditRecipePage(props: PageProps) {
 
   return (
     <section className="flex h-full flex-col gap-6">
-      <PageTitle title="Edit Recipe" />
-
-      {/* <Suspense fallback={<RecipeFormSkeleton />}> */}
       {recipe && (
         <RecipeForm
           id={id}
@@ -47,7 +43,6 @@ export default async function EditRecipePage(props: PageProps) {
           }}
         />
       )}
-      {/* </Suspense> */}
     </section>
   );
 }
