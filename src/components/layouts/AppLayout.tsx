@@ -16,9 +16,9 @@ export default function AppLayout(props: AppLayoutProps) {
       <AppSidebar variant="inset" />
 
       <SidebarInset>
-        <SiteHeader />
+        <SiteHeader title="" />
 
-        {children}
+        <div className="flex-1 px-4 py-4 md:gap-6 md:py-6 lg:px-6">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );
