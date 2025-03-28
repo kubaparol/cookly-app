@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 
 import '@/styles/globals.css';
 
-import { inter } from '@/constants';
+import { inter } from '@/constants/fonts';
 
 import { Toaster } from '@/components/ui/sonner';
 

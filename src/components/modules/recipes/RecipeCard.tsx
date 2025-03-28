@@ -42,12 +42,13 @@ export function RecipeCard({
           src={imageUrl}
           alt={`${title} picture`}
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="h-full w-full object-cover transition-transform duration-500"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300" />
       </div>
 
-      <div className="p-4">
+      <div className="grid flex-1 p-4">
         <h3 className="mb-3 line-clamp-2 text-xl font-semibold">{title}</h3>
 
         <div className="mb-4 flex flex-wrap gap-1.5">
@@ -76,7 +77,7 @@ export function RecipeCard({
           )}
         </div>
 
-        <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
+        <div className="mt-auto flex flex-wrap gap-2 text-sm text-muted-foreground">
           {cookingTime > 0 && (
             <div className="grid grid-cols-[auto,_1fr] items-center gap-1.5">
               <div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted">
@@ -97,7 +98,7 @@ export function RecipeCard({
         </div>
       </div>
 
-      <CardFooter className="gap-0 p-4 pt-0">
+      <CardFooter className="mt-auto gap-0 p-4 pt-0">
         <div className="flex w-full flex-wrap items-center gap-3">
           {isAuthor && (
             <>
