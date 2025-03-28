@@ -1,11 +1,4 @@
-import {
-  HelpCircleIcon,
-  LayoutDashboardIcon,
-  LucideIcon,
-  ScrollText,
-  SearchIcon,
-  SettingsIcon,
-} from 'lucide-react';
+import { LayoutDashboardIcon, LucideIcon, ScrollText, SettingsIcon } from 'lucide-react';
 import { useMemo } from 'react';
 
 import { ProjectUrls } from '@/constants/urls';
@@ -39,16 +32,6 @@ export const useAppSidebarItems = () => {
         title: 'Settings',
         url: ProjectUrls.settings,
         icon: SettingsIcon,
-      },
-      {
-        title: 'Get Help',
-        url: '#',
-        icon: HelpCircleIcon,
-      },
-      {
-        title: 'Search',
-        url: '#',
-        icon: SearchIcon,
       },
     ],
     [],

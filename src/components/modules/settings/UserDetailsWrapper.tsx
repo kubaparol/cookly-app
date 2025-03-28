@@ -3,12 +3,11 @@
 import { useUser } from '@clerk/nextjs';
 import { useCallback } from 'react';
 
+import UserDetailsForm, { UserDetailsFormValues } from '@/components/forms/UserDetailsForm';
+import { UserDetailsFormSkeleton } from '@/components/shared/skeletons';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-import UserDetailsForm, { UserDetailsFormValues } from '../forms/UserDetailsForm';
-import { UserDetailsFormSkeleton } from '../shared/skeletons';
-
-export default function UserDetailsContainer() {
+export default function UserDetailsWrapper() {
   const { user, isLoaded } = useUser();
 
   const userDetailsHandler = useCallback(

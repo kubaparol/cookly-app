@@ -1,5 +1,6 @@
 import { currentUser } from '@clerk/nextjs/server';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 import { getTotalCookingTime } from '@/utils';
 
@@ -7,28 +8,30 @@ import { ProjectUrls } from '@/constants';
 
 import { getMyRecipes } from '@/db';
 
-import { RecipeCard } from '../shared/RecipeCard';
-import StatusCard from '../shared/StatusCard';
+import { RecipeCard } from '@/components/shared/RecipeCard';
+import StatusCard from '@/components/shared/StatusCard';
+import { MyRecipesSkeleton } from '@/components/shared/skeletons';
 
-interface MyRecipesContainerProps {
-  query?: string;
-  difficulty?: string[];
-  cuisineType?: string[];
-  mealType?: string[];
-  dietaryTags?: string[];
-  maxCookingTime?: string;
-}
+import { PageProps } from '@/types';
 
-export default async function MyRecipesContainer(props: MyRecipesContainerProps) {
-  const { query, difficulty, cuisineType, mealType, dietaryTags, maxCookingTime } = props;
+async function MyRecipesLoader({ searchParams }: PageProps) {
+  const { difficulty, cuisineType, mealType, dietaryTags, maxCookingTime, query } =
+    searchParams || {};
+
+  const difficultyParam = difficulty ? (difficulty as string).split('_') : [];
+  const cuisineTypeParam = cuisineType ? (cuisineType as string).split('_') : [];
+  const mealTypeParam = mealType ? (mealType as string).split('_') : [];
+  const dietaryTagsParam = dietaryTags ? (dietaryTags as string).split('_') : [];
+  const maxCookingTimeParam = maxCookingTime as string | undefined;
+  const queryParam = query as string;
 
   const recipes = await getMyRecipes({
-    query,
-    difficulty,
-    cuisineType,
-    mealType,
-    dietaryTags,
-    maxCookingTime: maxCookingTime ? parseInt(maxCookingTime) : undefined,
+    query: queryParam,
+    difficulty: difficultyParam,
+    cuisineType: cuisineTypeParam,
+    mealType: mealTypeParam,
+    dietaryTags: dietaryTagsParam,
+    maxCookingTime: maxCookingTimeParam ? parseInt(maxCookingTimeParam) : undefined,
   });
 
   const user = await currentUser();
@@ -39,12 +42,12 @@ export default async function MyRecipesContainer(props: MyRecipesContainerProps)
 
   if (
     recipes?.length === 0 &&
-    !query &&
-    !difficulty?.length &&
-    !cuisineType?.length &&
-    !mealType?.length &&
-    !dietaryTags?.length &&
-    !maxCookingTime
+    !queryParam &&
+    !difficultyParam &&
+    !cuisineTypeParam &&
+    !mealTypeParam &&
+    !dietaryTagsParam &&
+    !maxCookingTimeParam
   ) {
     return (
       <div className="flex h-full flex-1 items-center justify-center">
@@ -71,7 +74,6 @@ export default async function MyRecipesContainer(props: MyRecipesContainerProps)
       </div>
     );
   }
-
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -94,5 +96,15 @@ export default async function MyRecipesContainer(props: MyRecipesContainerProps)
         ))}
       </div>
     </div>
+  );
+}
+
+export default function MyRecipesList({ searchParams }: PageProps) {
+  return (
+    <>
+      <Suspense fallback={<MyRecipesSkeleton />}>
+        <MyRecipesLoader searchParams={searchParams} />
+      </Suspense>
+    </>
   );
 }

@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
-import UserDetailsContainer from '@/components/containers/UserDetailsContainer';
-import UserPasswordContainer from '@/components/containers/UserPasswordContainer';
+import UserDetailsWrapper from '@/components/modules/settings/UserDetailsWrapper';
+import UserPasswordWrapper from '@/components/modules/settings/UserPasswordWrapper';
 
 export const metadata: Metadata = {
   title: 'Settings',
@@ -11,9 +11,9 @@ export default function SettingsPage() {
   return (
     <section className="grid gap-2 sm:gap-6">
       <div className="grid gap-8">
-        <UserDetailsContainer />
+        <UserDetailsWrapper />
 
-        <UserPasswordContainer />
+        <UserPasswordWrapper />
       </div>
     </section>
   );
