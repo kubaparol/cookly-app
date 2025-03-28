@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 import { getOneRecipe } from '@/db';
 
@@ -11,7 +12,11 @@ export const metadata: Metadata = {
 };
 
 export default async function EditRecipePage(props: PageProps) {
-  const id = props.params.id;
+  const id = props.params?.id;
+
+  if (!id) {
+    notFound();
+  }
 
   const recipe = await getOneRecipe(id);
 

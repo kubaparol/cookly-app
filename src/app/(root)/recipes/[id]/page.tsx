@@ -8,7 +8,7 @@ import { getOneRecipe } from '@/db';
 import { PageProps } from '@/types';
 
 export async function generateMetadata(props: PageProps): Promise<Metadata> {
-  const id = props.params.id as string;
+  const id = props.params?.id as string;
 
   const recipe = await getOneRecipe(id);
 
@@ -33,7 +33,7 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
 }
 
 export default async function RecipePage(props: PageProps) {
-  const id = props.params.id as string;
+  const id = props.params?.id as string;
 
   const recipe = await getOneRecipe(id);
 
