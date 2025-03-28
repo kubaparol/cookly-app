@@ -8,8 +8,11 @@ import { ProjectUrls } from '@/constants';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardFooter } from '@/components/ui/card';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 import DeleteRecipeWrapper from './DeleteRecipeWrapper';
+
+const MAX_DIETARY_TAGS = 2;
 
 interface RecipeCardProps {
   id: string;
@@ -33,26 +36,44 @@ export function RecipeCard({
   openInNewTab = false,
 }: RecipeCardProps) {
   return (
-    <Card className="group flex h-full flex-col overflow-hidden border-2 transition-all duration-300">
+    <Card className="flex h-full flex-col overflow-hidden border-2 transition-all duration-300">
       <div className="relative aspect-video overflow-hidden">
         <Image
           src={imageUrl}
           alt={`${title} picture`}
           fill
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+          className="h-full w-full object-cover transition-transform duration-500"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300" />
       </div>
 
       <div className="p-4">
         <h3 className="mb-3 line-clamp-2 text-xl font-semibold">{title}</h3>
 
         <div className="mb-4 flex flex-wrap gap-1.5">
-          {dietaryTags.map((tag) => (
+          {dietaryTags.slice(0, MAX_DIETARY_TAGS).map((tag) => (
             <Badge key={tag} variant="secondary" className="text-xs">
               {tag}
             </Badge>
           ))}
+          {dietaryTags.length > MAX_DIETARY_TAGS && (
+            <TooltipProvider>
+              <Tooltip delayDuration={100}>
+                <TooltipTrigger asChild>
+                  <Badge variant="secondary" className="cursor-pointer text-xs">
+                    + {dietaryTags.length - MAX_DIETARY_TAGS} more
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent className="flex flex-col gap-1 border bg-card p-2">
+                  {dietaryTags.slice(MAX_DIETARY_TAGS).map((tag) => (
+                    <Badge key={tag} variant="secondary" className="text-xs">
+                      {tag}
+                    </Badge>
+                  ))}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
         </div>
 
         <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
@@ -104,17 +125,16 @@ export function RecipeCard({
               </DeleteRecipeWrapper>
             </>
           )}
-          <Link
-            href={`/recipes/${id}`}
-            target={openInNewTab ? '_blank' : undefined}
-            className={`${isAuthor ? 'min-w-[100px] flex-1' : 'w-full'}`}>
-            <Button
-              size="sm"
-              className="flex w-full items-center justify-center gap-2 bg-primary transition-all duration-200 hover:bg-primary/90 hover:shadow-md">
+          <Button
+            asChild
+            variant="outline"
+            size="sm"
+            className="flex w-full items-center justify-center gap-2 transition-all duration-200 hover:bg-secondary hover:text-secondary-foreground">
+            <Link href={ProjectUrls.recipe(id)} target={openInNewTab ? '_blank' : undefined}>
               <Eye className="h-4 w-4" />
-              <span>View recipe</span>
-            </Button>
-          </Link>
+              <span>View</span>
+            </Link>
+          </Button>
         </div>
       </CardFooter>
     </Card>
