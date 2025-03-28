@@ -1,11 +1,13 @@
 import { currentUser } from '@clerk/nextjs/server';
 import { notFound } from 'next/navigation';
 
+import { getTotalCookingTime } from '@/utils';
+
 import { ProjectUrls } from '@/constants';
 
 import { getMyRecipes } from '@/db';
 
-import RecipeCard from '../shared/RecipeCard';
+import { RecipeCard } from '../shared/RecipeCard';
 import StatusCard from '../shared/StatusCard';
 
 interface MyRecipesContainerProps {
@@ -51,13 +53,22 @@ export default async function MyRecipesContainer(props: MyRecipesContainerProps)
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-[repeat(auto-fill,minmax(400px,1fr))]">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {recipes?.map((recipe, index) => (
         <RecipeCard
           key={index}
           id={recipe.id}
           title={recipe.title}
           imageUrl={recipe.imageUrl}
+          servings={recipe.servings}
+          cookingTime={getTotalCookingTime({
+            preparationTime: recipe.preparationTime,
+            cookingTime: recipe.cookingTime,
+            restTime: recipe.restTime || 0,
+          })}
+          ingredientsLength={recipe.ingredients.length}
+          difficulty={recipe.difficulty}
+          dietaryTags={recipe.dietaryTags}
           isAuthor={user.id === recipe.authorId}
           openInNewTab
         />

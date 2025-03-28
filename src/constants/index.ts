@@ -5,7 +5,7 @@ export * from './cost-levels';
 export * from './cuisine-types';
 export * from './dietary-tags';
 export * from './difficulty-levels';
-// export * from './fonts';
+export * from './fonts';
 export * from './meal-types';
 export * from './seasons';
 export * from './units';

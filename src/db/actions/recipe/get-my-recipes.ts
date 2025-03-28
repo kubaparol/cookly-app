@@ -23,15 +23,12 @@ export async function getMyRecipes(params: GetMyRecipesParams) {
       ...(query ? [ilike(recipes.title, `%${query}%`)] : []),
     ];
 
-    return await db
-      .select({
-        id: recipes.id,
-        title: recipes.title,
-        imageUrl: recipes.imageUrl,
-        authorId: recipes.authorId,
-      })
-      .from(recipes)
-      .where(and(...filters));
+    return await db.query.recipes.findMany({
+      where: and(...filters),
+      with: {
+        ingredients: true,
+      },
+    });
   } catch (error) {
     handleError(error);
   }

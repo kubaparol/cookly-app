@@ -1,66 +1,131 @@
-import { ExternalLink, Pencil, Trash2 } from 'lucide-react';
+import { Edit, Eye, Trash } from 'lucide-react';
+import { ChefHat, Clock, ListChecks, Users } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { ProjectUrls } from '@/constants';
-
-import DeleteRecipeContainer from '../containers/DeleteRecipeContainer';
-import { Button } from '../ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardFooter, CardHeader } from '@/components/ui/card';
 
 interface RecipeCardProps {
   id: string;
   title: string;
   imageUrl: string;
+  servings?: number;
+  cookingTime?: number;
+  ingredientsLength?: number;
+  difficulty?: string;
+  dietaryTags?: string[];
   isAuthor?: boolean;
   openInNewTab?: boolean;
 }
 
-export default function RecipeCard(props: RecipeCardProps) {
-  const { id, title, imageUrl, isAuthor, openInNewTab = false } = props;
-
+export function RecipeCard({
+  id,
+  title,
+  imageUrl,
+  servings = 0,
+  cookingTime = 0,
+  ingredientsLength = 0,
+  difficulty = 'medium',
+  dietaryTags = [],
+  isAuthor = false,
+  openInNewTab = false,
+}: RecipeCardProps) {
   return (
-    <div className="group relative overflow-hidden rounded-lg shadow-xl transition-shadow duration-300">
-      <div className="relative aspect-[16/9] w-full overflow-hidden">
+    <Card className="group flex h-full flex-col overflow-hidden border-2 transition-all duration-300">
+      <div className="relative aspect-video overflow-hidden">
         <Image
           src={imageUrl}
           alt={`${title} picture`}
           fill
-          className="transition-transform duration-500 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      </div>
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+      <div className="px-4 pt-4">
+        <div className="mb-3 flex flex-wrap gap-2">
+          {dietaryTags.map((tag) => (
+            <Badge
+              key={tag}
+              variant="outline"
+              className="bg-primary/10 text-xs hover:bg-primary/20">
+              {tag}
+            </Badge>
+          ))}
+        </div>
 
-        <div className="absolute inset-0 flex flex-col justify-end gap-2">
-          <div className="flex gap-4 px-4 py-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            {isAuthor && (
-              <>
-                <DeleteRecipeContainer id={id} button={{ size: 'sm', variant: 'destructive' }}>
-                  Delete
-                  <Trash2 className="ml-2 size-4" />
-                </DeleteRecipeContainer>
+        <div className="grid gap-2 text-sm text-muted-foreground">
+          {servings > 0 && (
+            <div className="flex min-w-[80px] items-center gap-1.5">
+              <Users className="h-3.5 w-3.5 flex-shrink-0" />
+              <span className="whitespace-nowrap">
+                {servings} {servings === 1 ? 'serving' : 'servings'}
+              </span>
+            </div>
+          )}
 
-                <Button size="sm" variant="outline" asChild>
-                  <Link href={ProjectUrls.editRecipe(id)}>
-                    Edit
-                    <Pencil className="ml-2 size-4" />
-                  </Link>
-                </Button>
-              </>
-            )}
+          {cookingTime > 0 && (
+            <div className="flex min-w-[80px] items-center gap-1.5">
+              <Clock className="h-3.5 w-3.5 flex-shrink-0" />
+              <span className="whitespace-nowrap">{cookingTime} min</span>
+            </div>
+          )}
 
-            <Button size="sm" asChild>
-              <Link href={ProjectUrls.recipe(id)} target={openInNewTab ? '_blank' : '_self'}>
-                View recipe
-                {openInNewTab && <ExternalLink className="ml-2 size-4" />}
-              </Link>
-            </Button>
-          </div>
+          {ingredientsLength > 0 && (
+            <div className="flex items-center gap-1.5">
+              <ListChecks className="h-3.5 w-3.5 flex-shrink-0" />
+              <span className="whitespace-nowrap">{ingredientsLength} ingredients</span>
+            </div>
+          )}
 
-          <h2 className="text-md bg-white/10 p-3 font-semibold text-white backdrop-blur-lg xl:p-4 xl:text-lg">
-            {title}
-          </h2>
+          {difficulty && (
+            <div className="flex items-center gap-1.5">
+              <ChefHat className="h-3.5 w-3.5 flex-shrink-0" />
+              <span className="whitespace-nowrap capitalize">{difficulty}</span>
+            </div>
+          )}
         </div>
       </div>
-    </div>
+
+      <CardHeader className="flex-1 py-3">
+        <h3 className="line-clamp-2 text-xl font-semibold">{title}</h3>
+      </CardHeader>
+
+      <CardFooter className="gap-0 p-4 pt-0">
+        <div className="flex w-full flex-wrap items-center gap-3">
+          {isAuthor && (
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex min-w-[100px] flex-1 items-center justify-center gap-2 transition-all duration-200 hover:bg-secondary hover:text-secondary-foreground">
+                <Edit className="h-4 w-4" />
+                <span>Edit</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex min-w-[100px] flex-1 items-center justify-center gap-2 border-destructive/30 text-destructive transition-all duration-200 hover:bg-destructive hover:text-destructive-foreground">
+                <Trash className="h-4 w-4" />
+                <span>Delete</span>
+              </Button>
+            </>
+          )}
+          <Link
+            href={`/recipes/${id}`}
+            target={openInNewTab ? '_blank' : undefined}
+            className={`${isAuthor ? 'min-w-[100px] flex-1' : 'w-full'}`}>
+            <Button
+              size="sm"
+              className="flex w-full items-center justify-center gap-2 bg-primary transition-all duration-200 hover:bg-primary/90 hover:shadow-md">
+              <Eye className="h-4 w-4" />
+              <span>View recipe</span>
+            </Button>
+          </Link>
+        </div>
+      </CardFooter>
+    </Card>
   );
 }
