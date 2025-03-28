@@ -1,5 +1,5 @@
 'use client';
 
-export default function Footer() {
+export function Footer() {
   return <footer className="">Footer</footer>;
 }
