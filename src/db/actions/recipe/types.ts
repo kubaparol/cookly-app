@@ -9,4 +9,9 @@ export type GetMyRecipesParams = {
   page?: number;
   limit?: number;
   query?: string;
+  difficulty?: string[];
+  cuisineType?: string[];
+  mealType?: string[];
+  dietaryTags?: string[];
+  maxCookingTime?: number;
 };

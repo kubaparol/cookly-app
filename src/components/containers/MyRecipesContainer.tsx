@@ -12,12 +12,24 @@ import StatusCard from '../shared/StatusCard';
 
 interface MyRecipesContainerProps {
   query?: string;
+  difficulty?: string[];
+  cuisineType?: string[];
+  mealType?: string[];
+  dietaryTags?: string[];
+  maxCookingTime?: string;
 }
 
 export default async function MyRecipesContainer(props: MyRecipesContainerProps) {
-  const { query } = props;
+  const { query, difficulty, cuisineType, mealType, dietaryTags, maxCookingTime } = props;
 
-  const recipes = await getMyRecipes({ query });
+  const recipes = await getMyRecipes({
+    query,
+    difficulty,
+    cuisineType,
+    mealType,
+    dietaryTags,
+    maxCookingTime: maxCookingTime ? parseInt(maxCookingTime) : undefined,
+  });
 
   const user = await currentUser();
 
@@ -25,7 +37,15 @@ export default async function MyRecipesContainer(props: MyRecipesContainerProps)
     notFound();
   }
 
-  if (recipes?.length === 0 && !query) {
+  if (
+    recipes?.length === 0 &&
+    !query &&
+    !difficulty?.length &&
+    !cuisineType?.length &&
+    !mealType?.length &&
+    !dietaryTags?.length &&
+    !maxCookingTime
+  ) {
     return (
       <div className="flex h-full flex-1 items-center justify-center">
         <StatusCard
@@ -46,31 +66,33 @@ export default async function MyRecipesContainer(props: MyRecipesContainerProps)
         <StatusCard
           type="sad"
           title="Recipes not found"
-          message="Sorry, but we could not find the recipes you are looking for."
+          message="Sorry, but we could not find the recipes matching your filters."
         />
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {recipes?.map((recipe, index) => (
-        <RecipeCard
-          key={index}
-          id={recipe.id}
-          title={recipe.title}
-          imageUrl={recipe.imageUrl}
-          cookingTime={getTotalCookingTime({
-            preparationTime: recipe.preparationTime,
-            cookingTime: recipe.cookingTime,
-            restTime: recipe.restTime || 0,
-          })}
-          difficulty={recipe.difficulty}
-          dietaryTags={recipe.dietaryTags}
-          isAuthor={user.id === recipe.authorId}
-          openInNewTab
-        />
-      ))}
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {recipes?.map((recipe, index) => (
+          <RecipeCard
+            key={index}
+            id={recipe.id}
+            title={recipe.title}
+            imageUrl={recipe.imageUrl}
+            cookingTime={getTotalCookingTime({
+              preparationTime: recipe.preparationTime,
+              cookingTime: recipe.cookingTime,
+              restTime: recipe.restTime || 0,
+            })}
+            difficulty={recipe.difficulty}
+            dietaryTags={recipe.dietaryTags}
+            isAuthor={user.id === recipe.authorId}
+            openInNewTab
+          />
+        ))}
+      </div>
     </div>
   );
 }

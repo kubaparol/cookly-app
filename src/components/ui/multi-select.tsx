@@ -40,6 +40,9 @@ interface MultiSelectProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
    */
   onValueChange: (value: string[]) => void;
 
+  /** The current selected values. */
+  value?: string[];
+
   /** The default selected values when the component mounts. */
   defaultValue?: string[];
 
@@ -86,6 +89,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
     {
       options,
       onValueChange,
+      value,
       defaultValue = [],
       placeholder = 'Select options',
       animation = 0,
@@ -96,9 +100,10 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
     },
     ref,
   ) => {
-    const [selectedValues, setSelectedValues] = React.useState<string[]>(defaultValue);
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
     const [isAnimating, setIsAnimating] = React.useState(false);
+
+    const selectedValues = value ?? defaultValue;
 
     const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'Enter') {
@@ -106,7 +111,6 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
       } else if (event.key === 'Backspace' && !event.currentTarget.value) {
         const newSelectedValues = [...selectedValues];
         newSelectedValues.pop();
-        setSelectedValues(newSelectedValues);
         onValueChange(newSelectedValues);
       }
     };
@@ -115,12 +119,10 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
       const newSelectedValues = selectedValues.includes(option)
         ? selectedValues.filter((value) => value !== option)
         : [...selectedValues, option];
-      setSelectedValues(newSelectedValues);
       onValueChange(newSelectedValues);
     };
 
     const handleClear = () => {
-      setSelectedValues([]);
       onValueChange([]);
     };
 
@@ -130,7 +132,6 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
 
     const clearExtraOptions = () => {
       const newSelectedValues = selectedValues.slice(0, maxCount);
-      setSelectedValues(newSelectedValues);
       onValueChange(newSelectedValues);
     };
 
@@ -158,34 +159,30 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
                       <Badge
                         key={value}
                         variant="outline"
-                        className="cursor-default"
-                        onClick={(event) => event.stopPropagation()}>
-                        {IconComponent && <IconComponent className="mr-2 h-4 w-4" />}
+                        className="cursor-default hover:bg-primary/50"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          toggleOption(value);
+                        }}>
+                        {IconComponent && <IconComponent className="mr-2 size-4" />}
 
                         {option?.label}
 
-                        <XCircle
-                          className="ml-2 h-4 w-4 cursor-pointer"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            toggleOption(value);
-                          }}
-                        />
+                        <XCircle className="ml-2 size-4 cursor-pointer" />
                       </Badge>
                     );
                   })}
 
                   {selectedValues.length > maxCount && (
-                    <Badge variant="secondary">
+                    <Badge
+                      variant="secondary"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        clearExtraOptions();
+                      }}>
                       {`+ ${selectedValues.length - maxCount} more`}
 
-                      <XCircle
-                        className="ml-2 h-4 w-4 cursor-pointer"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          clearExtraOptions();
-                        }}
-                      />
+                      <XCircle className="ml-2 size-4 cursor-pointer" />
                     </Badge>
                   )}
                 </div>
@@ -216,7 +213,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
                   viewBox="0 0 15 15"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 opacity-50"
+                  className="size-4 opacity-50"
                   aria-hidden="true">
                   <path
                     d="M4.93179 5.43179C4.75605 5.60753 4.75605 5.89245 4.93179 6.06819C5.10753 6.24392 5.39245 6.24392 5.56819 6.06819L7.49999 4.13638L9.43179 6.06819C9.60753 6.24392 9.89245 6.24392 10.0682 6.06819C10.2439 5.89245 10.2439 5.60753 10.0682 5.43179L7.81819 3.18179C7.73379 3.0974 7.61933 3.04999 7.49999 3.04999C7.38064 3.04999 7.26618 3.0974 7.18179 3.18179L4.93179 5.43179ZM10.0682 9.56819C10.2439 9.39245 10.2439 9.10753 10.0682 8.93179C9.89245 8.75606 9.60753 8.75606 9.43179 8.93179L7.49999 10.8636L5.56819 8.93179C5.39245 8.75606 5.10753 8.75606 4.93179 8.93179C4.75605 9.10753 4.75605 9.39245 4.93179 9.56819L7.18179 11.8182C7.35753 11.9939 7.64245 11.9939 7.81819 11.8182L10.0682 9.56819Z"
