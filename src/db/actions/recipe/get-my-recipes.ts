@@ -25,8 +25,16 @@ export async function getMyRecipes(params: GetMyRecipesParams) {
 
     return await db.query.recipes.findMany({
       where: and(...filters),
-      with: {
-        ingredients: true,
+      columns: {
+        id: true,
+        title: true,
+        imageUrl: true,
+        preparationTime: true,
+        cookingTime: true,
+        restTime: true,
+        difficulty: true,
+        dietaryTags: true,
+        authorId: true,
       },
     });
   } catch (error) {

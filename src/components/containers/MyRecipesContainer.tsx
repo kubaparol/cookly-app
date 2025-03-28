@@ -60,13 +60,11 @@ export default async function MyRecipesContainer(props: MyRecipesContainerProps)
           id={recipe.id}
           title={recipe.title}
           imageUrl={recipe.imageUrl}
-          servings={recipe.servings}
           cookingTime={getTotalCookingTime({
             preparationTime: recipe.preparationTime,
             cookingTime: recipe.cookingTime,
             restTime: recipe.restTime || 0,
           })}
-          ingredientsLength={recipe.ingredients.length}
           difficulty={recipe.difficulty}
           dietaryTags={recipe.dietaryTags}
           isAuthor={user.id === recipe.authorId}

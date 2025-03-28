@@ -1,19 +1,17 @@
 import { Edit, Eye, Trash } from 'lucide-react';
-import { ChefHat, Clock, ListChecks, Users } from 'lucide-react';
+import { ChefHat, Clock } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardFooter, CardHeader } from '@/components/ui/card';
+import { Card, CardFooter } from '@/components/ui/card';
 
 interface RecipeCardProps {
   id: string;
   title: string;
   imageUrl: string;
-  servings?: number;
   cookingTime?: number;
-  ingredientsLength?: number;
   difficulty?: string;
   dietaryTags?: string[];
   isAuthor?: boolean;
@@ -24,9 +22,7 @@ export function RecipeCard({
   id,
   title,
   imageUrl,
-  servings = 0,
   cookingTime = 0,
-  ingredientsLength = 0,
   difficulty = 'medium',
   dietaryTags = [],
   isAuthor = false,
@@ -44,54 +40,37 @@ export function RecipeCard({
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       </div>
 
-      <div className="px-4 pt-4">
-        <div className="mb-3 flex flex-wrap gap-2">
+      <div className="p-4">
+        <h3 className="mb-3 line-clamp-2 text-xl font-semibold">{title}</h3>
+
+        <div className="mb-4 flex flex-wrap gap-1.5">
           {dietaryTags.map((tag) => (
-            <Badge
-              key={tag}
-              variant="outline"
-              className="bg-primary/10 text-xs hover:bg-primary/20">
+            <Badge key={tag} variant="secondary" className="text-xs">
               {tag}
             </Badge>
           ))}
         </div>
 
-        <div className="grid gap-2 text-sm text-muted-foreground">
-          {servings > 0 && (
-            <div className="flex min-w-[80px] items-center gap-1.5">
-              <Users className="h-3.5 w-3.5 flex-shrink-0" />
-              <span className="whitespace-nowrap">
-                {servings} {servings === 1 ? 'serving' : 'servings'}
-              </span>
-            </div>
-          )}
-
+        <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
           {cookingTime > 0 && (
-            <div className="flex min-w-[80px] items-center gap-1.5">
-              <Clock className="h-3.5 w-3.5 flex-shrink-0" />
-              <span className="whitespace-nowrap">{cookingTime} min</span>
-            </div>
-          )}
-
-          {ingredientsLength > 0 && (
-            <div className="flex items-center gap-1.5">
-              <ListChecks className="h-3.5 w-3.5 flex-shrink-0" />
-              <span className="whitespace-nowrap">{ingredientsLength} ingredients</span>
+            <div className="grid grid-cols-[auto,_1fr] items-center gap-1.5">
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted">
+                <Clock className="h-3.5 w-3.5" />
+              </div>
+              <span>{cookingTime} min</span>
             </div>
           )}
 
           {difficulty && (
-            <div className="flex items-center gap-1.5">
-              <ChefHat className="h-3.5 w-3.5 flex-shrink-0" />
-              <span className="whitespace-nowrap capitalize">{difficulty}</span>
+            <div className="grid grid-cols-[auto,_1fr] items-center gap-1.5">
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted">
+                <ChefHat className="h-3.5 w-3.5" />
+              </div>
+              <span className="capitalize">{difficulty}</span>
             </div>
           )}
         </div>
       </div>
-
-      <CardHeader className="flex-1 py-3">
-        <h3 className="line-clamp-2 text-xl font-semibold">{title}</h3>
-      </CardHeader>
 
       <CardFooter className="gap-0 p-4 pt-0">
         <div className="flex w-full flex-wrap items-center gap-3">
