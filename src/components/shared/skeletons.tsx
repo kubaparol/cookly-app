@@ -1,5 +1,9 @@
 import { Skeleton } from '../ui/skeleton';
 
+export function StatisticCardsSkeleton() {
+  return <Skeleton className="h-[106px] w-full" />;
+}
+
 export function AllRecipesSkeleton() {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-[repeat(auto-fill,minmax(400px,1fr))]">
