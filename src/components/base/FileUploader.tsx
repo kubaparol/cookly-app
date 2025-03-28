@@ -16,10 +16,11 @@ type FileUploaderProps = {
   value: File | string;
   onFieldChange: (file: File | null) => void;
   disabled?: boolean;
+  loading?: boolean;
 };
 
 export default function FileUploader(props: FileUploaderProps) {
-  const { value, onFieldChange, disabled } = props;
+  const { value, onFieldChange, disabled, loading } = props;
 
   const onDrop = useCallback(
     (files: File[]) => {
@@ -40,15 +41,25 @@ export default function FileUploader(props: FileUploaderProps) {
       {...getRootProps()}
       className={cn(
         'bg-dark flex h-80 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border shadow-sm',
-        disabled && 'cursor-not-allowed',
+        disabled && '!cursor-not-allowed',
+        loading && '!cursor-wait',
       )}>
       <input
         {...getInputProps()}
-        disabled={disabled}
-        className={cn('cursor-pointer', disabled && 'cursor-not-allowed')}
+        disabled={disabled || loading}
+        className={cn(
+          'cursor-pointer',
+          disabled && '!cursor-not-allowed',
+          loading && '!cursor-wait',
+        )}
       />
 
-      {uploadedImage ? (
+      {loading ? (
+        <div className="grid place-items-center gap-2 py-5 text-gray-500">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-white"></div>
+          <p className="text-sm">Uploading...</p>
+        </div>
+      ) : uploadedImage ? (
         <div className="group relative flex h-full w-full flex-1 items-center justify-center">
           <Image
             src={uploadedImage}

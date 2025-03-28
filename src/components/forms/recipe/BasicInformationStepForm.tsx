@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { useUploadThing } from '@/lib/uploadthing';
@@ -15,6 +16,7 @@ import { BasicInformationStepFormValues } from './schemas';
 
 export default function BasicInformationStepForm() {
   const { control, setValue, clearErrors } = useFormContext<BasicInformationStepFormValues>();
+  const [isUploading, setIsUploading] = useState(false);
 
   const { startUpload } = useUploadThing('imageUploader');
 
@@ -24,14 +26,18 @@ export default function BasicInformationStepForm() {
       return;
     }
 
-    const uploadedImages = await startUpload([file]);
+    setIsUploading(true);
+    try {
+      const uploadedImages = await startUpload([file]);
 
-    if (!uploadedImages) return;
+      if (!uploadedImages) return;
 
-    const uploadedImageUrl = uploadedImages[0].url;
-
-    setValue('imageUrl', uploadedImageUrl);
-    clearErrors('imageUrl');
+      const uploadedImageUrl = uploadedImages[0].url;
+      setValue('imageUrl', uploadedImageUrl);
+      clearErrors('imageUrl');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -86,7 +92,11 @@ export default function BasicInformationStepForm() {
             </FormLabel>
 
             <FormControl>
-              <FileUploader onFieldChange={onImageChange} value={field.value} />
+              <FileUploader
+                onFieldChange={onImageChange}
+                value={field.value}
+                loading={isUploading}
+              />
             </FormControl>
 
             <FormMessage data-testid="error-message" />

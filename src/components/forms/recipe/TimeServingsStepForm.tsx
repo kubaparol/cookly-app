@@ -33,7 +33,7 @@ export default function TimeServingsStepForm() {
 
   return (
     <div className="grid h-fit gap-5">
-      <div className="grid grid-cols-1 gap-4 rounded-lg border bg-card p-4 shadow-sm sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 rounded-lg border bg-card p-4 shadow-sm sm:grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
         <FormField
           control={control}
           name="preparationTime"
