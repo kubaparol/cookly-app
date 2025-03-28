@@ -149,6 +149,7 @@ export default function Filters() {
               }}
               placeholder="Select difficulty"
               maxCount={isMobile ? 0 : 1}
+              modalPopover
             />
           </div>
 
@@ -166,6 +167,7 @@ export default function Filters() {
               }}
               placeholder="Select cuisine"
               maxCount={isMobile ? 0 : 1}
+              modalPopover
             />
           </div>
 
@@ -183,6 +185,7 @@ export default function Filters() {
               }}
               placeholder="Select meal type"
               maxCount={isMobile ? 0 : 1}
+              modalPopover
             />
           </div>
 
@@ -200,11 +203,12 @@ export default function Filters() {
               }}
               placeholder="Select dietary tags"
               maxCount={isMobile ? 0 : 1}
+              modalPopover
             />
           </div>
 
           <div className="space-y-2">
-            <Label>Maximum Cooking Time</Label>
+            <Label>Cooking Time</Label>
             <Select
               value={selectedValues.maxCookingTime}
               onValueChange={(value) => {
