@@ -50,7 +50,7 @@ export const timeServingsStepFormSchema = z.object({
     .min(1, 'Number of servings is required')
     .regex(/^\d*$/, 'Must be a valid number')
     .refine((value) => value === '' || Number(value) >= 1, {
-      message: 'Must be at least 1 minute',
+      message: 'Must be at least 1 serving',
     }),
   servingSize: z.string().min(1, 'Serving size is required').optional(),
   yield: z.string().min(1, 'Yield is required').optional(),

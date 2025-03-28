@@ -40,7 +40,14 @@ export default function TimeServingsStepForm() {
               </FormLabel>
 
               <FormControl>
-                <InputNumeric {...field} mode="natural" min={0} step={1} placeholder="e.g., 15" />
+                <InputNumeric
+                  {...field}
+                  mode="natural"
+                  min={0}
+                  step={1}
+                  placeholder="e.g., 15"
+                  unit="min"
+                />
               </FormControl>
 
               <FormMessage />
@@ -59,7 +66,14 @@ export default function TimeServingsStepForm() {
               </FormLabel>
 
               <FormControl>
-                <InputNumeric {...field} mode="natural" min={0} step={1} placeholder="e.g., 30" />
+                <InputNumeric
+                  {...field}
+                  mode="natural"
+                  min={0}
+                  step={1}
+                  placeholder="e.g., 30"
+                  unit="min"
+                />
               </FormControl>
 
               <FormMessage />
@@ -75,7 +89,14 @@ export default function TimeServingsStepForm() {
               <FormLabel>Rest Time (minutes)</FormLabel>
 
               <FormControl>
-                <InputNumeric {...field} mode="natural" min={0} step={1} placeholder="e.g., 10" />
+                <InputNumeric
+                  {...field}
+                  mode="natural"
+                  min={0}
+                  step={1}
+                  placeholder="e.g., 10"
+                  unit="min"
+                />
               </FormControl>
 
               <FormMessage />
@@ -93,7 +114,14 @@ export default function TimeServingsStepForm() {
               <FormLabel>Active Time (minutes)</FormLabel>
 
               <FormControl>
-                <InputNumeric {...field} mode="natural" min={0} step={1} placeholder="e.g., 20" />
+                <InputNumeric
+                  {...field}
+                  mode="natural"
+                  min={0}
+                  step={1}
+                  placeholder="e.g., 20"
+                  unit="min"
+                />
               </FormControl>
 
               <FormMessage />
