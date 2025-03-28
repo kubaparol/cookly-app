@@ -3,37 +3,37 @@
 import { useDropzone } from '@uploadthing/react';
 import { CloudUpload } from 'lucide-react';
 import Image from 'next/image';
-import { Dispatch, SetStateAction, useCallback } from 'react';
+import { useCallback } from 'react';
 import { generateClientDropzoneAccept } from 'uploadthing/client';
 
 import { cn, convertFileToUrl } from '@/utils';
 
-import { MAX_UPLOADTHING_FILE_SIZE } from '@/constants';
+import { MAX_UPLOADTHING_FILE_SIZE_MB } from '@/constants';
 
 import { Button } from '@/components/ui/button';
 
 type FileUploaderProps = {
-  onFieldChange: (url: string) => void;
-  imageUrl: string;
-  setFiles: Dispatch<SetStateAction<File[]>>;
+  value: File | string;
+  onFieldChange: (file: File | null) => void;
   disabled?: boolean;
 };
 
 export default function FileUploader(props: FileUploaderProps) {
-  const { imageUrl, onFieldChange, setFiles, disabled } = props;
+  const { value, onFieldChange, disabled } = props;
 
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      setFiles(acceptedFiles);
-      onFieldChange(convertFileToUrl(acceptedFiles[0]));
+    (files: File[]) => {
+      onFieldChange(files[0]);
     },
-    [onFieldChange, setFiles],
+    [onFieldChange],
   );
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: generateClientDropzoneAccept(['image/*']),
   });
+
+  const uploadedImage = value instanceof File ? convertFileToUrl(value) : value || null;
 
   return (
     <div
@@ -48,10 +48,10 @@ export default function FileUploader(props: FileUploaderProps) {
         className={cn('cursor-pointer', disabled && 'cursor-not-allowed')}
       />
 
-      {imageUrl ? (
+      {uploadedImage ? (
         <div className="group relative flex h-full w-full flex-1 items-center justify-center">
           <Image
-            src={imageUrl}
+            src={uploadedImage}
             alt="image"
             width={250}
             height={250}
@@ -80,7 +80,7 @@ export default function FileUploader(props: FileUploaderProps) {
             </p>
 
             <p>
-              Max file size: <span className="font-normal">{MAX_UPLOADTHING_FILE_SIZE}</span>
+              Max file size: <span className="font-normal">{MAX_UPLOADTHING_FILE_SIZE_MB}MB</span>
             </p>
           </div>
 

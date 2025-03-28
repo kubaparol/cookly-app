@@ -2,10 +2,21 @@
 
 import { currentUser } from '@clerk/nextjs/server';
 import { eq } from 'drizzle-orm';
+import { revalidatePath } from 'next/cache';
 
 import { handleError } from '@/utils';
 
-import { UpdateRecipeParams, ingredients, recipes, steps } from '@/db';
+import { ProjectUrls } from '@/constants';
+
+import {
+  UpdateRecipeParams,
+  equipment,
+  ingredients,
+  recipes,
+  steps,
+  substitutions,
+  tips,
+} from '@/db';
 import { db } from '@/db/drizzle';
 
 export async function updateRecipe(recipe: UpdateRecipeParams) {
@@ -17,10 +28,17 @@ export async function updateRecipe(recipe: UpdateRecipeParams) {
     const [newRecipe] = await db
       .update(recipes)
       .set({
-        title: recipe.title,
-        description: recipe.description,
-        imageUrl: recipe.imageUrl,
+        ...recipe,
         authorId: user.id,
+        preparationTime: parseInt(recipe.preparationTime),
+        cookingTime: parseInt(recipe.cookingTime),
+        restTime: recipe.restTime ? parseInt(recipe.restTime) : null,
+        activeTime: recipe.activeTime ? parseInt(recipe.activeTime) : null,
+        servings: parseInt(recipe.servings),
+        calories: recipe.calories ? parseInt(recipe.calories) : null,
+        protein: recipe.protein ? parseInt(recipe.protein) : null,
+        carbs: recipe.carbs ? parseInt(recipe.carbs) : null,
+        fat: recipe.fat ? parseInt(recipe.fat) : null,
       })
       .where(eq(recipes.id, recipe.id))
       .returning();
@@ -32,15 +50,59 @@ export async function updateRecipe(recipe: UpdateRecipeParams) {
 
     const existingSteps = await db.select().from(steps).where(eq(steps.recipeId, newRecipe.id));
 
+    const existingSubstitutions = await db
+      .select()
+      .from(substitutions)
+      .where(eq(substitutions.recipeId, newRecipe.id));
+
+    const existingTips = await db.select().from(tips).where(eq(tips.recipeId, newRecipe.id));
+
+    const existingEquipment = await db
+      .select()
+      .from(equipment)
+      .where(eq(equipment.recipeId, newRecipe.id));
+
     await updateOrInsertEntities(
       ingredients,
       existingIngredients,
-      recipe.ingredients,
+      recipe.ingredients.map((ingredient) => ({
+        ...ingredient,
+        quantity: parseFloat(ingredient.quantity),
+      })),
       'id',
       newRecipe.id,
     );
 
     await updateOrInsertEntities(steps, existingSteps, recipe.steps, 'id', newRecipe.id);
+
+    await updateOrInsertEntities(
+      substitutions,
+      existingSubstitutions,
+      recipe.substitutions || [],
+      'id',
+      newRecipe.id,
+    );
+
+    await updateOrInsertEntities(
+      tips,
+      existingTips,
+      recipe.tipsAndTricks || [],
+      'id',
+      newRecipe.id,
+    );
+
+    await updateOrInsertEntities(
+      equipment,
+      existingEquipment,
+      recipe.equipment || [],
+      'id',
+      newRecipe.id,
+    );
+
+    revalidatePath(ProjectUrls.dashboard);
+    revalidatePath(ProjectUrls.recipes);
+    revalidatePath(ProjectUrls.myRecipes);
+    revalidatePath(ProjectUrls.editRecipe(newRecipe.id));
 
     return JSON.parse(JSON.stringify(newRecipe));
   } catch (error) {

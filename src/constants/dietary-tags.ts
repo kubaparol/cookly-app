@@ -1,0 +1,17 @@
+export const dietaryTags = [
+  { label: 'Vegetarian', value: 'vegetarian' },
+  { label: 'Vegan', value: 'vegan' },
+  { label: 'Gluten-Free', value: 'gluten-free' },
+  { label: 'Dairy-Free', value: 'dairy-free' },
+  { label: 'Nut-Free', value: 'nut-free' },
+  { label: 'Low-Carb', value: 'low-carb' },
+  { label: 'Keto', value: 'keto' },
+  { label: 'Paleo', value: 'paleo' },
+  { label: 'Pescatarian', value: 'pescatarian' },
+  { label: 'Kosher', value: 'kosher' },
+  { label: 'Halal', value: 'halal' },
+  { label: 'Low-Sodium', value: 'low-sodium' },
+  { label: 'Low-Fat', value: 'low-fat' },
+  { label: 'Low-Sugar', value: 'low-sugar' },
+  { label: 'High-Protein', value: 'high-protein' },
+];

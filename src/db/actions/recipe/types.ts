@@ -1,11 +1,12 @@
-import { RecipeFormValues } from '@/components/forms/RecipeForm';
-
-import { SearchParams } from '@/types';
-
-export type CreateRecipeParams = RecipeFormValues & {};
+import { RecipeFormValues } from '@/components/forms/recipe/schemas';
 
 export type UpdateRecipeParams = RecipeFormValues & {
   id: string;
 };
 
-export type GetMyRecipesParams = SearchParams & {};
+export type GetMyRecipesParams = {
+  search?: string;
+  page?: number;
+  limit?: number;
+  query?: string;
+};

@@ -5,7 +5,7 @@ import { SQL, and, eq } from 'drizzle-orm';
 import { handleError } from '@/utils';
 
 import { db } from '@/db/drizzle';
-import { ingredients, recipes, steps } from '@/db/schema';
+import { equipment, ingredients, recipes, steps, substitutions, tips } from '@/db/schema';
 
 export async function getOneRecipe(id: string) {
   try {
@@ -37,10 +37,55 @@ export async function getOneRecipe(id: string) {
       .from(steps)
       .where(eq(steps.recipeId, id));
 
+    const substitutionsData = await db
+      .select({
+        id: substitutions.id,
+        original: substitutions.original,
+        substitute: substitutions.substitute,
+      })
+      .from(substitutions)
+      .where(eq(substitutions.recipeId, id));
+
+    const tipsData = await db
+      .select({
+        id: tips.id,
+        description: tips.description,
+      })
+      .from(tips)
+      .where(eq(tips.recipeId, id));
+
+    const equipmentData = await db
+      .select({
+        id: equipment.id,
+        name: equipment.name,
+      })
+      .from(equipment)
+      .where(eq(equipment.recipeId, id));
+
     return {
       ...recipeData,
-      ingredients: ingredientsData,
+      ingredients: ingredientsData.map((ingredient) => ({
+        ...ingredient,
+        quantity: ingredient.quantity.toString(),
+      })),
       steps: stepsData,
+      substitutions: substitutionsData,
+      tips: tipsData,
+      calories: recipeData.calories?.toString() || '',
+      protein: recipeData.protein?.toString() || '',
+      carbs: recipeData.carbs?.toString() || '',
+      fat: recipeData.fat?.toString() || '',
+      preparationTime: recipeData.preparationTime.toString(),
+      cookingTime: recipeData.cookingTime.toString(),
+      restTime: recipeData.restTime?.toString(),
+      activeTime: recipeData.activeTime?.toString(),
+      servings: recipeData.servings.toString(),
+      servingSize: recipeData.servingSize,
+      yield: recipeData.yield,
+      equipment: equipmentData,
+      storageInstructions: recipeData.storageInstructions,
+      reheatingInstructions: recipeData.reheatingInstructions,
+      makeAheadInstructions: recipeData.makeAheadInstructions,
     };
   } catch (error) {
     handleError(error);

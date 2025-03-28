@@ -24,7 +24,7 @@ export default function AppLayout(props: AppLayoutProps) {
   const { topItems, bottomItems } = useAppSidebarItems();
 
   return (
-    <>
+    <div className="flex h-screen flex-col overflow-hidden">
       <div className="flex justify-between border-b px-6 py-2 md:hidden">
         <Link href={ProjectUrls.home} title="Cookly Home">
           <Logo className="max-w-[100px]" />
@@ -47,7 +47,7 @@ export default function AppLayout(props: AppLayoutProps) {
         </Sheet>
       </div>
 
-      <div className="flex h-screen overflow-hidden">
+      <div className="flex flex-1 overflow-hidden">
         <div className="hidden w-full flex-col gap-2 px-3 py-4 md:flex md:w-64 md:px-2">
           <Link
             href={ProjectUrls.home}
@@ -65,10 +65,8 @@ export default function AppLayout(props: AppLayoutProps) {
           <UserPreviewContainer />
         </div>
 
-        <div className="min-h-[calc(100vh-(56px))] flex-1 overflow-y-scroll px-3 py-4 sm:px-6 md:min-h-[calc(100vh)]">
-          {children}
-        </div>
+        <div className="flex-1 overflow-y-auto px-3 py-4 sm:px-6">{children}</div>
       </div>
-    </>
+    </div>
   );
 }

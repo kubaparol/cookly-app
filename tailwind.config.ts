@@ -23,17 +23,17 @@ const config: Config = {
           foreground: 'hsl(var(--popover-foreground))',
         },
         primary: {
-          50: '#fefae8',
-          100: '#fef2c3',
-          200: '#fee78a',
-          300: '#fdd847',
-          400: '#facc15',
-          500: '#eabd08',
-          600: '#caa204',
-          700: '#a18207',
-          800: '#856d0e',
-          900: '#715e12',
-          950: '#423606',
+          '50': '#fefae8',
+          '100': '#fef2c3',
+          '200': '#fee78a',
+          '300': '#fdd847',
+          '400': '#facc15',
+          '500': '#eabd08',
+          '600': '#caa204',
+          '700': '#a18207',
+          '800': '#856d0e',
+          '900': '#715e12',
+          '950': '#423606',
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
         },
@@ -72,6 +72,28 @@ const config: Config = {
       screens: {
         xs: '576px',
         xxs: '400px',
+      },
+      keyframes: {
+        'accordion-down': {
+          from: {
+            height: '0',
+          },
+          to: {
+            height: 'var(--radix-accordion-content-height)',
+          },
+        },
+        'accordion-up': {
+          from: {
+            height: 'var(--radix-accordion-content-height)',
+          },
+          to: {
+            height: '0',
+          },
+        },
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
       },
     },
   },

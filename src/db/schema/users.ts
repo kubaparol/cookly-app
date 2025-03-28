@@ -6,5 +6,5 @@ export const users = pgTable('users', {
   lastName: text(),
   email: text(),
   imageUrl: text(),
-  createdAt: timestamp({ mode: 'date', precision: 3 }).defaultNow(),
+  createdAt: timestamp().defaultNow().notNull(),
 });

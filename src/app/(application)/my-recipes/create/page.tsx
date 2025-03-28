@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 import PageTitle from '@/components/base/PageTitle';
-import RecipeForm from '@/components/forms/RecipeForm';
+import RecipeForm from '@/components/forms/recipe/RecipeForm';
 
 import { PageProps } from '@/types';
 

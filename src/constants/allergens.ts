@@ -1,0 +1,16 @@
+export const allergens = [
+  { value: 'dairy', label: 'Dairy' },
+  { value: 'eggs', label: 'Eggs' },
+  { value: 'fish', label: 'Fish' },
+  { value: 'shellfish', label: 'Shellfish' },
+  { value: 'tree-nuts', label: 'Tree Nuts' },
+  { value: 'peanuts', label: 'Peanuts' },
+  { value: 'wheat', label: 'Wheat' },
+  { value: 'soy', label: 'Soy' },
+  { value: 'sesame', label: 'Sesame' },
+  { value: 'mustard', label: 'Mustard' },
+  { value: 'celery', label: 'Celery' },
+  { value: 'lupin', label: 'Lupin' },
+  { value: 'molluscs', label: 'Molluscs' },
+  { value: 'sulfites', label: 'Sulfites' },
+];
