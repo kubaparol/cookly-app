@@ -3,8 +3,6 @@
 import { currentUser } from '@clerk/nextjs/server';
 import { revalidatePath } from 'next/cache';
 
-import { handleError } from '@/utils';
-
 import { ProjectUrls } from '@/constants';
 
 import { equipment, ingredients, recipes, steps, substitutions, tips } from '@/db';
@@ -12,7 +10,9 @@ import { db } from '@/db/drizzle';
 
 import { RecipeFormValues } from '@/components/forms/recipe/schemas';
 
-export async function createRecipe(recipe: RecipeFormValues) {
+import { ServerActionResponse } from '@/types';
+
+export async function createRecipe(recipe: RecipeFormValues): Promise<ServerActionResponse> {
   try {
     const user = await currentUser();
 
@@ -82,8 +82,13 @@ export async function createRecipe(recipe: RecipeFormValues) {
     revalidatePath(ProjectUrls.recipes);
     revalidatePath(ProjectUrls.myRecipes);
 
-    return JSON.parse(JSON.stringify(newRecipe));
+    return {
+      success: true,
+    };
   } catch (error) {
-    handleError(error);
+    return {
+      success: false,
+      message: `Failed to create recipe: ${typeof error === 'string' ? error : JSON.stringify(error)}`,
+    };
   }
 }

@@ -4,18 +4,25 @@ import { currentUser } from '@clerk/nextjs/server';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
-import { handleError } from '@/utils';
-
 import { ProjectUrls } from '@/constants';
 
-import { recipes } from '@/db';
+import { equipment, ingredients, recipes, steps, substitutions, tips } from '@/db';
 import { db } from '@/db/drizzle';
 
-export async function deleteRecipe(id: string) {
+import { ServerActionResponse } from '@/types';
+
+export async function deleteRecipe(id: string): Promise<ServerActionResponse> {
   try {
     const user = await currentUser();
 
     if (!user) throw new Error('User not found');
+
+    await db.delete(ingredients).where(eq(ingredients.recipeId, id));
+    await db.delete(steps).where(eq(steps.recipeId, id));
+
+    await db.delete(equipment).where(eq(equipment.recipeId, id));
+    await db.delete(substitutions).where(eq(substitutions.recipeId, id));
+    await db.delete(tips).where(eq(tips.recipeId, id));
 
     await db.delete(recipes).where(eq(recipes.id, id));
 
@@ -24,8 +31,13 @@ export async function deleteRecipe(id: string) {
     revalidatePath(ProjectUrls.myRecipes);
     revalidatePath(ProjectUrls.editRecipe(id));
 
-    return JSON.parse(JSON.stringify({ message: 'OK' }));
+    return {
+      success: true,
+    };
   } catch (error) {
-    handleError(error);
+    return {
+      success: false,
+      message: `Failed to delete recipe: ${typeof error === 'string' ? error : JSON.stringify(error)}`,
+    };
   }
 }

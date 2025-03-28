@@ -2,6 +2,9 @@
 
 import { Loader2 } from 'lucide-react';
 import { PropsWithChildren, useState, useTransition } from 'react';
+import { toast } from 'sonner';
+
+import { ServerActionResponse } from '@/types';
 
 import {
   AlertDialog,
@@ -17,7 +20,7 @@ import { Button, ButtonProps } from '../ui/button';
 
 export interface DeleteRecipeFormProps extends PropsWithChildren {
   button: Omit<ButtonProps, 'type'>;
-  onFormSubmit: () => Promise<void>;
+  onFormSubmit: () => Promise<ServerActionResponse>;
 }
 
 export default function DeleteRecipeForm(props: DeleteRecipeFormProps) {
@@ -28,13 +31,19 @@ export default function DeleteRecipeForm(props: DeleteRecipeFormProps) {
 
   const deleteHandler = () => {
     startTransition(async () => {
-      await onFormSubmit();
+      const result = await onFormSubmit();
+
+      if (result.success) {
+        toast.success('Recipe deleted successfully');
+      } else {
+        toast.error(result.message);
+      }
     });
   };
 
   return (
     <>
-      <form action={() => setIsOpen(true)}>
+      <form action={() => setIsOpen(true)} className="w-full">
         <Button {...button} type="submit">
           {children}
         </Button>

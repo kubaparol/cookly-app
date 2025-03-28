@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { ProjectUrls } from '@/constants';
 
@@ -85,26 +86,33 @@ export default function RecipeForm(props: RecipeFormProps) {
       const formData = methods.getValues();
 
       if (type === 'Create') {
-        await createRecipe(formData);
+        const result = await createRecipe(formData);
 
-        const params = new URLSearchParams();
-        params.set('success', 'true');
+        if (result.success) {
+          const params = new URLSearchParams();
+          params.set('success', 'true');
 
-        router.replace(`${pathname}?${params.toString()}`);
-
-        setIsCreationSuccess(true);
+          router.replace(`${pathname}?${params.toString()}`);
+          methods.reset();
+        } else {
+          toast.error(result.message);
+        }
       }
 
       if (type === 'Update') {
-        await updateRecipe({
+        const result = await updateRecipe({
           id: id!,
           ...formData,
         });
 
-        router.push(ProjectUrls.myRecipes);
+        if (result.success) {
+          router.push(ProjectUrls.myRecipes);
+          toast.success('Recipe updated successfully');
+          methods.reset();
+        } else {
+          toast.error(result.message);
+        }
       }
-
-      methods.reset();
     }
   }, [goToNextStep, id, isLastStep, methods, pathname, router, type]);
 

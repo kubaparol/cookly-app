@@ -12,3 +12,8 @@ export type ClerkError = {
   errors: { message: string; long_message: string; code: string }[];
   clerk_trace_id: string;
 };
+
+export type ServerActionResponse = {
+  success: boolean;
+  message?: string;
+};

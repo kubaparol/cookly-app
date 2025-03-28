@@ -3,9 +3,13 @@ import { ChefHat, Clock } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { ProjectUrls } from '@/constants';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardFooter } from '@/components/ui/card';
+
+import DeleteRecipeWrapper from '../modules/recipes/DeleteRecipeWrapper';
 
 interface RecipeCardProps {
   id: string;
@@ -77,19 +81,27 @@ export function RecipeCard({
           {isAuthor && (
             <>
               <Button
+                asChild
                 variant="outline"
                 size="sm"
                 className="flex min-w-[100px] flex-1 items-center justify-center gap-2 transition-all duration-200 hover:bg-secondary hover:text-secondary-foreground">
-                <Edit className="h-4 w-4" />
-                <span>Edit</span>
+                <Link href={ProjectUrls.editRecipe(id)}>
+                  <Edit className="h-4 w-4" />
+                  <span>Edit</span>
+                </Link>
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex min-w-[100px] flex-1 items-center justify-center gap-2 border-destructive/30 text-destructive transition-all duration-200 hover:bg-destructive hover:text-destructive-foreground">
+
+              <DeleteRecipeWrapper
+                id={id}
+                button={{
+                  variant: 'outline',
+                  size: 'sm',
+                  className:
+                    'flex w-full min-w-[100px] flex-1 items-center justify-center gap-2 border-destructive/30 text-destructive transition-all duration-200 hover:bg-destructive hover:text-destructive-foreground',
+                }}>
                 <Trash className="h-4 w-4" />
                 <span>Delete</span>
-              </Button>
+              </DeleteRecipeWrapper>
             </>
           )}
           <Link
