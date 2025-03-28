@@ -3,12 +3,6 @@ export const ProjectUrls = Object.freeze({
   home: '/',
   recipes: '/recipes',
   recipe: (id: string) => `/recipes/${id}`,
-  mealPlanner: '/meal-planner',
-  community: '/community',
-  faq: '/faq',
-  contactUs: '/contact-us',
-  termsAndConditions: '/legals/terms-and-conditions',
-  privacyPolicy: '/legals/privacy-policy',
 
   // auth
   signIn: '/sign-in',
@@ -22,9 +16,4 @@ export const ProjectUrls = Object.freeze({
   settings: '/settings',
 });
 
-export const ExternalUrls = Object.freeze({
-  facebook: 'https://www.facebook.com/',
-  x: 'https://x.com/',
-  instagram: 'https://www.instagram.com/',
-  youtube: 'https://www.youtube.com/',
-});
+export const ExternalUrls = Object.freeze({});
