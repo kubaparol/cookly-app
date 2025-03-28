@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardFooter } from '@/components/ui/card';
 
-import DeleteRecipeWrapper from '../modules/recipes/DeleteRecipeWrapper';
+import DeleteRecipeWrapper from './DeleteRecipeWrapper';
 
 interface RecipeCardProps {
   id: string;

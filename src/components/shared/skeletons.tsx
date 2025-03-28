@@ -4,20 +4,7 @@ export function StatisticCardsSkeleton() {
   return <Skeleton className="h-[106px] w-full" />;
 }
 
-export function AllRecipesSkeleton() {
-  return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-[repeat(auto-fill,minmax(400px,1fr))]">
-      <Skeleton className="aspect-[16/9]" />
-      <Skeleton className="aspect-[16/9]" />
-      <Skeleton className="aspect-[16/9]" />
-      <Skeleton className="aspect-[16/9]" />
-      <Skeleton className="aspect-[16/9]" />
-      <Skeleton className="aspect-[16/9]" />
-    </div>
-  );
-}
-
-export function MyRecipesSkeleton() {
+export function RecipesSkeleton() {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       <Skeleton className="aspect-square" />

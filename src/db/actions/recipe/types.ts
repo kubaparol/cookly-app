@@ -4,14 +4,15 @@ export type UpdateRecipeParams = RecipeFormValues & {
   id: string;
 };
 
-export type GetMyRecipesParams = {
-  search?: string;
-  page?: number;
-  limit?: number;
+export interface GetMyRecipesParams {
   query?: string;
   difficulty?: string[];
   cuisineType?: string[];
   mealType?: string[];
   dietaryTags?: string[];
   maxCookingTime?: number;
-};
+}
+
+export interface GetRecipesParams extends GetMyRecipesParams {
+  authorId?: string;
+}

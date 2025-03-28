@@ -1,20 +1,25 @@
 import { currentUser } from '@clerk/nextjs/server';
-import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
 import { getTotalCookingTime } from '@/utils';
 
 import { ProjectUrls } from '@/constants';
 
-import { getMyRecipes } from '@/db';
+import { getAllRecipes, getMyRecipes } from '@/db';
 
-import { RecipeCard } from '@/components/shared/RecipeCard';
 import StatusCard from '@/components/shared/StatusCard';
-import { MyRecipesSkeleton } from '@/components/shared/skeletons';
+import { RecipesSkeleton } from '@/components/shared/skeletons';
 
 import { PageProps } from '@/types';
 
-async function MyRecipesLoader({ searchParams }: PageProps) {
+import { RecipeCard } from './RecipeCard';
+
+export interface RecipesListProps extends PageProps {
+  isPersonal?: boolean;
+  createRecipeUrl?: string;
+}
+
+async function RecipesLoader({ searchParams, isPersonal, createRecipeUrl }: RecipesListProps) {
   const { difficulty, cuisineType, mealType, dietaryTags, maxCookingTime, query } =
     searchParams || {};
 
@@ -25,28 +30,28 @@ async function MyRecipesLoader({ searchParams }: PageProps) {
   const maxCookingTimeParam = maxCookingTime as string | undefined;
   const queryParam = query as string;
 
-  const recipes = await getMyRecipes({
+  const user = isPersonal ? await currentUser() : null;
+
+  const recipeParams = {
     query: queryParam,
     difficulty: difficultyParam,
     cuisineType: cuisineTypeParam,
     mealType: mealTypeParam,
     dietaryTags: dietaryTagsParam,
     maxCookingTime: maxCookingTimeParam ? parseInt(maxCookingTimeParam) : undefined,
-  });
+  };
 
-  const user = await currentUser();
+  const recipes = isPersonal ? await getMyRecipes(recipeParams) : await getAllRecipes(recipeParams);
 
-  if (!user) {
-    notFound();
-  }
-
+  // For personal recipes, show empty state if no recipes and no filters
   if (
+    isPersonal &&
     recipes?.length === 0 &&
     !queryParam &&
-    !difficultyParam &&
-    !cuisineTypeParam &&
-    !mealTypeParam &&
-    !dietaryTagsParam &&
+    !difficultyParam.length &&
+    !cuisineTypeParam.length &&
+    !mealTypeParam.length &&
+    !dietaryTagsParam.length &&
     !maxCookingTimeParam
   ) {
     return (
@@ -56,13 +61,14 @@ async function MyRecipesLoader({ searchParams }: PageProps) {
           title="You haven't created any recipes yet"
           primaryAction={{
             label: 'Create your first recipe',
-            href: ProjectUrls.createRecipe,
+            href: createRecipeUrl || ProjectUrls.createRecipe,
           }}
         />
       </div>
     );
   }
 
+  // Generic no recipes found state
   if (recipes?.length === 0) {
     return (
       <div className="flex h-full flex-1 items-center justify-center">
@@ -74,6 +80,7 @@ async function MyRecipesLoader({ searchParams }: PageProps) {
       </div>
     );
   }
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -90,7 +97,7 @@ async function MyRecipesLoader({ searchParams }: PageProps) {
             })}
             difficulty={recipe.difficulty}
             dietaryTags={recipe.dietaryTags}
-            isAuthor={user.id === recipe.authorId}
+            isAuthor={user?.id === recipe.authorId}
             openInNewTab
           />
         ))}
@@ -99,12 +106,18 @@ async function MyRecipesLoader({ searchParams }: PageProps) {
   );
 }
 
-export default function MyRecipesList({ searchParams }: PageProps) {
+export default function RecipesList({
+  searchParams,
+  isPersonal,
+  createRecipeUrl,
+}: RecipesListProps) {
   return (
-    <>
-      <Suspense fallback={<MyRecipesSkeleton />}>
-        <MyRecipesLoader searchParams={searchParams} />
-      </Suspense>
-    </>
+    <Suspense fallback={<RecipesSkeleton />}>
+      <RecipesLoader
+        searchParams={searchParams}
+        isPersonal={isPersonal}
+        createRecipeUrl={createRecipeUrl}
+      />
+    </Suspense>
   );
 }

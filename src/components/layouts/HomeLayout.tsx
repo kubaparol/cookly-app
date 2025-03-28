@@ -13,7 +13,7 @@ export default function HomeLayout(props: HomeLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
-      <main className="flex-1">{children}</main>
+      <main className="container mx-auto flex-1 px-4 py-6 md:px-6">{children}</main>
       <Footer />
     </div>
   );

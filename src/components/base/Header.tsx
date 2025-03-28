@@ -5,7 +5,12 @@ import { SignOutButton } from '@clerk/nextjs';
 import { SignedIn } from '@clerk/nextjs';
 import { Menu } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+
+import { useNavLinks } from '@/hooks';
+
+import { cn } from '@/utils';
 
 import { ProjectUrls } from '@/constants';
 
@@ -42,6 +47,8 @@ const AuthButtons = () => {
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const { quickLinks } = useNavLinks();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -57,29 +64,17 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden gap-8 md:flex">
-          <Link href="/" className="text-sm font-medium transition-colors hover:text-primary">
-            Home
-          </Link>
-          <Link
-            href="/features"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-            Features
-          </Link>
-          <Link
-            href="/pricing"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-            Pricing
-          </Link>
-          <Link
-            href="/about"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-            About
-          </Link>
-          <Link
-            href="/contact"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-            Contact
-          </Link>
+          {quickLinks.map((link) => (
+            <Link
+              key={link.url}
+              href={link.url}
+              className={cn(
+                'text-sm font-medium transition-colors hover:text-primary',
+                pathname !== link.url && 'text-muted-foreground',
+              )}>
+              {link.label}
+            </Link>
+          ))}
         </nav>
 
         {/* Desktop Auth Buttons */}
@@ -110,36 +105,17 @@ export function Header() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <Link
-                  href="/"
-                  className="rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-primary/5 hover:text-primary"
-                  onClick={() => setIsOpen(false)}>
-                  Home
-                </Link>
-                <Link
-                  href="/features"
-                  className="rounded-md px-3 py-2 text-base font-medium text-muted-foreground transition-colors hover:bg-primary/5 hover:text-primary"
-                  onClick={() => setIsOpen(false)}>
-                  Features
-                </Link>
-                <Link
-                  href="/pricing"
-                  className="rounded-md px-3 py-2 text-base font-medium text-muted-foreground transition-colors hover:bg-primary/5 hover:text-primary"
-                  onClick={() => setIsOpen(false)}>
-                  Pricing
-                </Link>
-                <Link
-                  href="/about"
-                  className="rounded-md px-3 py-2 text-base font-medium text-muted-foreground transition-colors hover:bg-primary/5 hover:text-primary"
-                  onClick={() => setIsOpen(false)}>
-                  About
-                </Link>
-                <Link
-                  href="/contact"
-                  className="rounded-md px-3 py-2 text-base font-medium text-muted-foreground transition-colors hover:bg-primary/5 hover:text-primary"
-                  onClick={() => setIsOpen(false)}>
-                  Contact
-                </Link>
+                {quickLinks.map((link) => (
+                  <Link
+                    key={link.url}
+                    href={link.url}
+                    className={cn(
+                      'rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-primary/5 hover:text-primary',
+                      pathname !== link.url && 'text-muted-foreground',
+                    )}>
+                    {link.label}
+                  </Link>
+                ))}
               </div>
 
               <div className="mt-4 flex flex-col gap-3 border-t pt-4">
