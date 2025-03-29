@@ -1,12 +1,11 @@
 import { Metadata } from 'next';
 
-import { ProjectUrls } from '@/constants';
-
 import Search from '@/components/base/Search';
 import Filters from '@/components/modules/recipes/Filters';
-import RecipesList from '@/components/modules/recipes/RecipesList';
 
 import { PageProps } from '@/types';
+
+import MyRecipesList from './MyRecipesList';
 
 export const metadata: Metadata = {
   title: 'My Recipes',
@@ -25,11 +24,7 @@ export default function RecipesPage({ searchParams }: PageProps) {
         </div>
       </div>
 
-      <RecipesList
-        searchParams={searchParams}
-        isPersonal={true}
-        createRecipeUrl={ProjectUrls.createRecipe}
-      />
+      <MyRecipesList searchParams={searchParams} />
     </section>
   );
 }
