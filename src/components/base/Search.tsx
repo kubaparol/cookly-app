@@ -8,10 +8,11 @@ import { Input } from '../ui/input';
 
 interface SearchProps {
   placeholder: string;
+  pathPattern?: string;
 }
 
 export default function Search(props: SearchProps) {
-  const { placeholder } = props;
+  const { placeholder, pathPattern } = props;
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -20,14 +21,19 @@ export default function Search(props: SearchProps) {
   const handleSearch = useDebouncedCallback((term: string) => {
     const params = new URLSearchParams(searchParams);
 
-    // params.set('page', '1');
-
     if (term) {
       params.set('query', term);
     } else {
       params.delete('query');
     }
-    replace(`${pathname}?${params.toString()}`);
+
+    let newPath = pathname;
+    if (pathPattern) {
+      newPath = pathPattern.replace(':page', '1');
+      newPath = newPath.replace('{query}', term || '');
+    }
+
+    replace(`${newPath}?${params.toString()}`);
   }, 300);
 
   return (
