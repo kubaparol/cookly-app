@@ -44,7 +44,7 @@ export default function UserPasswordForm(props: UserPasswordFormProps) {
       toast.success('User password updated successfully');
       form.reset();
     } catch (error) {
-      const message = (error as ClerkError).errors[0].message;
+      const message = (error as ClerkError).errors[0].long_message;
 
       toast.error(message);
     }

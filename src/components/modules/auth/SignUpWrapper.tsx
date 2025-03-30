@@ -7,8 +7,10 @@ import { toast } from 'sonner';
 
 import { ProjectUrls } from '@/constants';
 
+import RegistrationVerificationForm, {
+  RegistrationVerificationFormValues,
+} from '@/components/forms/RegistrationVerificationForm';
 import SignUpForm, { SignUpFormValues } from '@/components/forms/SignUpForm';
-import VerifyForm, { VerifyFormValues } from '@/components/forms/VerifyForm';
 
 import { ClerkError } from '@/types';
 
@@ -35,13 +37,13 @@ export default function SignUpWrapper() {
 
       setSignUpStatus('verifying');
     } catch (error) {
-      const message = (error as ClerkError).errors[0].message;
+      const message = (error as ClerkError).errors[0].long_message;
 
       toast.error(message);
     }
   };
 
-  const handleVerify = async (values: VerifyFormValues) => {
+  const handleVerify = async (values: RegistrationVerificationFormValues) => {
     if (!isLoaded) return;
 
     try {
@@ -61,7 +63,7 @@ export default function SignUpWrapper() {
         router.push(ProjectUrls.dashboard);
       }
     } catch (error) {
-      const message = (error as ClerkError).errors[0].message;
+      const message = (error as ClerkError).errors[0].long_message;
 
       toast.error(message);
     }
@@ -75,7 +77,7 @@ export default function SignUpWrapper() {
     try {
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
     } catch (error) {
-      const message = (error as ClerkError).errors[0].message;
+      const message = (error as ClerkError).errors[0].long_message;
 
       toast.error(message);
     } finally {
@@ -88,7 +90,7 @@ export default function SignUpWrapper() {
       {signUpStatus === 'idle' && <SignUpForm onFormSubmit={handleSignUp} />}
 
       {signUpStatus === 'verifying' && (
-        <VerifyForm
+        <RegistrationVerificationForm
           length={6}
           isResending={isResending}
           onFormSubmit={handleVerify}
