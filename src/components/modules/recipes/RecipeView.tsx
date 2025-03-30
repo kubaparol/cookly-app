@@ -7,7 +7,6 @@ import {
   Coffee,
   DollarSign,
   Flame,
-  Heart,
   Info,
   Leaf,
   Scale,
@@ -39,13 +38,6 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function RecipeView(recipe: Recipe) {
-  const author = {
-    firstName: 'John',
-    lastName: 'Doe',
-    imageUrl:
-      'https://fastly.picsum.photos/id/95/200/200.jpg?hmac=EFN5lZlH5NAZUP3gI_uiihIaHacpG1u4aw_KmeJgeQ0',
-  };
-
   const totalTime = getTotalCookingTime({
     preparationTime: recipe.preparationTime,
     cookingTime: recipe.cookingTime,
@@ -99,15 +91,20 @@ export default function RecipeView(recipe: Recipe) {
 
           <div className="flex items-center gap-3 rounded-lg border bg-white p-3 shadow-sm">
             <Avatar className="h-10 w-10 border-2 border-gray-100 sm:h-12 sm:w-12">
-              <AvatarImage src={author.imageUrl} alt={`${author.firstName} ${author.lastName}`} />
+              {recipe.author.imageUrl && (
+                <AvatarImage
+                  src={recipe.author.imageUrl}
+                  alt={`${recipe.author.firstName} ${recipe.author.lastName}`}
+                />
+              )}
               <AvatarFallback className="bg-gray-100 text-xs text-gray-800 sm:text-sm">
-                {author.firstName[0]}
-                {author.lastName[0]}
+                {recipe.author.firstName}
+                {recipe.author.lastName}
               </AvatarFallback>
             </Avatar>
             <div>
               <p className="text-sm font-medium text-black sm:text-base">
-                {author.firstName} {author.lastName}
+                {recipe.author.firstName} {recipe.author.lastName}
               </p>
               <p className="text-xs text-muted-foreground">
                 {new Date(recipe.createdAt).toLocaleDateString('en-US', {
@@ -203,9 +200,9 @@ export default function RecipeView(recipe: Recipe) {
           />
           <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-black/60 to-transparent"></div>
           <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4">
-            <button className="rounded-full bg-white/90 p-1.5 shadow-md transition-all hover:scale-105 hover:bg-white sm:p-2">
+            {/* <button className="rounded-full bg-white/90 p-1.5 shadow-md transition-all hover:scale-105 hover:bg-white sm:p-2">
               <Heart className="h-4 w-4 text-rose-500 sm:h-5 sm:w-5" />
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

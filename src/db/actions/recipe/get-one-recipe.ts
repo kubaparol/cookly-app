@@ -8,6 +8,12 @@ import { db } from '@/db/drizzle';
 import { equipment, ingredients, recipes, steps, substitutions, tips } from '@/db/schema';
 
 export type Recipe = InferSelectModel<typeof recipes> & {
+  author: {
+    clerkId: string;
+    firstName: string | null;
+    lastName: string | null;
+    imageUrl: string | null;
+  };
   ingredients: InferSelectModel<typeof ingredients>[];
   steps: InferSelectModel<typeof steps>[];
   substitutions: InferSelectModel<typeof substitutions>[];
@@ -20,6 +26,14 @@ export async function getOneRecipe(id: string) {
     return await db.query.recipes.findFirst({
       where: eq(recipes.id, id),
       with: {
+        author: {
+          columns: {
+            clerkId: true,
+            firstName: true,
+            lastName: true,
+            imageUrl: true,
+          },
+        },
         ingredients: true,
         steps: true,
         substitutions: true,
