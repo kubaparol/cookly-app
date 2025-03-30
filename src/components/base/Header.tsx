@@ -23,6 +23,8 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 
+import { ModeToggle } from './ModeToggle';
+
 const AuthButtons = () => {
   return (
     <>
@@ -80,6 +82,7 @@ export function Header() {
         {/* Desktop Auth Buttons */}
         <div className="hidden items-center gap-3 md:flex">
           <AuthButtons />
+          <ModeToggle />
         </div>
 
         {/* Mobile Menu */}
@@ -117,6 +120,8 @@ export function Header() {
                   </Link>
                 ))}
               </div>
+
+              <ModeToggle />
 
               <div className="mt-4 flex flex-col gap-3 border-t pt-4">
                 <AuthButtons />
