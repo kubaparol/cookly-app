@@ -2,7 +2,7 @@ export const ProjectUrls = Object.freeze({
   // landing page
   home: '/',
   recipes: '/recipes',
-  recipe: (id: string) => `/recipes/${id}`,
+  recipe: (id: string) => `/recipe/${id}`,
 
   // auth
   signIn: '/sign-in',

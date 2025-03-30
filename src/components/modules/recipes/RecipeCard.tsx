@@ -100,6 +100,17 @@ export function RecipeCard({
 
       <CardFooter className="mt-auto gap-0 p-4 pt-0">
         <div className="flex w-full flex-wrap items-center gap-3">
+          <Button
+            asChild
+            variant="outline"
+            size="sm"
+            className="flex w-full items-center justify-center gap-2 transition-all duration-200 hover:bg-secondary hover:text-secondary-foreground">
+            <Link href={ProjectUrls.recipe(id)} target={openInNewTab ? '_blank' : undefined}>
+              <Eye className="h-4 w-4" />
+              <span>View</span>
+            </Link>
+          </Button>
+
           {isAuthor && (
             <>
               <Button
@@ -126,16 +137,6 @@ export function RecipeCard({
               </DeleteRecipeWrapper>
             </>
           )}
-          <Button
-            asChild
-            variant="outline"
-            size="sm"
-            className="flex w-full items-center justify-center gap-2 transition-all duration-200 hover:bg-secondary hover:text-secondary-foreground">
-            <Link href={ProjectUrls.recipe(id)} target={openInNewTab ? '_blank' : undefined}>
-              <Eye className="h-4 w-4" />
-              <span>View</span>
-            </Link>
-          </Button>
         </div>
       </CardFooter>
     </Card>

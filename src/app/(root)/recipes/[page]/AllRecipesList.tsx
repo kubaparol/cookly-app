@@ -71,7 +71,6 @@ async function AllRecipesLoader(props: PageProps) {
             })}
             difficulty={recipe.difficulty}
             dietaryTags={recipe.dietaryTags}
-            openInNewTab
           />
         ))}
       </div>
