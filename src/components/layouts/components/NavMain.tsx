@@ -49,7 +49,9 @@ export function NavMain({
               <SidebarMenuButton
                 asChild
                 tooltip={item.title}
-                className={cn(pathname === item.url && 'pointer-events-none bg-primary/30')}>
+                className={cn(
+                  pathname.startsWith(item.url) && 'pointer-events-none bg-primary/30',
+                )}>
                 <Link href={item.url}>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>

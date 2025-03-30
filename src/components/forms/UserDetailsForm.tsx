@@ -69,7 +69,7 @@ export default function UserDetailsForm(props: UserDetailsFormProps) {
 
       toast.success('User details updated successfully');
     } catch (error) {
-      const message = (error as ClerkError).errors[0].message;
+      const message = (error as ClerkError).errors[0].long_message;
 
       toast.error(message);
     }
