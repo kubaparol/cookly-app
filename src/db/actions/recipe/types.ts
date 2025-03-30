@@ -6,7 +6,7 @@ export type UpdateRecipeParams = RecipeFormValues & {
   id: string;
 };
 
-export interface GetMyRecipesParams {
+export interface GetMyRecipesParams extends PaginationRequest {
   query?: string;
   difficulty?: string[];
   cuisineType?: string[];
@@ -15,6 +15,6 @@ export interface GetMyRecipesParams {
   maxCookingTime?: number;
 }
 
-export interface GetRecipesParams extends GetMyRecipesParams, PaginationRequest {
+export interface GetRecipesParams extends GetMyRecipesParams {
   authorId?: string;
 }

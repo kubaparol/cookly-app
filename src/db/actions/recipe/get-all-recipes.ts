@@ -25,7 +25,7 @@ export async function getAllRecipes(params: GetRecipesParams) {
 
     const totalCount = countResult.length;
 
-    const recipes = await db.query.recipes.findMany({
+    const recipesResult = await db.query.recipes.findMany({
       where: and(...filters),
       columns: {
         id: true,
@@ -44,7 +44,7 @@ export async function getAllRecipes(params: GetRecipesParams) {
 
     return {
       count: totalCount,
-      data: recipes,
+      data: recipesResult,
     };
   } catch (error) {
     handleError(error);

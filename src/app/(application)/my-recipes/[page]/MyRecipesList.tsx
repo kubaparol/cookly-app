@@ -4,20 +4,24 @@ import { Suspense } from 'react';
 
 import { useRecipeSearchParams } from '@/hooks';
 
-import { getTotalCookingTime } from '@/utils';
+import { calculateOffset, getTotalCookingTime } from '@/utils';
 
-import { ProjectUrls } from '@/constants';
+import { DATA_PER_PAGE, ProjectUrls } from '@/constants';
 
 import { getMyRecipes } from '@/db';
 
 import { RecipeCard } from '@/components/modules/recipes/RecipeCard';
 import StatusCard from '@/components/shared/StatusCard';
 import { RecipesSkeleton } from '@/components/shared/skeletons';
+import { PaginationWithLinks } from '@/components/ui/pagination-with-links';
 
 import { PageProps } from '@/types';
 
 async function MyRecipesLoader(props: PageProps) {
-  const { searchParams } = props;
+  const { params, searchParams } = props;
+
+  const page = Number(params?.page);
+  const offset = calculateOffset(page, DATA_PER_PAGE);
 
   const {
     difficultyParam,
@@ -37,13 +41,17 @@ async function MyRecipesLoader(props: PageProps) {
       mealType: mealTypeParam,
       dietaryTags: dietaryTagsParam,
       maxCookingTime: maxCookingTimeParam,
+      limit: DATA_PER_PAGE,
+      offset,
     }),
   ]);
 
   if (!user) notFound();
 
+  if (!recipes) return null;
+
   if (
-    recipes?.length === 0 &&
+    recipes.data.length === 0 &&
     !queryParam &&
     !difficultyParam.length &&
     !cuisineTypeParam.length &&
@@ -65,7 +73,7 @@ async function MyRecipesLoader(props: PageProps) {
     );
   }
 
-  if (recipes?.length === 0) {
+  if (recipes.data.length === 0) {
     return (
       <div className="flex h-full flex-1 items-center justify-center">
         <StatusCard
@@ -80,7 +88,7 @@ async function MyRecipesLoader(props: PageProps) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {recipes?.map((recipe, index) => (
+        {recipes.data.map((recipe, index) => (
           <RecipeCard
             key={index}
             id={recipe.id}
@@ -98,16 +106,23 @@ async function MyRecipesLoader(props: PageProps) {
           />
         ))}
       </div>
+
+      <PaginationWithLinks
+        page={page}
+        pageSize={DATA_PER_PAGE}
+        totalCount={recipes.count}
+        pathPattern="/my-recipes/:page"
+      />
     </div>
   );
 }
 
 export default function MyRecipesList(props: PageProps) {
-  const { searchParams } = props;
+  const { params, searchParams } = props;
 
   return (
     <Suspense fallback={<RecipesSkeleton />}>
-      <MyRecipesLoader searchParams={searchParams} />
+      <MyRecipesLoader params={params} searchParams={searchParams} />
     </Suspense>
   );
 }

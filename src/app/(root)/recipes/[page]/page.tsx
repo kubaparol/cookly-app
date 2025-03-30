@@ -17,7 +17,7 @@ export default function RecipesPage({ params, searchParams }: PageProps) {
       <div className="rounded-lg border bg-card p-4 shadow-sm">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <div className="w-full sm:max-w-[400px]">
-            <Search placeholder="Szukaj przepisów" pathPattern="/recipes/:page" />
+            <Search placeholder="Search recipes..." pathPattern="/recipes/:page" />
           </div>
 
           <Filters pathPattern="/recipes/:page" />

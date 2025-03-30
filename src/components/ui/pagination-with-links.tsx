@@ -107,7 +107,7 @@ export function PaginationWithLinks({
     if (totalPageCount <= maxVisiblePages) {
       for (let i = 1; i <= totalPageCount; i++) {
         items.push(
-          <PaginationItem key={i}>
+          <PaginationItem key={i} className="hidden xs:block">
             <PaginationLink href={buildLink(i)} isActive={page === i}>
               {i}
             </PaginationLink>
@@ -116,7 +116,7 @@ export function PaginationWithLinks({
       }
     } else {
       items.push(
-        <PaginationItem key={1}>
+        <PaginationItem key={1} className="hidden xs:block">
           <PaginationLink href={buildLink(1)} isActive={page === 1}>
             1
           </PaginationLink>
@@ -125,7 +125,7 @@ export function PaginationWithLinks({
 
       if (page > 3) {
         items.push(
-          <PaginationItem key="ellipsis-start">
+          <PaginationItem key="ellipsis-start" className="hidden xs:block">
             <PaginationEllipsis />
           </PaginationItem>,
         );
@@ -136,7 +136,7 @@ export function PaginationWithLinks({
 
       for (let i = start; i <= end; i++) {
         items.push(
-          <PaginationItem key={i}>
+          <PaginationItem key={i} className="hidden xs:block">
             <PaginationLink href={buildLink(i)} isActive={page === i}>
               {i}
             </PaginationLink>
@@ -146,14 +146,14 @@ export function PaginationWithLinks({
 
       if (page < totalPageCount - 2) {
         items.push(
-          <PaginationItem key="ellipsis-end">
+          <PaginationItem key="ellipsis-end" className="hidden xs:block">
             <PaginationEllipsis />
           </PaginationItem>,
         );
       }
 
       items.push(
-        <PaginationItem key={totalPageCount}>
+        <PaginationItem key={totalPageCount} className="hidden xs:block">
           <PaginationLink href={buildLink(totalPageCount)} isActive={page === totalPageCount}>
             {totalPageCount}
           </PaginationLink>
@@ -185,7 +185,9 @@ export function PaginationWithLinks({
               className={page === 1 ? 'pointer-events-none opacity-50' : undefined}
             />
           </PaginationItem>
+
           {renderPageNumbers()}
+
           <PaginationItem>
             <PaginationNext
               href={buildLink(Math.min(page + 1, totalPageCount))}
