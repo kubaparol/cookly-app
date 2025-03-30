@@ -8,6 +8,20 @@
       "when": 1743117559311,
       "tag": "0000_robust_zaladane",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1743372803174,
+      "tag": "0001_good_white_tiger",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1743373545279,
+      "tag": "0002_wide_riptide",
+      "breakpoints": true
     }
   ]
 }

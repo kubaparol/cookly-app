@@ -1,5 +1,13 @@
 import { relations } from 'drizzle-orm';
-import { boolean, integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  doublePrecision,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+} from 'drizzle-orm/pg-core';
 
 import { comments } from './comments';
 import { equipment } from './equipment';
@@ -41,6 +49,7 @@ export const recipes = pgTable('recipes', {
   carbs: integer(),
   fat: integer(),
   termsAccepted: boolean().notNull().default(false),
+  averageRating: doublePrecision().default(0),
   createdAt: timestamp().defaultNow().notNull(),
 });
 

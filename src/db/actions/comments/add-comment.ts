@@ -12,6 +12,8 @@ import { CommentFormValues } from '@/components/forms/CommentForm';
 
 import { ServerActionResponse } from '@/types';
 
+import { updateRecipeAverageScore } from '../recipe';
+
 export async function addComment(
   comment: CommentFormValues & { recipeId: string },
 ): Promise<ServerActionResponse> {
@@ -26,6 +28,8 @@ export async function addComment(
       recipeId: comment.recipeId,
       authorId: user.id,
     });
+
+    await updateRecipeAverageScore(comment.recipeId);
 
     revalidatePath(ProjectUrls.recipes);
     revalidatePath(ProjectUrls.myRecipes);

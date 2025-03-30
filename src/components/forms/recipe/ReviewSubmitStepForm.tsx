@@ -1,7 +1,5 @@
-import { useUser } from '@clerk/nextjs';
 import { useFormContext } from 'react-hook-form';
 
-import RecipeView from '@/components/modules/recipes/RecipeView';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { Checkbox } from '../../ui/checkbox';
@@ -9,11 +7,11 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../
 import { ReviewSubmitStepFormValues } from './schemas';
 
 export default function ReviewSubmitStepForm() {
-  const { control, watch } = useFormContext<ReviewSubmitStepFormValues>();
+  const { control } = useFormContext<ReviewSubmitStepFormValues>();
 
-  const formValues = watch();
+  // const formValues = watch();
 
-  const user = useUser();
+  // const user = useUser();
 
   return (
     <div className="grid h-fit gap-5">
@@ -28,7 +26,7 @@ export default function ReviewSubmitStepForm() {
         </CardHeader>
 
         <CardContent className="pt-6">
-          <RecipeView
+          {/* <RecipeView
             isFormData={true}
             formData={formValues}
             author={{
@@ -36,7 +34,7 @@ export default function ReviewSubmitStepForm() {
               lastName: user?.user?.lastName || null,
               imageUrl: user?.user?.imageUrl || null,
             }}
-          />
+          /> */}
         </CardContent>
       </Card>
 

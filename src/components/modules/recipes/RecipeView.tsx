@@ -9,6 +9,7 @@ import {
   Flame,
   Info,
   Leaf,
+  MessageSquare,
   Scale,
   Sparkles,
   Timer,
@@ -21,8 +22,10 @@ import { getTotalCookingTime } from '@/utils';
 
 import { ProjectUrls } from '@/constants';
 
-import { Recipe } from '@/db';
+import { Recipe, addComment } from '@/db';
 
+import { StarRating } from '@/components/base/StarRating';
+import { CommentForm, CommentFormValues } from '@/components/forms/CommentForm';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -33,7 +36,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -74,6 +77,15 @@ export default function RecipeView(props: RecipeViewProps) {
     cookingTime: recipe.cookingTime || 0,
     restTime: recipe.restTime || 0,
   });
+
+  const addCommentHandler = async (values: CommentFormValues) => {
+    'use server';
+
+    return await addComment({
+      ...values,
+      recipeId: recipe.id,
+    });
+  };
 
   return (
     <>
@@ -652,6 +664,80 @@ export default function RecipeView(props: RecipeViewProps) {
               </CardContent>
             </Card>
           </div>
+        </div>
+      </div>
+
+      <div className="mb-8 md:mb-12">
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="flex items-center text-xl font-semibold text-foreground sm:text-2xl">
+            <MessageSquare className="mr-2 h-5 w-5 text-muted-foreground sm:h-6 sm:w-6" />
+            Reviews & Comments
+            <span className="ml-2 text-sm font-normal text-muted-foreground">
+              ({recipe.comments.length})
+            </span>
+          </h2>
+          <div className="flex items-center">
+            <StarRating rating={recipe.averageRating || 0} size="md" className="mr-2" />
+            <span className="text-sm font-medium text-foreground">
+              {(recipe.averageRating || 0).toFixed(1)}
+            </span>
+          </div>
+        </div>
+
+        {/* Add Comment Form */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="text-lg">Share Your Experience</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <CommentForm onFormSubmit={addCommentHandler} />
+          </CardContent>
+        </Card>
+
+        {/* Comments List */}
+        <div className="space-y-4 sm:space-y-6">
+          {recipe.comments.map((comment) => (
+            <Card key={comment.id}>
+              <CardContent className="pt-6">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+                  {comment.author.imageUrl && (
+                    <Avatar className="h-10 w-10 border-2 border-muted sm:h-12 sm:w-12">
+                      <AvatarImage
+                        src={comment.author.imageUrl}
+                        alt={`${comment.author.firstName} ${comment.author.lastName}`}
+                      />
+                      <AvatarFallback className="bg-muted text-muted-foreground">
+                        {comment.author.firstName
+                          ?.split(' ')
+                          .map((n) => n[0])
+                          .join('')}
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
+
+                  <div className="flex-1">
+                    <div className="mb-2 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <h3 className="font-medium text-foreground">
+                          {comment.author.firstName} {comment.author.lastName}
+                        </h3>
+                        <p className="text-xs text-muted-foreground">
+                          {new Date(comment.createdAt).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })}
+                        </p>
+                      </div>
+                      <StarRating rating={comment.rating} size="sm" />
+                    </div>
+
+                    <p className="text-sm text-foreground sm:text-base">{comment.content}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
     </>

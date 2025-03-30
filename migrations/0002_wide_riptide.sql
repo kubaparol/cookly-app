@@ -1,0 +1,1 @@
+ALTER TABLE "recipes" ADD COLUMN "averageRating" double precision DEFAULT 0;
