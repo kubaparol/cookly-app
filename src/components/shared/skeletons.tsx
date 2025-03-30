@@ -123,7 +123,7 @@ export function RecipeViewSkeleton() {
           </div>
 
           {/* Author */}
-          <div className="flex items-center gap-3 rounded-lg border p-3">
+          <div className="flex items-center gap-3 rounded-lg border p-3 dark:border-border">
             <Skeleton className="h-10 w-10 rounded-full sm:h-12 sm:w-12" />
             <div className="space-y-2">
               <Skeleton className="h-4 w-32" />
@@ -136,7 +136,7 @@ export function RecipeViewSkeleton() {
             {[...Array(4)].map((_, i) => (
               <div
                 key={i}
-                className="flex flex-col items-center rounded-xl border bg-white p-2 text-center shadow-sm sm:p-4">
+                className="flex flex-col items-center rounded-xl border bg-card p-2 text-center shadow-sm dark:border-border dark:bg-card sm:p-4">
                 <Skeleton className="mb-2 h-8 w-8 rounded-full sm:mb-3 sm:h-10 sm:w-10 md:h-12 md:w-12" />
                 <Skeleton className="mb-1 h-5 w-16" />
                 <Skeleton className="h-3 w-12" />
@@ -160,24 +160,24 @@ export function RecipeViewSkeleton() {
       <div className="mb-8 grid grid-cols-1 gap-6 md:mb-12 md:gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <Tabs defaultValue="ingredients" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 rounded-xl bg-gray-50 p-1">
+            <TabsList className="grid w-full grid-cols-3 rounded-xl bg-muted p-1 dark:bg-muted">
               <TabsTrigger
                 value="ingredients"
-                className="rounded-lg text-xs data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-sm sm:text-sm">
+                className="rounded-lg text-xs data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm dark:data-[state=active]:bg-background dark:data-[state=active]:text-foreground sm:text-sm">
                 <Scale className="mr-1 h-3.5 w-3.5 sm:mr-2 sm:h-4 sm:w-4" />
                 <span className="hidden xs:inline">Ingredients</span>
                 <span className="xs:hidden">Ingr.</span>
               </TabsTrigger>
               <TabsTrigger
                 value="instructions"
-                className="rounded-lg text-xs data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-sm sm:text-sm">
+                className="rounded-lg text-xs data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm dark:data-[state=active]:bg-background dark:data-[state=active]:text-foreground sm:text-sm">
                 <BookOpen className="mr-1 h-3.5 w-3.5 sm:mr-2 sm:h-4 sm:w-4" />
                 <span className="hidden xs:inline">Instructions</span>
                 <span className="xs:hidden">Instr.</span>
               </TabsTrigger>
               <TabsTrigger
                 value="notes"
-                className="rounded-lg text-xs data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-sm sm:text-sm">
+                className="rounded-lg text-xs data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm dark:data-[state=active]:bg-background dark:data-[state=active]:text-foreground sm:text-sm">
                 <Info className="mr-1 h-3.5 w-3.5 sm:mr-2 sm:h-4 sm:w-4" />
                 <span className="hidden xs:inline">Notes & Tips</span>
                 <span className="xs:hidden">Notes</span>
@@ -219,7 +219,7 @@ export function RecipeViewSkeleton() {
                   </div>
 
                   <Skeleton className="mb-3 h-7 w-32 sm:mb-4 sm:h-8" />
-                  <Card className="border-gray-200 bg-white">
+                  <Card className="border-border bg-card dark:border-border dark:bg-card">
                     <CardContent className="pt-4 sm:pt-6">
                       <div className="space-y-3 sm:space-y-4">
                         {[...Array(3)].map((_, i) => (
@@ -258,7 +258,7 @@ export function RecipeViewSkeleton() {
               <div className="space-y-6 sm:space-y-8 md:space-y-10">
                 <div>
                   <Skeleton className="mb-3 h-7 w-32 sm:mb-4 sm:h-8" />
-                  <Card className="border-gray-200 bg-white">
+                  <Card className="border-border bg-card dark:border-border dark:bg-card">
                     <CardContent className="pt-4 sm:pt-6">
                       <div className="space-y-3 sm:space-y-4">
                         {[...Array(3)].map((_, i) => (
@@ -274,7 +274,7 @@ export function RecipeViewSkeleton() {
 
                 <div>
                   <Skeleton className="mb-3 h-7 w-48 sm:mb-4 sm:h-8" />
-                  <Card className="border-gray-200 bg-white">
+                  <Card className="border-border bg-card dark:border-border dark:bg-card">
                     <CardContent className="space-y-4 pt-4 sm:space-y-6 sm:pt-6">
                       {[...Array(2)].map((_, i) => (
                         <div key={i} className="flex">
@@ -297,10 +297,10 @@ export function RecipeViewSkeleton() {
         <div>
           <div className="sticky top-4">
             {/* Nutrition Facts Skeleton */}
-            <Card className="mb-4 overflow-hidden border-gray-200 bg-white shadow-sm sm:mb-6">
-              <div className="bg-gray-900 p-3 sm:p-4">
-                <Skeleton className="mb-1 h-6 w-32 bg-gray-700 sm:h-7" />
-                <Skeleton className="h-3 w-24 bg-gray-700 sm:h-4" />
+            <Card className="mb-4 overflow-hidden border-border bg-card shadow-sm dark:border-border dark:bg-card sm:mb-6">
+              <div className="bg-primary-foreground p-3 dark:bg-primary sm:p-4">
+                <Skeleton className="mb-1 h-6 w-32 bg-primary/20 dark:bg-primary-foreground/20 sm:h-7" />
+                <Skeleton className="h-3 w-24 bg-primary/20 dark:bg-primary-foreground/20 sm:h-4" />
               </div>
               <CardContent className="pt-4 sm:pt-6">
                 <div>
@@ -324,7 +324,7 @@ export function RecipeViewSkeleton() {
             </Card>
 
             {/* Recipe Details Skeleton */}
-            <Card className="border-gray-200 bg-white shadow-sm">
+            <Card className="border-border bg-card shadow-sm dark:border-border dark:bg-card">
               <CardContent className="pt-4 sm:pt-6">
                 <Skeleton className="mb-3 h-5 w-32 sm:mb-4 sm:h-6" />
                 <div className="space-y-2 sm:space-y-3">
