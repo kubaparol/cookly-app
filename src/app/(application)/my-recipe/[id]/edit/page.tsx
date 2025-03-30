@@ -38,13 +38,22 @@ export default async function EditRecipePage(props: PageProps) {
             makeAheadInstructions: recipe.makeAheadInstructions || undefined,
             substitutions: recipe.substitutions || [],
             tipsAndTricks: recipe.tips || [],
-            calories: recipe.calories || undefined,
-            protein: recipe.protein || undefined,
-            carbs: recipe.carbs || undefined,
-            fat: recipe.fat || undefined,
+            calories: recipe.calories?.toString() || undefined,
+            protein: recipe.protein?.toString() || undefined,
+            carbs: recipe.carbs?.toString() || undefined,
+            fat: recipe.fat?.toString() || undefined,
             allergens: recipe.allergens || undefined,
             seasonality: recipe.seasonality || undefined,
             costLevel: recipe.costLevel || undefined,
+            preparationTime: recipe.preparationTime?.toString() || undefined,
+            cookingTime: recipe.cookingTime?.toString() || undefined,
+            servings: recipe.servings?.toString() || undefined,
+            ingredients: recipe.ingredients?.map((ingredient) => ({
+              ...ingredient,
+              quantity: ingredient.quantity.toString(),
+            })),
+            restTime: recipe.restTime?.toString() || undefined,
+            activeTime: recipe.activeTime?.toString() || undefined,
           }}
         />
       )}

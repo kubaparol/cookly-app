@@ -37,39 +37,72 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-export default function RecipeView(recipe: Recipe) {
+type RecipeViewProps =
+  | Recipe
+  | {
+      isFormData: true;
+      formData: Partial<Recipe>;
+      author?: {
+        firstName: string | null;
+        lastName: string | null;
+        imageUrl: string | null;
+      };
+    };
+
+export default function RecipeView(props: RecipeViewProps) {
+  const isFormData = 'isFormData' in props && props.isFormData;
+
+  const recipe = isFormData
+    ? ({
+        ...props.formData,
+        author: props.author || {
+          firstName: 'You',
+          lastName: '',
+          imageUrl: null,
+        },
+        createdAt: props.formData.createdAt || new Date(),
+        ingredients: props.formData.ingredients || [],
+        steps: props.formData.steps || [],
+        substitutions: props.formData.substitutions || [],
+        tips: props.formData.tips || [],
+        equipment: props.formData.equipment || [],
+      } as Recipe)
+    : (props as Recipe);
+
   const totalTime = getTotalCookingTime({
-    preparationTime: recipe.preparationTime,
-    cookingTime: recipe.cookingTime,
+    preparationTime: recipe.preparationTime || 0,
+    cookingTime: recipe.cookingTime || 0,
     restTime: recipe.restTime || 0,
   });
 
   return (
     <>
       {/* Breadcrumb */}
-      <Breadcrumb className="mb-4 text-xs sm:mb-6 sm:text-sm">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href={ProjectUrls.home} className="flex items-center">
-              Home
-            </BreadcrumbLink>
-          </BreadcrumbItem>
+      {!isFormData && (
+        <Breadcrumb className="mb-4 text-xs sm:mb-6 sm:text-sm">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href={ProjectUrls.home} className="flex items-center">
+                Home
+              </BreadcrumbLink>
+            </BreadcrumbItem>
 
-          <BreadcrumbSeparator />
+            <BreadcrumbSeparator />
 
-          <BreadcrumbItem>
-            <BreadcrumbLink href={ProjectUrls.recipes}>Recipes</BreadcrumbLink>
-          </BreadcrumbItem>
+            <BreadcrumbItem>
+              <BreadcrumbLink href={ProjectUrls.recipes}>Recipes</BreadcrumbLink>
+            </BreadcrumbItem>
 
-          <BreadcrumbSeparator />
+            <BreadcrumbSeparator />
 
-          <BreadcrumbItem>
-            <BreadcrumbPage className="max-w-[120px] truncate sm:max-w-[200px]">
-              {recipe.title}
-            </BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+            <BreadcrumbItem>
+              <BreadcrumbPage className="max-w-[120px] truncate sm:max-w-[200px]">
+                {recipe.title}
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      )}
 
       <div className="mb-8 grid grid-cols-1 gap-6 md:mb-12 md:gap-8 lg:grid-cols-2">
         <div className="space-y-4 sm:space-y-5 md:space-y-6">

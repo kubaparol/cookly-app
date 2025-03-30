@@ -11,8 +11,8 @@ export const ProjectUrls = Object.freeze({
   // app
   dashboard: '/dashboard',
   myRecipes: '/my-recipes',
-  createRecipe: '/my-recipes/create',
-  editRecipe: (id: string) => `/my-recipes/${id}/edit`,
+  createRecipe: '/my-recipe/create',
+  editRecipe: (id: string) => `/my-recipe/${id}/edit`,
   settings: '/settings',
 });
 
