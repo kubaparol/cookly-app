@@ -1,7 +1,11 @@
-'use client';
+import { Metadata } from 'next';
 
-import SignInForm from '@/components/forms/SignInForm';
+import SignInWrapper from '@/components/modules/auth/SignInWrapper';
+
+export const metadata: Metadata = {
+  title: 'Sign In',
+};
 
 export default function Page() {
-  return <SignInForm />;
+  return <SignInWrapper />;
 }

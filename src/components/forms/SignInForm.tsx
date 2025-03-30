@@ -1,23 +1,22 @@
 'use client';
 
-import { useSignIn } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { ProjectUrls } from '@/constants';
-
-import { ClerkError } from '@/types';
 
 import { PasswordInput } from '../base/PasswordInput';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
+
+interface SignInFormProps {
+  onFormSubmit: (values: SignInFormValues) => void;
+}
 
 export const SignInFormSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
@@ -26,11 +25,7 @@ export const SignInFormSchema = z.object({
 
 export type SignInFormValues = z.infer<typeof SignInFormSchema>;
 
-export default function SignInForm() {
-  const { isLoaded, signIn, setActive } = useSignIn();
-
-  const router = useRouter();
-
+export default function SignInForm({ onFormSubmit }: SignInFormProps) {
   const form = useForm<SignInFormValues>({
     resolver: zodResolver(SignInFormSchema),
     defaultValues: {
@@ -38,29 +33,6 @@ export default function SignInForm() {
       password: '',
     },
   });
-
-  const handleSubmit = async (values: SignInFormValues) => {
-    if (!isLoaded) return;
-
-    try {
-      const result = await signIn.create({
-        identifier: values.email,
-        password: values.password,
-      });
-
-      if (result.status === 'complete') {
-        setActive({ session: result.createdSessionId });
-
-        toast.success('You have been logged in successfully');
-
-        router.push(ProjectUrls.dashboard);
-      }
-    } catch (error) {
-      const message = (error as ClerkError).errors[0].message;
-
-      toast.error(message);
-    }
-  };
 
   const isSubmitting = form.formState.isSubmitting;
 
@@ -74,7 +46,7 @@ export default function SignInForm() {
 
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="grid gap-8">
+            <form onSubmit={form.handleSubmit(onFormSubmit)} className="grid gap-8">
               <div className="space-y-4">
                 <FormField
                   control={form.control}
@@ -124,7 +96,7 @@ export default function SignInForm() {
 
               <div className="text-center text-sm">
                 Don&apos;t have an account?{' '}
-                <Link href="#" className="underline underline-offset-4">
+                <Link href={ProjectUrls.signUp} className="underline underline-offset-4">
                   Sign up
                 </Link>
               </div>
