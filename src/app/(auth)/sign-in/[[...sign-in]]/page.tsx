@@ -1,10 +1,7 @@
-import { SignIn } from '@clerk/nextjs';
-import { Metadata } from 'next';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Sign In',
-};
+import SignInForm from '@/components/forms/SignInForm';
 
 export default function Page() {
-  return <SignIn />;
+  return <SignInForm />;
 }
