@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+
 interface VerifyFormProps {
   length?: number;
   isResending?: boolean;
@@ -71,52 +73,56 @@ export default function VerifyForm({
   const isSubmitting = form.formState.isSubmitting;
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <h2 className="text-xl font-semibold">Verify your email</h2>
-        <p className="text-sm text-muted-foreground">
-          Enter the verification code sent to your email
-        </p>
-      </div>
+    <div className="flex flex-col gap-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-2xl">Verify your email</CardTitle>
+          <CardDescription>Enter the verification code sent to your email</CardDescription>
+        </CardHeader>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onFormSubmit)} className="space-y-6">
-          <InputOTP
-            maxLength={length}
-            value={form.watch('code')}
-            onChange={handleValueChange}
-            disabled={isSubmitting}>
-            <InputOTPGroup className="mx-auto">
-              {Array.from({ length }).map((_, index) => (
-                <InputOTPSlot key={index} index={index} />
-              ))}
-            </InputOTPGroup>
-          </InputOTP>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onFormSubmit)} className="grid gap-8">
+              <InputOTP
+                maxLength={length}
+                value={form.watch('code')}
+                onChange={handleValueChange}
+                disabled={isSubmitting}>
+                <InputOTPGroup className="mx-auto">
+                  {Array.from({ length }).map((_, index) => (
+                    <InputOTPSlot key={index} index={index} />
+                  ))}
+                </InputOTPGroup>
+              </InputOTP>
 
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={form.watch('code').length !== length || isSubmitting}>
-            {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isSubmitting ? 'Verifying...' : 'Verify'}
-          </Button>
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={form.watch('code').length !== length || isSubmitting}>
+                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {isSubmitting ? 'Verifying...' : 'Verify'}
+              </Button>
 
-          <div className="mt-4 text-center">
-            <Button
-              variant="link"
-              type="button"
-              className="text-sm text-muted-foreground"
-              onClick={handleResendCode}
-              disabled={countdown > 0}>
-              {isResending ? (
-                'Resending...'
-              ) : (
-                <>Didn't receive the code? {countdown > 0 ? `Resend (${countdown}s)` : 'Resend'}</>
-              )}
-            </Button>
-          </div>
-        </form>
-      </Form>
+              <div className="text-center">
+                <Button
+                  variant="link"
+                  type="button"
+                  className="text-sm text-muted-foreground"
+                  onClick={handleResendCode}
+                  disabled={countdown > 0}>
+                  {isResending ? (
+                    'Resending...'
+                  ) : (
+                    <>
+                      Didn't receive the code? {countdown > 0 ? `Resend (${countdown}s)` : 'Resend'}
+                    </>
+                  )}
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
