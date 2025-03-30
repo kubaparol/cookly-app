@@ -2,13 +2,7 @@ export const ProjectUrls = Object.freeze({
   // landing page
   home: '/',
   recipes: '/recipes',
-  recipe: (id: string) => `/recipes/${id}`,
-  mealPlanner: '/meal-planner',
-  community: '/community',
-  faq: '/faq',
-  contactUs: '/contact-us',
-  termsAndConditions: '/legals/terms-and-conditions',
-  privacyPolicy: '/legals/privacy-policy',
+  recipe: (id: string) => `/recipe/${id}`,
 
   // auth
   signIn: '/sign-in',
@@ -17,14 +11,9 @@ export const ProjectUrls = Object.freeze({
   // app
   dashboard: '/dashboard',
   myRecipes: '/my-recipes',
-  createRecipe: '/my-recipes/create',
-  editRecipe: (id: string) => `/my-recipes/${id}/edit`,
+  createRecipe: '/my-recipe/create',
+  editRecipe: (id: string) => `/my-recipe/${id}/edit`,
   settings: '/settings',
 });
 
-export const ExternalUrls = Object.freeze({
-  facebook: 'https://www.facebook.com/',
-  x: 'https://x.com/',
-  instagram: 'https://www.instagram.com/',
-  youtube: 'https://www.youtube.com/',
-});
+export const ExternalUrls = Object.freeze({});

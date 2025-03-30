@@ -4,8 +4,9 @@ import { ReactNode } from 'react';
 
 import '@/styles/globals.css';
 
-import { inter } from '@/constants';
+import { inter } from '@/constants/fonts';
 
+import { ThemeProvider } from '@/components/providers/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 
 export const metadata: Metadata = {
@@ -27,9 +28,15 @@ export default function RootLayout(props: RootLayoutProps) {
     <ClerkProvider>
       <html lang="en">
         <body className={`${inter.className} antialiased`}>
-          {children}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange>
+            {children}
 
-          <Toaster position="top-right" richColors />
+            <Toaster position="top-right" richColors />
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

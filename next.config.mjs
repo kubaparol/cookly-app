@@ -10,8 +10,24 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'img.clerk.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+      },
     ],
   },
+  redirects: async () => [
+    {
+      source: '/recipes',
+      destination: '/recipes/1',
+      permanent: true,
+    },
+    {
+      source: '/my-recipes',
+      destination: '/my-recipes/1',
+      permanent: true,
+    },
+  ],
 };
 
 export default nextConfig;

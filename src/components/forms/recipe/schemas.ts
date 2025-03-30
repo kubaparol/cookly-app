@@ -61,10 +61,10 @@ export const ingredientsStepFormSchema = z.object({
     z.object({
       quantity: z
         .string()
-        .min(1, 'Quantity is required')
-        .regex(/^\d*$/, 'Must be a valid number')
-        .refine((value) => value === '' || Number(value) >= 1, {
-          message: 'Must be at least 1',
+        .min(0.1, 'Quantity is required')
+        .regex(/^\d+(\.\d+)?$/, 'Must be a valid number')
+        .refine((value) => value === '' || Number(value) >= 0.1, {
+          message: 'Must be at least 0.1',
         }),
       unit: z.string().min(1, 'Unit is required'),
       name: z.string().min(1, 'Ingredient name is required'),

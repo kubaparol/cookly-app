@@ -32,7 +32,7 @@ export default function FormNavigation({
   };
 
   return (
-    <div className="sticky bottom-0 z-50 flex items-center justify-between gap-4 rounded-lg border border-x border-border bg-gradient-to-b from-background/80 to-background p-4 shadow-lg backdrop-blur-sm">
+    <div className="sticky bottom-4 z-50 flex items-center justify-between gap-4 rounded-lg border border-x border-border bg-gradient-to-b from-background/80 to-background p-4 shadow-lg backdrop-blur-sm">
       {!isFirstStep && (
         <Button
           type="button"

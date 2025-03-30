@@ -43,7 +43,11 @@ export const recipes = pgTable('recipes', {
   createdAt: timestamp().defaultNow().notNull(),
 });
 
-export const recipesRelations = relations(recipes, ({ many }) => ({
+export const recipesRelations = relations(recipes, ({ one, many }) => ({
+  author: one(users, {
+    fields: [recipes.authorId],
+    references: [users.clerkId],
+  }),
   ingredients: many(ingredients),
   steps: many(steps),
   equipment: many(equipment),

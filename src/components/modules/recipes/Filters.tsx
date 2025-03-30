@@ -3,7 +3,6 @@
 import { Filter } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useDebouncedCallback } from 'use-debounce';
 
 import { useIsMobile } from '@/hooks';
 
@@ -30,6 +29,10 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 
+interface FiltersProps {
+  pathPattern?: string;
+}
+
 const maxCookingTimeOptions = [
   { label: 'Up to 15 minutes total', value: '15' },
   { label: 'Up to 30 minutes total', value: '30' },
@@ -37,14 +40,14 @@ const maxCookingTimeOptions = [
   { label: 'Up to 120 minutes total', value: '120' },
 ];
 
-export default function Filters() {
+export default function Filters({ pathPattern }: FiltersProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
 
-  const [selectedValues, setSelectedValues] = useState({
+  const [draftValues, setDraftValues] = useState({
     difficulty: [] as string[],
     cuisineType: [] as string[],
     mealType: [] as string[],
@@ -61,38 +64,79 @@ export default function Filters() {
     const dietaryTags = params.get('dietaryTags');
     const maxCookingTime = params.get('maxCookingTime');
 
-    setSelectedValues({
+    const newValues = {
       difficulty: difficulty ? difficulty.split('_').filter(Boolean) : [],
       cuisineType: cuisineType ? cuisineType.split('_').filter(Boolean) : [],
       mealType: mealType ? mealType.split('_').filter(Boolean) : [],
       dietaryTags: dietaryTags ? dietaryTags.split('_').filter(Boolean) : [],
       maxCookingTime: maxCookingTime || undefined,
-    });
+    };
+
+    setDraftValues(newValues);
   }, [searchParams]);
 
-  const updateParams = useDebouncedCallback((param: string, values: string[]) => {
+  const applyFilters = () => {
     const params = new URLSearchParams(searchParams);
 
-    if (values.length > 0) {
-      params.set(param, values.join('_'));
+    if (draftValues.difficulty.length > 0) {
+      params.set('difficulty', draftValues.difficulty.join('_'));
     } else {
-      params.delete(param);
+      params.delete('difficulty');
     }
 
-    replace(`${pathname}?${params.toString()}`);
-  }, 300);
+    if (draftValues.cuisineType.length > 0) {
+      params.set('cuisineType', draftValues.cuisineType.join('_'));
+    } else {
+      params.delete('cuisineType');
+    }
+
+    if (draftValues.mealType.length > 0) {
+      params.set('mealType', draftValues.mealType.join('_'));
+    } else {
+      params.delete('mealType');
+    }
+
+    if (draftValues.dietaryTags.length > 0) {
+      params.set('dietaryTags', draftValues.dietaryTags.join('_'));
+    } else {
+      params.delete('dietaryTags');
+    }
+
+    if (draftValues.maxCookingTime) {
+      params.set('maxCookingTime', draftValues.maxCookingTime);
+    } else {
+      params.delete('maxCookingTime');
+    }
+
+    let newPath = pathname;
+    if (pathPattern) {
+      newPath = pathPattern.replace(':page', '1');
+    }
+
+    replace(`${newPath}?${params.toString()}`);
+    setOpen(false);
+  };
 
   const clearAllFilters = (e: React.MouseEvent) => {
     e.stopPropagation();
     const params = new URLSearchParams();
-    replace(`${pathname}?${params.toString()}`);
-    setSelectedValues({
+
+    let newPath = pathname;
+    if (pathPattern) {
+      newPath = pathPattern.replace(':page', '1');
+    }
+
+    replace(`${newPath}?${params.toString()}`);
+
+    const emptyValues = {
       difficulty: [],
       cuisineType: [],
       mealType: [],
       dietaryTags: [],
       maxCookingTime: undefined,
-    });
+    };
+
+    setDraftValues(emptyValues);
   };
 
   const hasActiveFilters = () => {
@@ -142,10 +186,10 @@ export default function Filters() {
                 label: level.label,
                 value: level.value,
               }))}
-              value={selectedValues.difficulty}
+              value={draftValues.difficulty}
               onValueChange={(values) => {
-                setSelectedValues((prev) => ({ ...prev, difficulty: values }));
-                updateParams('difficulty', values);
+                setDraftValues((prev) => ({ ...prev, difficulty: values }));
+                // No immediate URL update
               }}
               placeholder="Select difficulty"
               maxCount={isMobile ? 0 : 1}
@@ -160,10 +204,10 @@ export default function Filters() {
                 label: type.label,
                 value: type.value,
               }))}
-              value={selectedValues.cuisineType}
+              value={draftValues.cuisineType}
               onValueChange={(values) => {
-                setSelectedValues((prev) => ({ ...prev, cuisineType: values }));
-                updateParams('cuisineType', values);
+                setDraftValues((prev) => ({ ...prev, cuisineType: values }));
+                // No immediate URL update
               }}
               placeholder="Select cuisine"
               maxCount={isMobile ? 0 : 1}
@@ -178,10 +222,10 @@ export default function Filters() {
                 label: type.label,
                 value: type.value,
               }))}
-              value={selectedValues.mealType}
+              value={draftValues.mealType}
               onValueChange={(values) => {
-                setSelectedValues((prev) => ({ ...prev, mealType: values }));
-                updateParams('mealType', values);
+                setDraftValues((prev) => ({ ...prev, mealType: values }));
+                // No immediate URL update
               }}
               placeholder="Select meal type"
               maxCount={isMobile ? 0 : 1}
@@ -196,10 +240,10 @@ export default function Filters() {
                 label: tag.label,
                 value: tag.value,
               }))}
-              value={selectedValues.dietaryTags}
+              value={draftValues.dietaryTags}
               onValueChange={(values) => {
-                setSelectedValues((prev) => ({ ...prev, dietaryTags: values }));
-                updateParams('dietaryTags', values);
+                setDraftValues((prev) => ({ ...prev, dietaryTags: values }));
+                // No immediate URL update
               }}
               placeholder="Select dietary tags"
               maxCount={isMobile ? 0 : 1}
@@ -210,10 +254,10 @@ export default function Filters() {
           <div className="space-y-2">
             <Label>Cooking Time</Label>
             <Select
-              value={selectedValues.maxCookingTime}
+              value={draftValues.maxCookingTime}
               onValueChange={(value) => {
-                setSelectedValues((prev) => ({ ...prev, maxCookingTime: value }));
-                updateParams('maxCookingTime', [value]);
+                setDraftValues((prev) => ({ ...prev, maxCookingTime: value }));
+                // No immediate URL update
               }}>
               <SelectTrigger>
                 <SelectValue placeholder="Select max cooking time" />
@@ -237,7 +281,7 @@ export default function Filters() {
             disabled={!hasActiveFilters()}>
             Clear filters
           </Button>
-          <Button className="flex-1" onClick={() => setOpen(false)}>
+          <Button className="flex-1" onClick={applyFilters}>
             Search
           </Button>
         </SheetFooter>

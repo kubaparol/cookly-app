@@ -11,6 +11,14 @@ export const getPageTitle = (pathname: string): string => {
 
   if (path.length === 0) return PAGE_TITLES.dashboard;
 
-  const page = path[path.length - 1];
-  return PAGE_TITLES[page] || page.charAt(0).toUpperCase() + page.slice(1).replace(/-/g, ' ');
+  const lastSegment = path[path.length - 1];
+
+  if (PAGE_TITLES[lastSegment]) return PAGE_TITLES[lastSegment];
+
+  if (/^\d+$/.test(lastSegment) && path.length > 1) {
+    const parentSegment = path[path.length - 2];
+    if (PAGE_TITLES[parentSegment]) return PAGE_TITLES[parentSegment];
+  }
+
+  return lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1).replace(/-/g, ' ');
 };
