@@ -1,11 +1,11 @@
 'use server';
 
-import { InferSelectModel, eq } from 'drizzle-orm';
+import { InferSelectModel, desc, eq } from 'drizzle-orm';
 
 import { handleError } from '@/utils';
 
 import { db } from '@/db/drizzle';
-import { equipment, ingredients, recipes, steps, substitutions, tips } from '@/db/schema';
+import { comments, equipment, ingredients, recipes, steps, substitutions, tips } from '@/db/schema';
 
 export type Recipe = InferSelectModel<typeof recipes> & {
   author: {
@@ -19,6 +19,14 @@ export type Recipe = InferSelectModel<typeof recipes> & {
   substitutions: InferSelectModel<typeof substitutions>[];
   tips: InferSelectModel<typeof tips>[];
   equipment: InferSelectModel<typeof equipment>[];
+  comments: (InferSelectModel<typeof comments> & {
+    author: {
+      clerkId: string;
+      firstName: string | null;
+      lastName: string | null;
+      imageUrl: string | null;
+    };
+  })[];
 };
 
 export async function getOneRecipe(id: string) {
@@ -39,6 +47,19 @@ export async function getOneRecipe(id: string) {
         substitutions: true,
         tips: true,
         equipment: true,
+        comments: {
+          with: {
+            author: {
+              columns: {
+                clerkId: true,
+                firstName: true,
+                lastName: true,
+                imageUrl: true,
+              },
+            },
+          },
+          orderBy: desc(comments.createdAt),
+        },
       },
     });
   } catch (error) {

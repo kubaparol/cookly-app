@@ -1,6 +1,7 @@
 import { relations } from 'drizzle-orm';
 import { boolean, integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
+import { comments } from './comments';
 import { equipment } from './equipment';
 import { ingredients } from './ingredients';
 import { steps } from './steps';
@@ -53,4 +54,5 @@ export const recipesRelations = relations(recipes, ({ one, many }) => ({
   equipment: many(equipment),
   substitutions: many(substitutions),
   tips: many(tips),
+  comments: many(comments),
 }));
