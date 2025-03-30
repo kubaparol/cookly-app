@@ -7,6 +7,7 @@ const isPublicRoute = createRouteMatcher([
   `${ProjectUrls.home}`,
   `${ProjectUrls.signIn}(.*)`,
   `${ProjectUrls.signUp}(.*)`,
+  `${ProjectUrls.forgotPassword}(.*)`,
   `${ProjectUrls.recipes}(.*)`,
 
   // api routes

@@ -7,6 +7,7 @@ export const ProjectUrls = Object.freeze({
   // auth
   signIn: '/sign-in',
   signUp: '/sign-up',
+  forgotPassword: '/forgot-password',
 
   // app
   dashboard: '/dashboard',
