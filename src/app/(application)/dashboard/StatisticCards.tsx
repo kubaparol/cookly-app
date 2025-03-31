@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import { getUserRecipeCount } from '@/db/actions/statistics';
+import { getUserRecipeCount } from '@/db';
 
 import StatisticCard from '@/components/modules/dashboard/StatisticCard';
 import { StatisticCardsSkeleton } from '@/components/shared/skeletons';
