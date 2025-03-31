@@ -22,6 +22,7 @@ export async function removeFromFavorites(recipeId: string): Promise<ServerActio
       .delete(favorites)
       .where(and(eq(favorites.recipeId, recipeId), eq(favorites.userId, user.id)));
 
+    revalidatePath(ProjectUrls.dashboard);
     revalidatePath(ProjectUrls.recipes);
     revalidatePath(ProjectUrls.myRecipes);
     revalidatePath(ProjectUrls.recipe(recipeId));
