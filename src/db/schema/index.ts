@@ -1,3 +1,4 @@
+export * from './comments';
 export * from './equipment';
 export * from './ingredients';
 export * from './recipes';
