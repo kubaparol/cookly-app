@@ -36,6 +36,13 @@
       "when": 1743410510688,
       "tag": "0004_lean_monster_badoon",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1743441898291,
+      "tag": "0005_powerful_garia",
+      "breakpoints": true
     }
   ]
 }

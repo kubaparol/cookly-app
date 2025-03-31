@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache';
 
 import { ProjectUrls } from '@/constants';
 
-import { equipment, ingredients, recipes, steps, substitutions, tips } from '@/db';
+import { equipment, favorites, ingredients, recipes, steps, substitutions, tips } from '@/db';
 import { db } from '@/db/drizzle';
 
 import { ServerActionResponse } from '@/types';
@@ -25,6 +25,8 @@ export async function deleteRecipe(id: string): Promise<ServerActionResponse> {
     await db.delete(tips).where(eq(tips.recipeId, id));
 
     await db.delete(recipes).where(eq(recipes.id, id));
+
+    await db.delete(favorites).where(eq(favorites.recipeId, id));
 
     revalidatePath(ProjectUrls.dashboard);
     revalidatePath(ProjectUrls.recipes);

@@ -11,6 +11,7 @@ import {
 
 import { comments } from './comments';
 import { equipment } from './equipment';
+import { favorites } from './favorites';
 import { ingredients } from './ingredients';
 import { steps } from './steps';
 import { substitutions } from './substitutions';
@@ -71,6 +72,7 @@ export const recipesRelations = relations(recipes, ({ one, many }) => ({
   substitutions: many(substitutions),
   tips: many(tips),
   comments: many(comments),
+  favorites: many(favorites),
 }));
 
 export type RecipeStatus = (typeof recipes.status.enumValues)[number];

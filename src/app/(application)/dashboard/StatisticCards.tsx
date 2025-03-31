@@ -1,14 +1,22 @@
 import { Suspense } from 'react';
 
-import { getUserRecipeCount } from '@/db/actions/statistics';
+import { getUserFavoriteCount, getUserRecipeCount } from '@/db';
 
 import StatisticCard from '@/components/modules/dashboard/StatisticCard';
 import { StatisticCardsSkeleton } from '@/components/shared/skeletons';
 
 async function StatisticCardsLoader() {
-  const recipeCount = await getUserRecipeCount();
+  const [recipeCount, favoriteCount] = await Promise.all([
+    getUserRecipeCount(),
+    getUserFavoriteCount(),
+  ]);
 
-  return <StatisticCard title="Your recipes" value={recipeCount ?? 0} />;
+  return (
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <StatisticCard title="Your recipes" value={recipeCount ?? 0} />
+      <StatisticCard title="Your favorites" value={favoriteCount ?? 0} />
+    </div>
+  );
 }
 
 export default function StatisticCards() {

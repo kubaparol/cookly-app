@@ -27,6 +27,11 @@ const nextConfig = {
       destination: '/my-recipes/1',
       permanent: true,
     },
+    {
+      source: '/favorite-recipes',
+      destination: '/favorite-recipes/1',
+      permanent: true,
+    },
   ],
 };
 

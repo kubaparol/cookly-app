@@ -1,5 +1,6 @@
 export * from './comments';
 export * from './equipment';
+export * from './favorites';
 export * from './ingredients';
 export * from './recipes';
 export * from './steps';
