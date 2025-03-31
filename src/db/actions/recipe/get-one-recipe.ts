@@ -1,6 +1,6 @@
 'use server';
 
-import { InferSelectModel, desc, eq } from 'drizzle-orm';
+import { InferSelectModel, and, desc, eq } from 'drizzle-orm';
 
 import { handleError } from '@/utils';
 
@@ -32,7 +32,7 @@ export type Recipe = InferSelectModel<typeof recipes> & {
 export async function getOneRecipe(id: string) {
   try {
     return await db.query.recipes.findFirst({
-      where: eq(recipes.id, id),
+      where: and(eq(recipes.id, id), eq(recipes.status, 'published')),
       with: {
         author: {
           columns: {

@@ -1,12 +1,13 @@
 'use server';
 
-import { and } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 
 import { createRecipeSqlFilters, handleError } from '@/utils';
 
 import { DATA_PER_PAGE } from '@/constants';
 
 import { db } from '@/db/drizzle';
+import { recipes } from '@/db/schema';
 
 import { GetRecipesParams } from './types';
 
@@ -15,9 +16,11 @@ export async function getAllRecipes(params: GetRecipesParams) {
 
   const filters = createRecipeSqlFilters(rest);
 
+  const statusFilter = eq(recipes.status, 'published');
+
   try {
     const countResult = await db.query.recipes.findMany({
-      where: and(...filters),
+      where: and(...filters, ...[statusFilter]),
       columns: {
         id: true,
       },
@@ -26,7 +29,7 @@ export async function getAllRecipes(params: GetRecipesParams) {
     const totalCount = countResult.length;
 
     const recipesResult = await db.query.recipes.findMany({
-      where: and(...filters),
+      where: and(...filters, ...[statusFilter]),
       columns: {
         id: true,
         title: true,

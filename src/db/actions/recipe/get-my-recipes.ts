@@ -1,7 +1,7 @@
 'use server';
 
 import { currentUser } from '@clerk/nextjs/server';
-import { and, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 
 import { createRecipeSqlFilters, handleError } from '@/utils';
 
@@ -37,15 +37,13 @@ export async function getMyRecipes(params: GetMyRecipesParams) {
         id: true,
         title: true,
         imageUrl: true,
-        preparationTime: true,
-        cookingTime: true,
-        restTime: true,
-        difficulty: true,
-        dietaryTags: true,
-        authorId: true,
+        averageRating: true,
+        status: true,
+        updatedAt: true,
       },
       limit: limit || DATA_PER_PAGE,
       offset: offset || 0,
+      orderBy: desc(recipes.createdAt),
     });
 
     return {

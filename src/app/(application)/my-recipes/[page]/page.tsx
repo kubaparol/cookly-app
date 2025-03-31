@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 import Search from '@/components/base/Search';
-import Filters from '@/components/modules/recipes/Filters';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { PageProps } from '@/types';
 
@@ -14,17 +14,22 @@ export const metadata: Metadata = {
 export default function RecipesPage({ params, searchParams }: PageProps) {
   return (
     <section className="flex h-full flex-1 flex-col gap-6 pb-8">
-      <div className="rounded-lg border bg-card p-4 shadow-sm">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-          <div className="w-full sm:max-w-[400px]">
+      <Card>
+        <CardHeader>
+          <CardTitle>Recipe Collection</CardTitle>
+          <CardDescription>
+            View and manage all your recipes. Click on a recipe to see more details.
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent className="space-y-4">
+          <div className="w-full sm:max-w-xs">
             <Search placeholder="Search recipes..." pathPattern="/my-recipes/:page" />
           </div>
 
-          <Filters pathPattern="/my-recipes/:page" />
-        </div>
-      </div>
-
-      <MyRecipesList params={params} searchParams={searchParams} />
+          <MyRecipesList params={params} searchParams={searchParams} />
+        </CardContent>
+      </Card>
     </section>
   );
 }
