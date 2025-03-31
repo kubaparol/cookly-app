@@ -75,6 +75,7 @@ async function AllRecipesLoader(props: PageProps) {
             cuisineType={recipe.cuisineType}
             difficulty={recipe.difficulty}
             dietaryTags={recipe.dietaryTags}
+            isFavorite={recipe.favorites.length > 0}
           />
         ))}
       </div>

@@ -1,9 +1,7 @@
-import { Heart, Users } from 'lucide-react';
+import { Users } from 'lucide-react';
 import { ChefHat, Clock } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-
-import { cn } from '@/utils';
 
 import { ProjectUrls } from '@/constants';
 
@@ -11,6 +9,8 @@ import { StarRating } from '@/components/base/StarRating';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+
+import { AddToFavoritesButton } from './AddToFavoritesButton';
 
 const MAX_DIETARY_TAGS = 2;
 interface RecipeCardProps {
@@ -26,6 +26,7 @@ interface RecipeCardProps {
   cuisineType?: string;
   isAuthor?: boolean;
   openInNewTab?: boolean;
+  isFavorite?: boolean;
 }
 
 export function RecipeCard({
@@ -39,6 +40,7 @@ export function RecipeCard({
   dietaryTags = [],
   averageRating = 0,
   cuisineType = '',
+  isFavorite = false,
 }: RecipeCardProps) {
   return (
     <Link href={ProjectUrls.recipe(id)}>
@@ -51,14 +53,7 @@ export function RecipeCard({
             className="object-cover transition-transform group-hover:scale-105"
           />
 
-          <button className="absolute right-2 top-2 rounded-full bg-background/80 p-1.5 backdrop-blur-sm transition-all hover:bg-background">
-            <Heart
-              className={cn(
-                'h-4 w-4',
-                Math.random() > 50 ? 'fill-rose-500 text-rose-500' : 'text-muted-foreground',
-              )}
-            />
-          </button>
+          <AddToFavoritesButton recipeId={id} isFavorite={isFavorite} />
 
           {cuisineType && (
             <div className="absolute bottom-2 left-2">
@@ -71,7 +66,7 @@ export function RecipeCard({
 
         <CardContent className="p-4">
           <div className="space-y-2">
-            <h3 className="line-clamp-1 text-lg font-semibold">{title}</h3>
+            <h3 className="line-clamp-1 text-lg font-semibold group-hover:underline">{title}</h3>
 
             {description && (
               <p className="line-clamp-2 text-sm text-muted-foreground">{description}</p>

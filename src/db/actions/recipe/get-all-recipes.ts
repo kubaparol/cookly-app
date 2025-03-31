@@ -1,5 +1,6 @@
 'use server';
 
+import { currentUser } from '@clerk/nextjs/server';
 import { and, eq } from 'drizzle-orm';
 
 import { createRecipeSqlFilters, handleError } from '@/utils';
@@ -7,7 +8,7 @@ import { createRecipeSqlFilters, handleError } from '@/utils';
 import { DATA_PER_PAGE } from '@/constants';
 
 import { db } from '@/db/drizzle';
-import { recipes } from '@/db/schema';
+import { favorites, recipes } from '@/db/schema';
 
 import { GetRecipesParams } from './types';
 
@@ -19,6 +20,8 @@ export async function getAllRecipes(params: GetRecipesParams) {
   const statusFilter = eq(recipes.status, 'published');
 
   try {
+    const user = await currentUser();
+
     const countResult = await db.query.recipes.findMany({
       where: and(...filters, ...[statusFilter]),
       columns: {
@@ -44,6 +47,14 @@ export async function getAllRecipes(params: GetRecipesParams) {
         averageRating: true,
         cuisineType: true,
         authorId: true,
+      },
+      with: {
+        favorites: {
+          where: eq(favorites.userId, user?.id || ''),
+          columns: {
+            id: true,
+          },
+        },
       },
       limit: limit || DATA_PER_PAGE,
       offset: offset || 0,
