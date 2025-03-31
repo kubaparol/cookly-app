@@ -25,6 +25,8 @@ async function CommentsLoader() {
   const unansweredCount =
     received?.data.filter((comment) => comment.replies.length === 0).length || 0;
 
+  console.log(made?.data);
+
   return (
     <>
       <div className="mb-6 flex flex-col gap-4 md:mb-8 md:flex-row md:items-center md:justify-between">

@@ -5,7 +5,7 @@ import { desc, eq } from 'drizzle-orm';
 
 import { handleError } from '@/utils';
 
-import { comments } from '@/db';
+import { comments, commentsReplies } from '@/db';
 import { db } from '@/db/drizzle';
 
 export async function getMadeComments() {
@@ -37,6 +37,23 @@ export async function getMadeComments() {
             firstName: true,
             lastName: true,
             imageUrl: true,
+          },
+        },
+        replies: {
+          where: eq(commentsReplies.authorId, user.id),
+          columns: {
+            id: true,
+            content: true,
+            createdAt: true,
+          },
+          with: {
+            author: {
+              columns: {
+                firstName: true,
+                lastName: true,
+                imageUrl: true,
+              },
+            },
           },
         },
       },

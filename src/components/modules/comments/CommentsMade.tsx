@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { ProjectUrls } from '@/constants';
 
 import { StarRating } from '@/components/base/StarRating';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 dayjs.extend(relativeTime);
 
@@ -33,13 +34,16 @@ interface Comment {
     lastName: string | null;
     imageUrl: string | null;
   };
-  // hasReply: boolean;
-  // reply?: {
-  //   authorName: string;
-  //   authorImage: string;
-  //   content: string;
-  //   createdAt: Date;
-  // };
+  replies?: {
+    id: string;
+    content: string;
+    author: {
+      firstName: string | null;
+      lastName: string | null;
+      imageUrl: string | null;
+    } | null;
+    createdAt: Date;
+  }[];
 }
 
 interface CommentsMadeProps {
@@ -114,27 +118,36 @@ export function CommentsMade({ comments }: CommentsMadeProps) {
           </div>
 
           {/* Reply section */}
-          {/* {comment.hasReply && comment.reply && (
-            <div className="mt-4 border-l-2 border-muted py-2 pl-4 sm:pl-12">
+          {comment.replies && comment.replies.length > 0 && (
+            <div className="mt-4 border-l-2 border-muted py-2 pl-4">
               <div className="flex items-start justify-between">
                 <div className="flex w-full items-start gap-2">
-                  <Avatar className="h-8 w-8 flex-shrink-0">
-                    <AvatarImage src={comment.reply.authorImage} alt={comment.reply.authorName} />
-                    <AvatarFallback>{comment.reply.authorName.charAt(0)}</AvatarFallback>
-                  </Avatar>
+                  {comment.replies[0].author && comment.replies[0].author.imageUrl && (
+                    <Avatar className="h-8 w-8 flex-shrink-0">
+                      <AvatarImage src={comment.replies[0].author.imageUrl} />
+                      <AvatarFallback>
+                        {comment.replies[0].author.firstName?.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
+
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-sm font-medium">{comment.reply.authorName}</span>
+                      <span className="text-sm font-medium">
+                        {comment.replies[0].author?.firstName} {comment.replies[0].author?.lastName}
+                      </span>
                       <span className="text-xs text-muted-foreground">
-                        {formatDate(comment.reply.createdAt)}
+                        {formatDate(comment.replies[0].createdAt)}
                       </span>
                     </div>
-                    <p className="mt-1 break-words text-sm md:text-base">{comment.reply.content}</p>
+                    <p className="mt-1 break-words text-sm md:text-base">
+                      {comment.replies[0].content}
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
-          )} */}
+          )}
         </div>
       ))}
     </div>

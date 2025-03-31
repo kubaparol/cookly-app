@@ -149,7 +149,7 @@ export function CommentsReceived({ comments }: CommentsReceivedProps) {
 
           {/* Reply section */}
           {comment.replies && comment.replies.length > 0 && (
-            <div className="mt-4 border-l-2 border-muted py-2 pl-4 sm:pl-12">
+            <div className="mt-4 border-l-2 border-muted py-2 pl-4">
               <div className="flex items-start justify-between">
                 <div className="flex w-full items-start gap-2">
                   <div className="min-w-0 flex-1">
