@@ -5,7 +5,7 @@ import { desc, eq, inArray } from 'drizzle-orm';
 
 import { handleError } from '@/utils';
 
-import { comments, recipes } from '@/db';
+import { comments, commentsReplies, recipes } from '@/db';
 import { db } from '@/db/drizzle';
 
 export async function getReceivedComments() {
@@ -14,7 +14,6 @@ export async function getReceivedComments() {
 
     if (!user) throw new Error('User not found');
 
-    // First, get all recipes created by the current user
     const userRecipes = await db.query.recipes.findMany({
       where: eq(recipes.authorId, user.id),
       columns: {
@@ -24,7 +23,6 @@ export async function getReceivedComments() {
 
     const recipeIds = userRecipes.map((recipe) => recipe.id);
 
-    // If user has no recipes, return empty array
     if (recipeIds.length === 0) {
       return {
         success: true,
@@ -32,7 +30,6 @@ export async function getReceivedComments() {
       };
     }
 
-    // Get all comments on the user's recipes
     const receivedComments = await db.query.comments.findMany({
       where: inArray(comments.recipeId, recipeIds),
       with: {
@@ -50,16 +47,21 @@ export async function getReceivedComments() {
             imageUrl: true,
           },
         },
+        replies: {
+          where: eq(commentsReplies.authorId, user.id),
+          columns: {
+            id: true,
+            content: true,
+            createdAt: true,
+          },
+        },
       },
       orderBy: desc(comments.createdAt),
     });
 
     return {
       success: true,
-      data: receivedComments.map((comment) => ({
-        ...comment,
-        isReplied: false,
-      })),
+      data: receivedComments,
     };
   } catch (error) {
     handleError(error);

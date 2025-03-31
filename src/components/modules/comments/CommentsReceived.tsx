@@ -9,8 +9,10 @@ import { useCallback, useState } from 'react';
 
 import { ProjectUrls } from '@/constants';
 
+import { replyToComment } from '@/db';
+
 import { StarRating } from '@/components/base/StarRating';
-import { CommentReplyForm } from '@/components/forms/CommentReplyForm';
+import { CommentReplyForm, CommentReplyFormValues } from '@/components/forms/CommentReplyForm';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -34,12 +36,11 @@ interface Comment {
     lastName: string | null;
     imageUrl: string | null;
   };
-  isReplied?: boolean;
-  reply?: {
+  replies?: {
     id: string;
     content: string;
     createdAt: Date;
-  };
+  }[];
 }
 
 interface CommentsReceivedProps {
@@ -49,18 +50,23 @@ interface CommentsReceivedProps {
 export function CommentsReceived({ comments }: CommentsReceivedProps) {
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
 
-  // Format date
   const formatDate = (date: Date) => {
     return dayjs(date).fromNow();
   };
 
-  const handleSubmitReply = useCallback(async () => {
-    await new Promise((resolve) => setTimeout(resolve, 2500));
+  const handleSubmitReply = useCallback(
+    async (values: CommentReplyFormValues, commentId: string, recipeId: string) => {
+      await new Promise((resolve) => setTimeout(resolve, 2500));
 
-    return {
-      success: true,
-    };
-  }, []);
+      return await replyToComment({
+        reply: values.reply,
+        commentId,
+        recipeId,
+      });
+    },
+    [],
+  );
+
   if (comments.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -111,7 +117,7 @@ export function CommentsReceived({ comments }: CommentsReceivedProps) {
               </div>
             </div>
 
-            {!comment.isReplied && (
+            {comment.replies?.length === 0 && (
               <Badge
                 variant="outline"
                 className="self-start border-amber-200 bg-amber-50 text-amber-700 sm:self-center">
@@ -142,7 +148,7 @@ export function CommentsReceived({ comments }: CommentsReceivedProps) {
           </div>
 
           {/* Reply section */}
-          {comment.isReplied && comment.reply && (
+          {comment.replies && comment.replies.length > 0 && (
             <div className="mt-4 border-l-2 border-muted py-2 pl-4 sm:pl-12">
               <div className="flex items-start justify-between">
                 <div className="flex w-full items-start gap-2">
@@ -150,10 +156,10 @@ export function CommentsReceived({ comments }: CommentsReceivedProps) {
                     <div className="mb-1 flex items-center gap-2">
                       <span className="text-sm font-medium">Your reply</span>
                       <span className="text-xs text-muted-foreground">
-                        {formatDate(comment.reply.createdAt)}
+                        {formatDate(comment.replies[0].createdAt)}
                       </span>
                     </div>
-                    <p className="break-words text-sm">{comment.reply.content}</p>
+                    <p className="break-words text-sm">{comment.replies[0].content}</p>
                   </div>
                 </div>
               </div>
@@ -161,7 +167,7 @@ export function CommentsReceived({ comments }: CommentsReceivedProps) {
           )}
 
           {/* Reply button and form */}
-          {!comment.isReplied && (
+          {comment.replies && comment.replies.length === 0 && (
             <div>
               {replyingTo !== comment.id ? (
                 <Button
@@ -174,7 +180,7 @@ export function CommentsReceived({ comments }: CommentsReceivedProps) {
               ) : (
                 <CommentReplyForm
                   commentId={comment.id}
-                  onFormSubmit={handleSubmitReply}
+                  onFormSubmit={(values) => handleSubmitReply(values, comment.id, comment.recipeId)}
                   onCancel={() => setReplyingTo(null)}
                 />
               )}

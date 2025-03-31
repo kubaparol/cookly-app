@@ -22,7 +22,8 @@ async function CommentsLoader() {
 
   const totalReceived = received?.data.length;
   const totalMade = made?.data.length;
-  const unansweredCount = received?.data.filter((comment) => !comment.isReplied).length;
+  const unansweredCount =
+    received?.data.filter((comment) => comment.replies.length === 0).length || 0;
 
   return (
     <>
@@ -55,7 +56,7 @@ async function CommentsLoader() {
           <TabsList>
             <TabsTrigger value="received" className="relative">
               Comments Received
-              {unansweredCount && unansweredCount > 0 && (
+              {unansweredCount > 0 && (
                 <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white">
                   {unansweredCount}
                 </span>
