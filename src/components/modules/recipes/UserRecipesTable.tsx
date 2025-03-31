@@ -3,6 +3,7 @@
 import dayjs from 'dayjs';
 import {
   AlertTriangle,
+  Archive,
   ArrowUpDown,
   Calendar,
   Edit,
@@ -20,7 +21,7 @@ import { cn } from '@/utils';
 
 import { ProjectUrls } from '@/constants';
 
-import { RecipeStatus, deleteRecipe } from '@/db';
+import { RecipeStatus, deleteRecipe, setRecipeStatus } from '@/db';
 
 import { StarRating } from '@/components/base/StarRating';
 import {
@@ -98,7 +99,9 @@ const getStatusBadge = (status: string) => {
 
 export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTableProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-
+  const [showSetStatusDialog, setShowSetStatusDialog] = useState<
+    'publish' | 'draft' | 'archive' | null
+  >(null);
   const [isPending, startTransition] = useTransition();
 
   const handleDeleteRecipe = (id: string, e: React.MouseEvent<HTMLButtonElement>) => {
@@ -108,6 +111,26 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
       const result = await deleteRecipe(id);
       if (result.success) {
         toast.success('Recipe deleted successfully');
+        setShowDeleteDialog(false);
+      } else {
+        toast.error(result.message);
+      }
+    });
+  };
+
+  const handleSetRecipeStatus = (
+    id: string,
+    status: RecipeStatus,
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    e.preventDefault();
+
+    startTransition(async () => {
+      const result = await setRecipeStatus(id, status);
+
+      if (result.success) {
+        toast.success('Recipe status updated successfully');
+        setShowSetStatusDialog(null);
       } else {
         toast.error(result.message);
       }
@@ -249,6 +272,134 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
                         </DropdownMenuItem>
 
                         <DropdownMenuSeparator />
+
+                        {(recipe.status === 'archived' || recipe.status === 'draft') && (
+                          <>
+                            <AlertDialog
+                              open={showSetStatusDialog === 'publish'}
+                              onOpenChange={(open) =>
+                                setShowSetStatusDialog(open ? 'publish' : null)
+                              }>
+                              <AlertDialogTrigger asChild>
+                                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                  <Archive className="mr-2 h-4 w-4" />
+                                  Publish
+                                </DropdownMenuItem>
+                              </AlertDialogTrigger>
+
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    This action will publish the recipe <b>{recipe.title}</b> and
+                                    will be visible to the public.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+
+                                  <AlertDialogAction
+                                    disabled={isPending}
+                                    onClick={(e) =>
+                                      handleSetRecipeStatus(recipe.id, 'published', e)
+                                    }>
+                                    {isPending ? (
+                                      <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Publishing...
+                                      </>
+                                    ) : (
+                                      'Publish'
+                                    )}
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </>
+                        )}
+
+                        {(recipe.status === 'archived' || recipe.status === 'published') && (
+                          <AlertDialog
+                            open={showSetStatusDialog === 'draft'}
+                            onOpenChange={(open) => setShowSetStatusDialog(open ? 'draft' : null)}>
+                            <AlertDialogTrigger asChild>
+                              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                <Archive className="mr-2 h-4 w-4" />
+                                Draft
+                              </DropdownMenuItem>
+                            </AlertDialogTrigger>
+
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action will set the recipe <b>{recipe.title}</b> to draft
+                                  status and you will be able to edit it before publishing it again.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+
+                              <AlertDialogFooter>
+                                <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+
+                                <AlertDialogAction
+                                  disabled={isPending}
+                                  onClick={(e) => handleSetRecipeStatus(recipe.id, 'draft', e)}>
+                                  {isPending ? (
+                                    <>
+                                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                      Drafting...
+                                    </>
+                                  ) : (
+                                    'Draft'
+                                  )}
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        )}
+
+                        {recipe.status !== 'archived' && (
+                          <AlertDialog
+                            open={showSetStatusDialog === 'archive'}
+                            onOpenChange={(open) =>
+                              setShowSetStatusDialog(open ? 'archive' : null)
+                            }>
+                            <AlertDialogTrigger asChild>
+                              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                <Archive className="mr-2 h-4 w-4" />
+                                Archive
+                              </DropdownMenuItem>
+                            </AlertDialogTrigger>
+
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action will archive the recipe <b>{recipe.title}</b> and will
+                                  not be visible to the public.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+
+                              <AlertDialogFooter>
+                                <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+
+                                <AlertDialogAction
+                                  disabled={isPending}
+                                  onClick={(e) => handleSetRecipeStatus(recipe.id, 'archived', e)}>
+                                  {isPending ? (
+                                    <>
+                                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                      Archiving...
+                                    </>
+                                  ) : (
+                                    'Archive'
+                                  )}
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        )}
 
                         <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
                           <AlertDialogTrigger asChild>

@@ -43,7 +43,7 @@ export async function getMyRecipes(params: GetMyRecipesParams) {
       },
       limit: limit || DATA_PER_PAGE,
       offset: offset || 0,
-      orderBy: desc(recipes.updatedAt),
+      orderBy: desc(recipes.createdAt),
     });
 
     return {
