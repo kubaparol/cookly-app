@@ -23,6 +23,10 @@ interface Comment {
     id: string;
     title: string;
     imageUrl: string;
+    author: {
+      firstName: string | null;
+      lastName: string | null;
+    };
   };
   author: {
     firstName: string | null;
@@ -103,7 +107,9 @@ export function CommentsMade({ comments }: CommentsMadeProps) {
                 {comment.recipe.title}
                 <ExternalLink className="h-3 w-3 flex-shrink-0" />
               </Link>
-              <p className="text-xs text-muted-foreground">By {comment.author.firstName}</p>
+              <p className="text-xs text-muted-foreground">
+                By {comment.recipe.author.firstName} {comment.recipe.author.lastName}
+              </p>
             </div>
           </div>
 

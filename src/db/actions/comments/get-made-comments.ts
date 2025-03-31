@@ -23,6 +23,14 @@ export async function getMadeComments() {
             title: true,
             imageUrl: true,
           },
+          with: {
+            author: {
+              columns: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
         },
         author: {
           columns: {
