@@ -4,8 +4,10 @@ import dayjs from 'dayjs';
 import {
   AlertTriangle,
   Archive,
+  ArchiveRestore,
   ArrowUpDown,
   Calendar,
+  CircleCheck,
   Edit,
   Eye,
   Loader2,
@@ -257,23 +259,27 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-                        <DropdownMenuItem asChild>
-                          <Link href={ProjectUrls.recipe(recipe.id)}>
-                            <Eye className="mr-2 h-4 w-4" />
-                            View
-                          </Link>
-                        </DropdownMenuItem>
+                        {recipe.status !== 'archived' && (
+                          <>
+                            <DropdownMenuItem asChild>
+                              <Link href={ProjectUrls.recipe(recipe.id)}>
+                                <Eye className="mr-2 h-4 w-4" />
+                                View
+                              </Link>
+                            </DropdownMenuItem>
 
-                        <DropdownMenuItem asChild>
-                          <Link href={ProjectUrls.editRecipe(recipe.id)}>
-                            <Edit className="mr-2 h-4 w-4" />
-                            Edit
-                          </Link>
-                        </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                              <Link href={ProjectUrls.editRecipe(recipe.id)}>
+                                <Edit className="mr-2 h-4 w-4" />
+                                Edit
+                              </Link>
+                            </DropdownMenuItem>
 
-                        <DropdownMenuSeparator />
+                            <DropdownMenuSeparator />
+                          </>
+                        )}
 
-                        {(recipe.status === 'archived' || recipe.status === 'draft') && (
+                        {recipe.status === 'draft' && (
                           <>
                             <AlertDialog
                               open={showSetStatusDialog === 'publish'}
@@ -282,7 +288,7 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
                               }>
                               <AlertDialogTrigger asChild>
                                 <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                                  <Archive className="mr-2 h-4 w-4" />
+                                  <CircleCheck className="mr-2 h-4 w-4" />
                                   Publish
                                 </DropdownMenuItem>
                               </AlertDialogTrigger>
@@ -319,7 +325,7 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
                           </>
                         )}
 
-                        {(recipe.status === 'archived' || recipe.status === 'published') && (
+                        {recipe.status === 'published' && (
                           <AlertDialog
                             open={showSetStatusDialog === 'draft'}
                             onOpenChange={(open) => setShowSetStatusDialog(open ? 'draft' : null)}>
@@ -394,6 +400,46 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
                                     </>
                                   ) : (
                                     'Archive'
+                                  )}
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        )}
+
+                        {recipe.status === 'archived' && (
+                          <AlertDialog
+                            open={showSetStatusDialog === 'draft'}
+                            onOpenChange={(open) => setShowSetStatusDialog(open ? 'draft' : null)}>
+                            <AlertDialogTrigger asChild>
+                              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                <ArchiveRestore className="mr-2 h-4 w-4" />
+                                Restore
+                              </DropdownMenuItem>
+                            </AlertDialogTrigger>
+
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action will set the recipe <b>{recipe.title}</b> to draft
+                                  status and you will be able to edit it before publishing it again.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+
+                              <AlertDialogFooter>
+                                <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+
+                                <AlertDialogAction
+                                  disabled={isPending}
+                                  onClick={(e) => handleSetRecipeStatus(recipe.id, 'draft', e)}>
+                                  {isPending ? (
+                                    <>
+                                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                      Restoring...
+                                    </>
+                                  ) : (
+                                    'Restore'
                                   )}
                                 </AlertDialogAction>
                               </AlertDialogFooter>
