@@ -49,8 +49,15 @@ export const recipes = pgTable('recipes', {
   carbs: integer(),
   fat: integer(),
   termsAccepted: boolean().notNull().default(false),
-  averageRating: doublePrecision().default(0),
+  averageRating: doublePrecision().notNull().default(0),
+  status: text({ enum: ['draft', 'published', 'archived'] })
+    .notNull()
+    .default('published'),
   createdAt: timestamp().defaultNow().notNull(),
+  updatedAt: timestamp()
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => new Date()),
 });
 
 export const recipesRelations = relations(recipes, ({ one, many }) => ({
@@ -65,3 +72,5 @@ export const recipesRelations = relations(recipes, ({ one, many }) => ({
   tips: many(tips),
   comments: many(comments),
 }));
+
+export type RecipeStatus = (typeof recipes.status.enumValues)[number];
