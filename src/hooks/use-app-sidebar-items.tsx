@@ -1,4 +1,4 @@
-import { LayoutDashboardIcon, LucideIcon, ScrollText, SettingsIcon } from 'lucide-react';
+import { Heart, LayoutDashboardIcon, LucideIcon, ScrollText, SettingsIcon } from 'lucide-react';
 import { useMemo } from 'react';
 
 import { ProjectUrls } from '@/constants/urls';
@@ -21,6 +21,11 @@ export const useAppSidebarItems = () => {
         title: 'My Recipes',
         url: ProjectUrls.myRecipes,
         icon: ScrollText,
+      },
+      {
+        title: 'Favorite Recipes',
+        url: ProjectUrls.favoriteRecipes,
+        icon: Heart,
       },
     ],
     [],
