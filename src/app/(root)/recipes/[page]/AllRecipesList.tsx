@@ -63,12 +63,16 @@ async function AllRecipesLoader(props: PageProps) {
             key={index}
             id={recipe.id}
             title={recipe.title}
+            description={recipe.description || ''}
             imageUrl={recipe.imageUrl}
             cookingTime={getTotalCookingTime({
               preparationTime: recipe.preparationTime,
               cookingTime: recipe.cookingTime,
               restTime: recipe.restTime || 0,
             })}
+            servings={recipe.servings}
+            averageRating={recipe.averageRating || 0}
+            cuisineType={recipe.cuisineType}
             difficulty={recipe.difficulty}
             dietaryTags={recipe.dietaryTags}
           />

@@ -4,13 +4,12 @@ import { Suspense } from 'react';
 
 import { useRecipeSearchParams } from '@/hooks';
 
-import { calculateOffset, getTotalCookingTime } from '@/utils';
+import { calculateOffset } from '@/utils';
 
 import { DATA_PER_PAGE, ProjectUrls } from '@/constants';
 
 import { getMyRecipes } from '@/db';
 
-import { RecipeCard } from '@/components/modules/recipes/RecipeCard';
 import StatusCard from '@/components/shared/StatusCard';
 import { RecipesSkeleton } from '@/components/shared/skeletons';
 import { PaginationWithLinks } from '@/components/ui/pagination-with-links';
@@ -88,7 +87,7 @@ async function MyRecipesLoader(props: PageProps) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {recipes.data.map((recipe, index) => (
+        {/* {recipes.data.map((recipe, index) => (
           <RecipeCard
             key={index}
             id={recipe.id}
@@ -104,7 +103,7 @@ async function MyRecipesLoader(props: PageProps) {
             isAuthor={user?.id === recipe.authorId}
             openInNewTab
           />
-        ))}
+        ))} */}
       </div>
 
       <PaginationWithLinks
