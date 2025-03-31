@@ -6,6 +6,7 @@ import {
   Archive,
   ArchiveRestore,
   ArrowUpDown,
+  Bookmark,
   Calendar,
   CircleCheck,
   Edit,
@@ -64,6 +65,7 @@ interface UserRecipesTableProps {
     averageRating: number;
     status: RecipeStatus;
     updatedAt: Date;
+    favoritesCount: number;
   }[];
   hasSearchTerm: boolean;
 }
@@ -168,12 +170,12 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
                 </div>
               </TableHead>
 
-              {/* <TableHead className="hidden xl:table-cell">
-              <div className="flex cursor-pointer items-center" onClick={() => {}}>
-                Stats
-                <ArrowUpDown className="ml-2 h-4 w-4" />
-              </div>
-            </TableHead> */}
+              <TableHead className="hidden xl:table-cell">
+                <div className="flex cursor-pointer items-center" onClick={() => {}}>
+                  Stats
+                  <ArrowUpDown className="ml-2 h-4 w-4" />
+                </div>
+              </TableHead>
 
               <TableHead className="w-[100px] text-right">Actions</TableHead>
             </TableRow>
@@ -213,6 +215,7 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
 
                   <TableCell>
                     <div className="font-medium">{recipe.title}</div>
+
                     <div className="mt-1 flex items-center">
                       <StarRating rating={recipe.averageRating} size="sm" />
                       <span className="ml-1 text-xs text-muted-foreground">
@@ -227,25 +230,25 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
 
                   <TableCell className="hidden lg:table-cell">
                     <div className="flex items-center">
-                      <Calendar className="mr-2 h-4 w-4 text-muted-foreground" />
-                      <span className="text-xs">
+                      <Calendar className="mr-2 size-4 text-muted-foreground" />
+                      <span className="text-sm">
                         {dayjs(recipe.updatedAt).format('DD.MM.YYYY')}
                       </span>
                     </div>
                   </TableCell>
 
-                  {/* <TableCell className="hidden xl:table-cell">
-                  <div className="flex items-center space-x-4">
-                    <div className="flex items-center text-xs">
-                      <Eye className="mr-1 h-3.5 w-3.5 text-muted-foreground" />
-                      {recipe.views || 0}
+                  <TableCell className="hidden xl:table-cell">
+                    <div className="flex items-center space-x-4">
+                      <div className="flex items-center text-sm">
+                        <Eye className="mr-1 size-4 text-muted-foreground" />
+                        {/* {recipe.views || 0} */}0
+                      </div>
+                      <div className="flex items-center text-sm">
+                        <Bookmark className="mr-1 size-4 text-muted-foreground" />
+                        {recipe.favoritesCount}
+                      </div>
                     </div>
-                    <div className="flex items-center text-xs">
-                      <Bookmark className="mr-1 h-3.5 w-3.5 text-muted-foreground" />
-                      {recipe.saves || 0}
-                    </div>
-                  </div>
-                </TableCell> */}
+                  </TableCell>
 
                   <TableCell className="text-right">
                     <DropdownMenu>

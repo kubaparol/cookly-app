@@ -1,14 +1,14 @@
 'use server';
 
 import { currentUser } from '@clerk/nextjs/server';
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, sql } from 'drizzle-orm';
 
 import { createRecipeSqlFilters, handleError } from '@/utils';
 
 import { DATA_PER_PAGE } from '@/constants';
 
 import { db } from '@/db/drizzle';
-import { recipes } from '@/db/schema';
+import { favorites, recipes } from '@/db/schema';
 
 import { GetMyRecipesParams } from './types';
 
@@ -31,20 +31,25 @@ export async function getMyRecipes(params: GetMyRecipesParams) {
 
     const totalCount = countResult.length;
 
-    const recipesResult = await db.query.recipes.findMany({
-      where: and(...filters, ...[eq(recipes.authorId, user.id)]),
-      columns: {
-        id: true,
-        title: true,
-        imageUrl: true,
-        averageRating: true,
-        status: true,
-        updatedAt: true,
-      },
-      limit: limit || DATA_PER_PAGE,
-      offset: offset || 0,
-      orderBy: desc(recipes.createdAt),
-    });
+    const recipesResult = await db
+      .select({
+        id: recipes.id,
+        title: recipes.title,
+        imageUrl: recipes.imageUrl,
+        averageRating: recipes.averageRating,
+        status: recipes.status,
+        updatedAt: recipes.updatedAt,
+        favoritesCount: sql<number>`cast(count(distinct ${favorites.userId}) as int)`.as(
+          'favoritesCount',
+        ),
+      })
+      .from(recipes)
+      .leftJoin(favorites, eq(favorites.recipeId, recipes.id))
+      .where(and(...filters, eq(recipes.authorId, user.id)))
+      .groupBy(recipes.id)
+      .limit(limit || DATA_PER_PAGE)
+      .offset(offset || 0)
+      .orderBy(desc(recipes.createdAt));
 
     return {
       count: totalCount,
