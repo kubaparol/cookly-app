@@ -67,6 +67,7 @@ interface UserRecipesTableProps {
     averageRating: number;
     status: RecipeStatus;
     updatedAt: Date;
+    viewsCount: number;
     favoritesCount: number;
     commentsCount: number;
   }[];
@@ -244,7 +245,7 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
                     <div className="flex items-center space-x-4">
                       <div className="flex items-center text-sm">
                         <Eye className="mr-1 size-4 text-muted-foreground" />
-                        {/* {recipe.views || 0} */}0
+                        {recipe.viewsCount || 0}
                       </div>
                       <div className="flex items-center text-sm">
                         <MessageCircle className="mr-1 size-4 text-muted-foreground" />
