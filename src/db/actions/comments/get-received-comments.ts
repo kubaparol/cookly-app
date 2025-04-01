@@ -5,11 +5,13 @@ import { and, asc, desc, eq, inArray } from 'drizzle-orm';
 
 import { createCommentSqlFilters, handleError } from '@/utils';
 
+import { DATA_PER_PAGE } from '@/constants';
+
 import { GetCommentsParams, comments, commentsReplies, recipes } from '@/db';
 import { db } from '@/db/drizzle';
 
 export async function getReceivedComments(params: GetCommentsParams) {
-  const { sortBy, status, ...rest } = params;
+  const { limit, offset, sortBy, status, ...rest } = params;
 
   try {
     const user = await currentUser();
@@ -88,6 +90,8 @@ export async function getReceivedComments(params: GetCommentsParams) {
         },
       },
       orderBy: orderByClause,
+      limit: limit || DATA_PER_PAGE,
+      offset: offset || 0,
     });
 
     let filteredComments = receivedComments;

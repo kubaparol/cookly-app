@@ -121,7 +121,7 @@ export default function CommentsFilters({ pathPattern }: CommentsFiltersProps) {
   };
 
   return (
-    <div className="mb-4 grid grid-cols-1 gap-2 md:grid-cols-2 lg:flex">
+    <div className="mb-4 grid grid-cols-2 gap-2 lg:flex">
       <Select value={draftValues.rating} onValueChange={(value) => applyFilters('rating', value)}>
         <SelectTrigger className="lg:w-[150px]">
           <SelectValue placeholder="Filter by Rating" />

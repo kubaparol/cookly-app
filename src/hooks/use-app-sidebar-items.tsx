@@ -16,8 +16,14 @@ export interface AppSidebarItem {
   icon: LucideIcon;
 }
 
+export interface AppSidebarGroup {
+  title: string;
+  icon: LucideIcon;
+  items: Omit<AppSidebarItem, 'icon'>[];
+}
+
 export const useAppSidebarItems = () => {
-  const main = useMemo<AppSidebarItem[]>(
+  const main = useMemo<(AppSidebarItem | AppSidebarGroup)[]>(
     () => [
       {
         title: 'Dashboard',
@@ -36,8 +42,17 @@ export const useAppSidebarItems = () => {
       },
       {
         title: 'Comments',
-        url: ProjectUrls.comments,
         icon: MessageCircle,
+        items: [
+          {
+            title: 'Comments Received',
+            url: ProjectUrls.commentsReceived,
+          },
+          {
+            title: 'Comments Made',
+            url: ProjectUrls.commentsMade,
+          },
+        ],
       },
     ],
     [],

@@ -360,22 +360,20 @@ export function CommentsSkeleton() {
           <Skeleton className="mb-2 h-10 w-48" />
           <Skeleton className="h-5 w-72" />
         </div>
-        <div className="flex gap-2">
-          <Skeleton className="h-6 w-24" />
-          <Skeleton className="h-6 w-24" />
-        </div>
       </div>
 
       <div className="space-y-6">
-        <div className="mb-6 flex items-center justify-between">
-          <Skeleton className="h-10 w-48" />
-          <Skeleton className="h-10 w-64" />
-        </div>
+        <div className="mb-4 space-y-2">
+          <div className="w-full sm:max-w-[400px]">
+            <Skeleton className="h-10" />
+          </div>
 
-        <div className="mb-6 flex gap-2">
-          <Skeleton className="h-8 w-32" />
-          <Skeleton className="h-8 w-32" />
-          <Skeleton className="h-8 w-32" />
+          <div className="mb-4 grid grid-cols-2 gap-2 lg:flex">
+            <Skeleton className="h-8 min-w-[150px]" />
+            <Skeleton className="h-8 min-w-[150px]" />
+            <Skeleton className="h-8 min-w-[150px]" />
+            <Skeleton className="h-8 min-w-[150px]" />
+          </div>
         </div>
 
         <Card>

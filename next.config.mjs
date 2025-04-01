@@ -32,6 +32,16 @@ const nextConfig = {
       destination: '/favorite-recipes/1',
       permanent: true,
     },
+    {
+      source: '/comments/received',
+      destination: '/comments/received/1',
+      permanent: true,
+    },
+    {
+      source: '/comments/made',
+      destination: '/comments/made/1',
+      permanent: true,
+    },
   ],
 };
 
