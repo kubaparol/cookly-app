@@ -26,7 +26,7 @@ export async function replyToComment(
       authorId: user.id,
     });
 
-    revalidatePath(ProjectUrls.comments);
+    revalidatePath(ProjectUrls.commentsReceived);
     revalidatePath(ProjectUrls.recipe(comment.recipeId));
 
     return {
