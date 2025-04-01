@@ -13,7 +13,7 @@ export const ProjectUrls = Object.freeze({
   dashboard: '/dashboard',
   myRecipes: '/my-recipes',
   favoriteRecipes: '/favorite-recipes',
-  commentsMade: '/comments',
+  commentsMade: '/comments/made',
   commentsReceived: '/comments/received',
   createRecipe: '/my-recipe/create',
   editRecipe: (id: string) => `/my-recipe/${id}/edit`,

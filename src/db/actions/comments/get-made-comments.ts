@@ -5,17 +5,13 @@ import { and, asc, desc, eq } from 'drizzle-orm';
 
 import { createCommentSqlFilters, handleError } from '@/utils';
 
+import { DATA_PER_PAGE } from '@/constants';
+
 import { GetCommentsParams, comments } from '@/db';
 import { db } from '@/db/drizzle';
 
 export async function getMadeComments(params: GetCommentsParams) {
-  const {
-    // limit,
-    // offset,
-    sortBy,
-    status,
-    ...rest
-  } = params;
+  const { limit, offset, sortBy, status, ...rest } = params;
 
   try {
     const user = await currentUser();
@@ -94,8 +90,8 @@ export async function getMadeComments(params: GetCommentsParams) {
         },
       },
       orderBy: orderByClause,
-      // limit: limit || DATA_PER_PAGE,
-      // offset: offset || 0,
+      limit: limit || DATA_PER_PAGE,
+      offset: offset || 0,
     });
 
     let filteredComments = madeComments;
