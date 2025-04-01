@@ -8,3 +8,4 @@ export * from './steps';
 export * from './substitutions';
 export * from './tips';
 export * from './users';
+export * from './views';
