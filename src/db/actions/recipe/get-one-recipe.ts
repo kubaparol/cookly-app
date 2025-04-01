@@ -17,6 +17,8 @@ import {
   tips,
 } from '@/db/schema';
 
+import { addView } from '../views';
+
 export type Recipe = InferSelectModel<typeof recipes> & {
   author: {
     clerkId: string;
@@ -55,6 +57,8 @@ export type Recipe = InferSelectModel<typeof recipes> & {
 export async function getOneRecipe(id: string) {
   try {
     const user = await currentUser();
+
+    await addView(id);
 
     return await db.query.recipes.findFirst({
       where: and(eq(recipes.id, id), eq(recipes.status, 'published')),

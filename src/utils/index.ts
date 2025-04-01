@@ -3,5 +3,6 @@ export * from './cn';
 export * from './convert-file-to-url';
 export * from './create-comment-sql-filters';
 export * from './create-recipe-sql-filters';
+export * from './get-ip-address';
 export * from './get-total-cooking-time';
 export * from './handle-error';
