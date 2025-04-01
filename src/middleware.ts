@@ -9,6 +9,7 @@ const isPublicRoute = createRouteMatcher([
   `${ProjectUrls.signUp}(.*)`,
   `${ProjectUrls.forgotPassword}(.*)`,
   `${ProjectUrls.recipes}(.*)`,
+  `${ProjectUrls.recipe(':id')}(.*)`,
 
   // api routes
   '/api/uploadthing',
