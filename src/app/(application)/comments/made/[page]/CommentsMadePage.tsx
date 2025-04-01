@@ -38,9 +38,13 @@ async function CommentsLoader({ params, searchParams }: PageProps) {
         </div>
       </div>
 
-      <Search placeholder="Search comments..." />
+      <div className="mb-4 space-y-2">
+        <div className="w-full sm:max-w-[400px]">
+          <Search placeholder="Search comments..." />
+        </div>
 
-      <CommentsFilters />
+        <CommentsFilters />
+      </div>
 
       <CommentsMade comments={made?.data ?? []} />
 

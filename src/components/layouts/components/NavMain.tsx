@@ -29,6 +29,10 @@ export function NavMain({
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
   const pathname = usePathname();
 
+  const isActive = (url: string) => {
+    return pathname.startsWith(url);
+  };
+
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent className="flex flex-col gap-6">
@@ -50,7 +54,7 @@ export function NavMain({
           {items.map((item) => (
             <>
               {'items' in item ? (
-                <Collapsible>
+                <Collapsible defaultOpen={item.items.some((item) => isActive(item.url))}>
                   <SidebarMenuItem>
                     <CollapsibleTrigger asChild>
                       <SidebarMenuButton className="group">
@@ -69,8 +73,7 @@ export function NavMain({
                               asChild
                               tooltip={item.title}
                               className={cn(
-                                pathname.startsWith(item.url) &&
-                                  'pointer-events-none bg-primary/30',
+                                isActive(item.url) && 'pointer-events-none bg-primary/30',
                               )}>
                               <Link href={item.url}>
                                 <span>{item.title}</span>
@@ -87,9 +90,7 @@ export function NavMain({
                   <SidebarMenuButton
                     asChild
                     tooltip={item.title}
-                    className={cn(
-                      pathname.startsWith(item.url) && 'pointer-events-none bg-primary/30',
-                    )}>
+                    className={cn(isActive(item.url) && 'pointer-events-none bg-primary/30')}>
                     <Link href={item.url}>
                       {item.icon && <item.icon />}
                       <span>{item.title}</span>
