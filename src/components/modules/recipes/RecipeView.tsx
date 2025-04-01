@@ -40,6 +40,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+import { CommentReply } from '../comments/CommentReply';
+import { AddToFavoritesButton } from './AddToFavoritesButton';
+
 type RecipeViewProps =
   | Recipe
   | {
@@ -246,11 +249,7 @@ export default function RecipeView(props: RecipeViewProps) {
             priority
           />
           <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-black/60 to-transparent"></div>
-          <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4">
-            {/* <button className="rounded-full bg-background/90 p-1.5 shadow-md transition-all hover:scale-105 hover:bg-background sm:p-2">
-              <Heart className="h-4 w-4 text-rose-500 sm:h-5 sm:w-5" />
-            </button> */}
-          </div>
+          <AddToFavoritesButton recipeId={recipe.id} isFavorite={recipe.favorites.length > 0} />
         </div>
       </div>
 
@@ -735,6 +734,16 @@ export default function RecipeView(props: RecipeViewProps) {
                     <p className="text-sm text-foreground sm:text-base">{comment.content}</p>
                   </div>
                 </div>
+
+                {comment.replies && comment.replies.length > 0 && (
+                  <CommentReply
+                    imageUrl={comment.replies[0].author?.imageUrl}
+                    firstName={comment.replies[0].author?.firstName}
+                    lastName={comment.replies[0].author?.lastName}
+                    content={comment.replies[0].content}
+                    createdAt={comment.replies[0].createdAt}
+                  />
+                )}
               </CardContent>
             </Card>
           ))}

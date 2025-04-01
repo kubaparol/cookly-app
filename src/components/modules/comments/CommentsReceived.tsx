@@ -17,6 +17,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
+import { CommentReply } from './CommentReply';
+
 dayjs.extend(relativeTime);
 
 interface Comment {
@@ -149,21 +151,10 @@ export function CommentsReceived({ comments }: CommentsReceivedProps) {
 
           {/* Reply section */}
           {comment.replies && comment.replies.length > 0 && (
-            <div className="mt-4 border-l-2 border-muted py-2 pl-4">
-              <div className="flex items-start justify-between">
-                <div className="flex w-full items-start gap-2">
-                  <div className="min-w-0 flex-1">
-                    <div className="mb-1 flex items-center gap-2">
-                      <span className="text-sm font-medium">Your reply</span>
-                      <span className="text-xs text-muted-foreground">
-                        {formatDate(comment.replies[0].createdAt)}
-                      </span>
-                    </div>
-                    <p className="break-words text-sm">{comment.replies[0].content}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <CommentReply
+              content={comment.replies[0].content}
+              createdAt={comment.replies[0].createdAt}
+            />
           )}
 
           {/* Reply button and form */}

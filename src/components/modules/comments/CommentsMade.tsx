@@ -9,7 +9,8 @@ import Link from 'next/link';
 import { ProjectUrls } from '@/constants';
 
 import { StarRating } from '@/components/base/StarRating';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
+import { CommentReply } from './CommentReply';
 
 dayjs.extend(relativeTime);
 
@@ -119,34 +120,13 @@ export function CommentsMade({ comments }: CommentsMadeProps) {
 
           {/* Reply section */}
           {comment.replies && comment.replies.length > 0 && (
-            <div className="mt-4 border-l-2 border-muted py-2 pl-4">
-              <div className="flex items-start justify-between">
-                <div className="flex w-full items-start gap-2">
-                  {comment.replies[0].author && comment.replies[0].author.imageUrl && (
-                    <Avatar className="h-8 w-8 flex-shrink-0">
-                      <AvatarImage src={comment.replies[0].author.imageUrl} />
-                      <AvatarFallback>
-                        {comment.replies[0].author.firstName?.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                  )}
-
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-sm font-medium">
-                        {comment.replies[0].author?.firstName} {comment.replies[0].author?.lastName}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {formatDate(comment.replies[0].createdAt)}
-                      </span>
-                    </div>
-                    <p className="mt-1 break-words text-sm md:text-base">
-                      {comment.replies[0].content}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <CommentReply
+              imageUrl={comment.replies[0].author?.imageUrl}
+              firstName={comment.replies[0].author?.firstName}
+              lastName={comment.replies[0].author?.lastName}
+              content={comment.replies[0].content}
+              createdAt={comment.replies[0].createdAt}
+            />
           )}
         </div>
       ))}
