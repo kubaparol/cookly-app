@@ -73,7 +73,6 @@ export const useRecipeFormSteps = () => {
     },
   ] as const;
 
-  const stepsLength = steps.length;
   const currentStep = steps[currentStepIndex];
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === steps.length - 1;
@@ -98,7 +97,6 @@ export const useRecipeFormSteps = () => {
 
   return {
     currentStepIndex,
-    stepsLength,
     currentStep,
     isFirstStep,
     isLastStep,

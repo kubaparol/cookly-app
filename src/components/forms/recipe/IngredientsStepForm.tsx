@@ -54,7 +54,7 @@ export default function IngredientsStepForm() {
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[50px]"></TableHead>
-                <TableHead className="w-[150px]">Quantity</TableHead>
+                <TableHead className="w-[160px]">Quantity</TableHead>
                 <TableHead className="w-[100px]">Unit</TableHead>
                 <TableHead className="w-[150px]">Ingredient</TableHead>
                 <TableHead className="w-[50px]"></TableHead>
@@ -80,7 +80,7 @@ export default function IngredientsStepForm() {
                             </div>
                           </TableCell>
 
-                          <TableCell className="w-fit min-w-[150px]">
+                          <TableCell className="w-fit min-w-[160px]">
                             <FormField
                               control={control}
                               name={`ingredients.${index}.quantity`}

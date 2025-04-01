@@ -27,14 +27,13 @@ export default function RecipeForm(props: RecipeFormProps) {
   const { type, id, defaultValues, isSuccess = false } = props;
 
   const [isCreationSuccess, setIsCreationSuccess] = useState(isSuccess);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
 
   const {
     currentStepIndex,
-    stepsLength,
     currentStep,
     isFirstStep,
     isLastStep,
@@ -55,9 +54,9 @@ export default function RecipeForm(props: RecipeFormProps) {
       cuisineType: '',
       mealType: '',
       categories: [],
-      preparationTime: '',
-      cookingTime: '',
-      servings: '',
+      preparationTime: 0,
+      cookingTime: 0,
+      servings: 0,
       ingredients: [{ name: '', quantity: '', unit: '' }],
       steps: [{ description: '' }],
       difficulty: '',
@@ -88,7 +87,7 @@ export default function RecipeForm(props: RecipeFormProps) {
       goToNextStep();
     } else {
       const formData = methods.getValues();
-      setIsSubmitting(true);
+      // setIsSubmitting(true);
 
       try {
         if (type === 'Create') {
@@ -120,7 +119,7 @@ export default function RecipeForm(props: RecipeFormProps) {
           }
         }
       } finally {
-        setIsSubmitting(false);
+        // setIsSubmitting(false);
       }
     }
   }, [goToNextStep, id, isLastStep, methods, pathname, router, type]);

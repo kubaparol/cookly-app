@@ -1,5 +1,5 @@
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
-import { GripVertical, Plus, PlusCircle, Trash2, Upload } from 'lucide-react';
+import { GripVertical, Plus, Trash2, Upload } from 'lucide-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -124,7 +124,7 @@ export default function PreparationStepsForm() {
             </li>
             <li className="flex items-start">
               <span className="mr-2">•</span>
-              Include visual cues (e.g., "cook until golden brown")
+              Include visual cues (e.g., &quot;cook until golden brown&quot;)
             </li>
             <li className="flex items-start">
               <span className="mr-2">•</span>

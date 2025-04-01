@@ -18,38 +18,23 @@ export const basicInformationStepFormSchema = z.object({
 
 export const timeServingsStepFormSchema = z.object({
   preparationTime: z
-    .string()
+    .number()
     .min(1, 'Preparation time is required')
-    .regex(/^\d+$/, 'Must be a valid number')
-    .refine((value) => Number(value) >= 1, {
+    .refine((value) => value >= 1, {
       message: 'Must be at least 1 minute',
     }),
   cookingTime: z
-    .string()
+    .number()
     .min(1, 'Cooking time is required')
-    .regex(/^\d+$/, 'Must be a valid number')
     .refine((value) => Number(value) >= 1, {
       message: 'Must be at least 1 minute',
     }),
-  restTime: z
-    .string()
-    .regex(/^\d*$/, 'Must be a valid number')
-    .refine((value) => value === '' || Number(value) >= 1, {
-      message: 'Must be at least 1 minute',
-    })
-    .optional(),
-  activeTime: z
-    .string()
-    .regex(/^\d*$/, 'Must be a valid number')
-    .refine((value) => value === '' || Number(value) >= 1, {
-      message: 'Must be at least 1 minute',
-    })
-    .optional(),
+  restTime: z.number().optional(),
+  activeTime: z.number().optional(),
   servings: z
-    .string()
+    .number()
     .min(1, 'Number of servings is required')
-    .regex(/^\d*$/, 'Must be a valid number')
-    .refine((value) => value === '' || Number(value) >= 1, {
+    .refine((value) => value >= 1, {
       message: 'Must be at least 1 serving',
     }),
   servingSize: z.string().min(1, 'Serving size is required').optional(),

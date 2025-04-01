@@ -45,15 +45,15 @@ export default async function EditRecipePage(props: PageProps) {
             allergens: recipe.allergens || undefined,
             seasonality: recipe.seasonality || undefined,
             costLevel: recipe.costLevel || undefined,
-            preparationTime: recipe.preparationTime?.toString() || undefined,
-            cookingTime: recipe.cookingTime?.toString() || undefined,
-            servings: recipe.servings?.toString() || undefined,
+            preparationTime: recipe.preparationTime || undefined,
+            cookingTime: recipe.cookingTime || undefined,
+            servings: recipe.servings || undefined,
             ingredients: recipe.ingredients?.map((ingredient) => ({
               ...ingredient,
               quantity: ingredient.quantity.toString(),
             })),
-            restTime: recipe.restTime?.toString() || undefined,
-            activeTime: recipe.activeTime?.toString() || undefined,
+            restTime: recipe.restTime || undefined,
+            activeTime: recipe.activeTime || undefined,
           }}
         />
       )}

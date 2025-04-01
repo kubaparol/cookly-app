@@ -67,7 +67,7 @@ export default function TimeServingsStepForm() {
                     <div className="flex items-center justify-between">
                       <FormLabel className="flex items-center">
                         <span className="text-[18px] text-red-500">*</span>
-                        Preparation Time (minutes)
+                        Preparation Time
                         <TooltipProvider delayDuration={100}>
                           <Tooltip>
                             <TooltipTrigger asChild>
@@ -94,8 +94,8 @@ export default function TimeServingsStepForm() {
                         min={0}
                         max={120}
                         step={5}
-                        value={[Number(field.value)]}
-                        onValueChange={(value) => field.onChange(value[0].toString())}
+                        value={[field.value]}
+                        onValueChange={(value) => field.onChange(value[0])}
                       />
                     </FormControl>
 
@@ -112,7 +112,7 @@ export default function TimeServingsStepForm() {
                     <div className="flex items-center justify-between">
                       <FormLabel className="flex items-center">
                         <span className="text-[18px] text-red-500">*</span>
-                        Cooking Time (minutes)
+                        Cooking Time
                         <TooltipProvider delayDuration={100}>
                           <Tooltip>
                             <TooltipTrigger asChild>
@@ -139,8 +139,8 @@ export default function TimeServingsStepForm() {
                         min={0}
                         max={240}
                         step={5}
-                        value={[Number(field.value)]}
-                        onValueChange={(value) => field.onChange(value[0].toString())}
+                        value={[field.value]}
+                        onValueChange={(value) => field.onChange(value[0])}
                       />
                     </FormControl>
 
@@ -156,8 +156,7 @@ export default function TimeServingsStepForm() {
                   <FormItem>
                     <div className="flex items-center justify-between">
                       <FormLabel className="flex items-center">
-                        <span className="text-[18px] text-red-500">*</span>
-                        Rest Time (minutes)
+                        Rest Time
                         <TooltipProvider delayDuration={100}>
                           <Tooltip>
                             <TooltipTrigger asChild>
@@ -169,14 +168,16 @@ export default function TimeServingsStepForm() {
                             <TooltipContent>
                               <p className="max-w-xs">
                                 The time the food needs to rest before serving (e.g., letting meat
-                                rest)
+                                rest) (optional)
                               </p>
                             </TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
                       </FormLabel>
 
-                      <span className="text-sm font-medium">{field.value} min</span>
+                      {field.value && (
+                        <span className="text-sm font-medium">{field.value} min</span>
+                      )}
                     </div>
 
                     <FormControl>
@@ -185,8 +186,10 @@ export default function TimeServingsStepForm() {
                         min={0}
                         max={60}
                         step={5}
-                        value={[Number(field.value)]}
-                        onValueChange={(value) => field.onChange(value[0].toString())}
+                        value={[field.value || 0]}
+                        onValueChange={(value) =>
+                          field.onChange(value[0] === 0 ? undefined : value[0])
+                        }
                       />
                     </FormControl>
 
@@ -202,8 +205,7 @@ export default function TimeServingsStepForm() {
                   <FormItem>
                     <div className="flex items-center justify-between">
                       <FormLabel className="flex items-center">
-                        <span className="text-[18px] text-red-500">*</span>
-                        Active Time (minutes)
+                        Active Time
                         <TooltipProvider delayDuration={100}>
                           <Tooltip>
                             <TooltipTrigger asChild>
@@ -221,7 +223,9 @@ export default function TimeServingsStepForm() {
                         </TooltipProvider>
                       </FormLabel>
 
-                      <span className="text-sm font-medium">{field.value} min</span>
+                      {field.value && (
+                        <span className="text-sm font-medium">{field.value} min</span>
+                      )}
                     </div>
 
                     <FormControl>
@@ -230,8 +234,10 @@ export default function TimeServingsStepForm() {
                         min={0}
                         max={180}
                         step={5}
-                        value={[Number(field.value)]}
-                        onValueChange={(value) => field.onChange(value[0].toString())}
+                        value={[field.value || 0]}
+                        onValueChange={(value) =>
+                          field.onChange(value[0] === 0 ? undefined : value[0])
+                        }
                       />
                     </FormControl>
 
@@ -264,7 +270,7 @@ export default function TimeServingsStepForm() {
                   ) : null}
                   <div className="space-y-1">
                     <span className="text-sm text-muted-foreground">Total</span>
-                    <p className="text-lg font-medium">{totalTime} min</p>
+                    <p className="font-medium">{totalTime} min</p>
                   </div>
                 </div>
               </div>
@@ -311,8 +317,8 @@ export default function TimeServingsStepForm() {
                         min={1}
                         max={20}
                         step={1}
-                        value={[Number(field.value)]}
-                        onValueChange={(value) => field.onChange(value[0].toString())}
+                        value={[field.value]}
+                        onValueChange={(value) => field.onChange(value[0])}
                       />
                     </FormControl>
 

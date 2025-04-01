@@ -1,17 +1,13 @@
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
-import { GripVertical, Plus, PlusCircle, Trash2 } from 'lucide-react';
+import { TabsContent } from '@radix-ui/react-tabs';
+import { CalendarClock, GripVertical, Info, Plus, Scale, Trash2, Utensils } from 'lucide-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { allergens, costLevels, dietaryTags, difficultyLevels, seasons } from '@/constants';
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { InputNumeric } from '../../base/InputNumeric';
 import { Button } from '../../ui/button';
@@ -263,10 +259,10 @@ export default function AdditionalDetailsStepForm() {
 
           <Separator />
 
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Nutrition Information (Optional)</h3>
+          <div className="flex flex-col space-y-1.5">
+            <h4 className="font-semibold leading-none tracking-tight">Dietary Information</h4>
             <p className="text-sm text-muted-foreground">
-              Providing nutrition information helps users make informed choices
+              Help users with dietary restrictions find your recipe
             </p>
           </div>
 
@@ -361,178 +357,71 @@ export default function AdditionalDetailsStepForm() {
         </CardContent>
       </Card>
 
-      <Accordion
-        type="multiple"
-        defaultValue={['equipment', 'storage', 'substitutions', 'tips']}
-        className="w-full">
-        <AccordionItem value="equipment">
-          <AccordionTrigger>Equipment</AccordionTrigger>
-          <AccordionContent>
-            <div className="space-y-4">
-              <p className="text-sm text-muted-foreground">
-                List the equipment needed to prepare this recipe
-              </p>
+      <Card>
+        <CardHeader>
+          <CardTitle>Additional Information</CardTitle>
+          <CardDescription>Expand your recipe with helpful details</CardDescription>
+        </CardHeader>
 
-              <DragDropContext onDragEnd={handleEquipmentDragEnd}>
-                <Droppable droppableId="equipment">
-                  {(provided) => (
-                    <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-2">
-                      {equipmentFields.map((field, index) => (
-                        <Draggable key={field.id} draggableId={field.id} index={index}>
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              className="flex items-center gap-2 rounded-md border p-2">
-                              <div {...provided.dragHandleProps} className="cursor-grab">
-                                <GripVertical className="h-4 w-4 text-muted-foreground" />
-                              </div>
+        <CardContent>
+          <div className="space-y-4">
+            <Tabs defaultValue="equipment" className="w-full">
+              <TabsList className="mb-6 grid w-full grid-cols-4">
+                <TabsTrigger value="equipment" className="flex items-center gap-2">
+                  <Utensils className="h-4 w-4" />
+                  <span className="hidden sm:inline">Equipment</span>
+                  <span className="sm:hidden">Equip.</span>
+                </TabsTrigger>
+                <TabsTrigger value="storage" className="flex items-center gap-2">
+                  <CalendarClock className="h-4 w-4" />
+                  <span className="hidden sm:inline">Storage</span>
+                  <span className="sm:hidden">Store</span>
+                </TabsTrigger>
+                <TabsTrigger value="substitutions" className="flex items-center gap-2">
+                  <Scale className="h-4 w-4" />
+                  <span className="hidden sm:inline">Substitutions</span>
+                  <span className="sm:hidden">Subs</span>
+                </TabsTrigger>
+                <TabsTrigger value="tips" className="flex items-center gap-2">
+                  <Info className="h-4 w-4" />
+                  <span className="hidden sm:inline">Tips & Tricks</span>
+                  <span className="sm:hidden">Tips</span>
+                </TabsTrigger>
+              </TabsList>
 
-                              <FormField
-                                control={control}
-                                name={`equipment.${index}.name`}
-                                render={({ field }) => (
-                                  <FormItem className="w-full">
-                                    <FormControl>
-                                      <Input
-                                        {...field}
-                                        placeholder="e.g., Blender, Food processor"
-                                      />
-                                    </FormControl>
+              <TabsContent value="equipment" className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  List the equipment needed to prepare this recipe
+                </p>
 
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
+                <DragDropContext onDragEnd={handleEquipmentDragEnd}>
+                  <Droppable droppableId="equipment">
+                    {(provided) => (
+                      <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        className="space-y-2">
+                        {equipmentFields.map((field, index) => (
+                          <Draggable key={field.id} draggableId={field.id} index={index}>
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                className="flex items-center gap-2 rounded-md border p-2">
+                                <div {...provided.dragHandleProps} className="cursor-grab">
+                                  <GripVertical className="h-4 w-4 text-muted-foreground" />
+                                </div>
 
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => removeEquipment(index)}
-                                className="h-8 w-8">
-                                <Trash2 className="h-4 w-4 text-muted-foreground" />
-                                <span className="sr-only">Remove</span>
-                              </Button>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
-
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => appendEquipment({ name: '' })}
-                size="sm">
-                <Plus className="mr-2 h-4 w-4" />
-                Add Equipment
-              </Button>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem value="storage">
-          <AccordionTrigger>Storage & Make Ahead</AccordionTrigger>
-          <AccordionContent>
-            <div className="space-y-4">
-              <FormField
-                control={control}
-                name="storageInstructions"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Storage Instructions</FormLabel>
-
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        placeholder="e.g., Store in an airtight container in the refrigerator for up to 3 days."
-                        className="min-h-[100px]"
-                      />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={control}
-                name="reheatingInstructions"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Reheating Instructions</FormLabel>
-
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        placeholder="e.g., Microwave on high for 2-3 minutes, stirring halfway through."
-                        className="min-h-[100px]"
-                      />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={control}
-                name="makeAheadInstructions"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Make-Ahead Instructions</FormLabel>
-
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        placeholder="e.g., Can be prepared up to 24 hours in advance. Store in the refrigerator and bring to room temperature before serving."
-                        className="min-h-[100px]"
-                      />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem value="substitutions">
-          <AccordionTrigger>Substitutions</AccordionTrigger>
-          <AccordionContent>
-            <div className="space-y-4">
-              <p className="text-sm text-muted-foreground">
-                Suggest ingredient substitutions for dietary restrictions or availability
-              </p>
-
-              <DragDropContext onDragEnd={handleSubstitutionsDragEnd}>
-                <Droppable droppableId="substitutions">
-                  {(provided) => (
-                    <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-2">
-                      {substitutionFields.map((field, index) => (
-                        <Draggable key={field.id} draggableId={field.id} index={index}>
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              className="flex items-center gap-2 rounded-md border p-2">
-                              <div {...provided.dragHandleProps} className="cursor-grab">
-                                <GripVertical className="h-4 w-4 text-muted-foreground" />
-                              </div>
-
-                              <div className="grid flex-1 grid-cols-2 gap-2">
                                 <FormField
                                   control={control}
-                                  name={`substitutions.${index}.original`}
+                                  name={`equipment.${index}.name`}
                                   render={({ field }) => (
-                                    <FormItem>
+                                    <FormItem className="w-full">
                                       <FormControl>
-                                        <Input {...field} placeholder="Original Ingredient" />
+                                        <Input
+                                          {...field}
+                                          placeholder="e.g., Blender, Food processor"
+                                        />
                                       </FormControl>
 
                                       <FormMessage />
@@ -540,122 +429,557 @@ export default function AdditionalDetailsStepForm() {
                                   )}
                                 />
 
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => removeEquipment(index)}
+                                  className="h-8 w-8">
+                                  <Trash2 className="h-4 w-4 text-muted-foreground" />
+                                  <span className="sr-only">Remove</span>
+                                </Button>
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => appendEquipment({ name: '' })}
+                  size="sm">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Equipment
+                </Button>
+              </TabsContent>
+
+              <TabsContent value="storage" className="space-y-4">
+                <FormField
+                  control={control}
+                  name="storageInstructions"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Storage Instructions</FormLabel>
+
+                      <FormControl>
+                        <Textarea
+                          {...field}
+                          placeholder="e.g., Store in an airtight container in the refrigerator for up to 3 days."
+                          className="min-h-[100px]"
+                        />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={control}
+                  name="reheatingInstructions"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Reheating Instructions</FormLabel>
+
+                      <FormControl>
+                        <Textarea
+                          {...field}
+                          placeholder="e.g., Microwave on high for 2-3 minutes, stirring halfway through."
+                          className="min-h-[100px]"
+                        />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={control}
+                  name="makeAheadInstructions"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Make-Ahead Instructions</FormLabel>
+
+                      <FormControl>
+                        <Textarea
+                          {...field}
+                          placeholder="e.g., Can be prepared up to 24 hours in advance. Store in the refrigerator and bring to room temperature before serving."
+                          className="min-h-[100px]"
+                        />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </TabsContent>
+
+              <TabsContent value="substitutions" className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Suggest ingredient substitutions for dietary restrictions or availability
+                </p>
+
+                <DragDropContext onDragEnd={handleSubstitutionsDragEnd}>
+                  <Droppable droppableId="substitutions">
+                    {(provided) => (
+                      <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        className="space-y-2">
+                        {substitutionFields.map((field, index) => (
+                          <Draggable key={field.id} draggableId={field.id} index={index}>
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                className="flex items-center gap-2 rounded-md border p-2">
+                                <div {...provided.dragHandleProps} className="cursor-grab">
+                                  <GripVertical className="h-4 w-4 text-muted-foreground" />
+                                </div>
+
+                                <div className="grid flex-1 grid-cols-2 gap-2">
+                                  <FormField
+                                    control={control}
+                                    name={`substitutions.${index}.original`}
+                                    render={({ field }) => (
+                                      <FormItem>
+                                        <FormControl>
+                                          <Input {...field} placeholder="Original Ingredient" />
+                                        </FormControl>
+
+                                        <FormMessage />
+                                      </FormItem>
+                                    )}
+                                  />
+
+                                  <FormField
+                                    control={control}
+                                    name={`substitutions.${index}.substitute`}
+                                    render={({ field }) => (
+                                      <FormItem>
+                                        <FormControl>
+                                          <Input {...field} placeholder="Substitute Ingredient" />
+                                        </FormControl>
+
+                                        <FormMessage />
+                                      </FormItem>
+                                    )}
+                                  />
+                                </div>
+
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => removeSubstitution(index)}
+                                  className="h-8 w-8">
+                                  <Trash2 className="h-4 w-4 text-muted-foreground" />
+                                  <span className="sr-only">Remove</span>
+                                </Button>
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => appendSubstitution({ original: '', substitute: '' })}
+                  size="sm">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Substitution
+                </Button>
+              </TabsContent>
+
+              <TabsContent value="tips" className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Share helpful tips to make this recipe a success
+                </p>
+
+                <DragDropContext onDragEnd={handleTipsDragEnd}>
+                  <Droppable droppableId="tips">
+                    {(provided) => (
+                      <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        className="space-y-2">
+                        {tipFields.map((field, index) => (
+                          <Draggable key={field.id} draggableId={field.id} index={index}>
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                className="flex items-start gap-2 rounded-md border p-2">
+                                <div {...provided.dragHandleProps} className="mt-2 cursor-grab">
+                                  <GripVertical className="h-4 w-4 text-muted-foreground" />
+                                </div>
+
                                 <FormField
                                   control={control}
-                                  name={`substitutions.${index}.substitute`}
+                                  name={`tipsAndTricks.${index}.description`}
                                   render={({ field }) => (
-                                    <FormItem>
+                                    <FormItem className="w-full">
                                       <FormControl>
-                                        <Input {...field} placeholder="Substitute Ingredient" />
+                                        <Textarea
+                                          {...field}
+                                          placeholder="e.g., For best results, let the dough rest for at least 30 minutes."
+                                          className="min-h-[100px] w-full resize-y"
+                                        />
                                       </FormControl>
 
                                       <FormMessage />
                                     </FormItem>
                                   )}
                                 />
+
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => removeTip(index)}
+                                  className="h-8 w-8">
+                                  <Trash2 className="h-4 w-4 text-muted-foreground" />
+                                  <span className="sr-only">Remove</span>
+                                </Button>
                               </div>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
 
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => removeSubstitution(index)}
-                                className="h-8 w-8">
-                                <Trash2 className="h-4 w-4 text-muted-foreground" />
-                                <span className="sr-only">Remove</span>
-                              </Button>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => appendTip({ description: '' })}
+                  size="sm">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Tip
+                </Button>
+              </TabsContent>
+            </Tabs>
 
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => appendSubstitution({ original: '', substitute: '' })}
-                size="sm">
-                <Plus className="mr-2 h-4 w-4" />
-                Add Substitution
-              </Button>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
+            {/* <Accordion
+              type="multiple"
+              defaultValue={['equipment', 'storage', 'substitutions', 'tips']}
+              className="w-full">
+              <AccordionItem value="equipment">
+                <AccordionTrigger>Equipment</AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-4">
+                    <p className="text-sm text-muted-foreground">
+                      List the equipment needed to prepare this recipe
+                    </p>
 
-        <AccordionItem value="tips">
-          <AccordionTrigger>Tips & Tricks</AccordionTrigger>
-          <AccordionContent>
-            <div className="space-y-4">
-              <p className="text-sm text-muted-foreground">
-                Share helpful tips to make this recipe a success
-              </p>
+                    <DragDropContext onDragEnd={handleEquipmentDragEnd}>
+                      <Droppable droppableId="equipment">
+                        {(provided) => (
+                          <div
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                            className="space-y-2">
+                            {equipmentFields.map((field, index) => (
+                              <Draggable key={field.id} draggableId={field.id} index={index}>
+                                {(provided) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    className="flex items-center gap-2 rounded-md border p-2">
+                                    <div {...provided.dragHandleProps} className="cursor-grab">
+                                      <GripVertical className="h-4 w-4 text-muted-foreground" />
+                                    </div>
 
-              <DragDropContext onDragEnd={handleTipsDragEnd}>
-                <Droppable droppableId="tips">
-                  {(provided) => (
-                    <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-2">
-                      {tipFields.map((field, index) => (
-                        <Draggable key={field.id} draggableId={field.id} index={index}>
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              className="flex items-start gap-2 rounded-md border p-2">
-                              <div {...provided.dragHandleProps} className="mt-2 cursor-grab">
-                                <GripVertical className="h-4 w-4 text-muted-foreground" />
-                              </div>
+                                    <FormField
+                                      control={control}
+                                      name={`equipment.${index}.name`}
+                                      render={({ field }) => (
+                                        <FormItem className="w-full">
+                                          <FormControl>
+                                            <Input
+                                              {...field}
+                                              placeholder="e.g., Blender, Food processor"
+                                            />
+                                          </FormControl>
 
-                              <FormField
-                                control={control}
-                                name={`tipsAndTricks.${index}.description`}
-                                render={({ field }) => (
-                                  <FormItem className="w-full">
-                                    <FormControl>
-                                      <Textarea
-                                        {...field}
-                                        placeholder="e.g., For best results, let the dough rest for at least 30 minutes."
-                                        className="min-h-[100px] w-full resize-y"
-                                      />
-                                    </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
+                                    />
 
-                                    <FormMessage />
-                                  </FormItem>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() => removeEquipment(index)}
+                                      className="h-8 w-8">
+                                      <Trash2 className="h-4 w-4 text-muted-foreground" />
+                                      <span className="sr-only">Remove</span>
+                                    </Button>
+                                  </div>
                                 )}
-                              />
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
 
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => removeTip(index)}
-                                className="h-8 w-8">
-                                <Trash2 className="h-4 w-4 text-muted-foreground" />
-                                <span className="sr-only">Remove</span>
-                              </Button>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => appendEquipment({ name: '' })}
+                      size="sm">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add Equipment
+                    </Button>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
 
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => appendTip({ description: '' })}
-                size="sm">
-                <Plus className="mr-2 h-4 w-4" />
-                Add Tip
-              </Button>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+              <AccordionItem value="storage">
+                <AccordionTrigger>Storage & Make Ahead</AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-4">
+                    <FormField
+                      control={control}
+                      name="storageInstructions"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Storage Instructions</FormLabel>
+
+                          <FormControl>
+                            <Textarea
+                              {...field}
+                              placeholder="e.g., Store in an airtight container in the refrigerator for up to 3 days."
+                              className="min-h-[100px]"
+                            />
+                          </FormControl>
+
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={control}
+                      name="reheatingInstructions"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Reheating Instructions</FormLabel>
+
+                          <FormControl>
+                            <Textarea
+                              {...field}
+                              placeholder="e.g., Microwave on high for 2-3 minutes, stirring halfway through."
+                              className="min-h-[100px]"
+                            />
+                          </FormControl>
+
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={control}
+                      name="makeAheadInstructions"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Make-Ahead Instructions</FormLabel>
+
+                          <FormControl>
+                            <Textarea
+                              {...field}
+                              placeholder="e.g., Can be prepared up to 24 hours in advance. Store in the refrigerator and bring to room temperature before serving."
+                              className="min-h-[100px]"
+                            />
+                          </FormControl>
+
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="substitutions">
+                <AccordionTrigger>Substitutions</AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-4">
+                    <p className="text-sm text-muted-foreground">
+                      Suggest ingredient substitutions for dietary restrictions or availability
+                    </p>
+
+                    <DragDropContext onDragEnd={handleSubstitutionsDragEnd}>
+                      <Droppable droppableId="substitutions">
+                        {(provided) => (
+                          <div
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                            className="space-y-2">
+                            {substitutionFields.map((field, index) => (
+                              <Draggable key={field.id} draggableId={field.id} index={index}>
+                                {(provided) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    className="flex items-center gap-2 rounded-md border p-2">
+                                    <div {...provided.dragHandleProps} className="cursor-grab">
+                                      <GripVertical className="h-4 w-4 text-muted-foreground" />
+                                    </div>
+
+                                    <div className="grid flex-1 grid-cols-2 gap-2">
+                                      <FormField
+                                        control={control}
+                                        name={`substitutions.${index}.original`}
+                                        render={({ field }) => (
+                                          <FormItem>
+                                            <FormControl>
+                                              <Input {...field} placeholder="Original Ingredient" />
+                                            </FormControl>
+
+                                            <FormMessage />
+                                          </FormItem>
+                                        )}
+                                      />
+
+                                      <FormField
+                                        control={control}
+                                        name={`substitutions.${index}.substitute`}
+                                        render={({ field }) => (
+                                          <FormItem>
+                                            <FormControl>
+                                              <Input
+                                                {...field}
+                                                placeholder="Substitute Ingredient"
+                                              />
+                                            </FormControl>
+
+                                            <FormMessage />
+                                          </FormItem>
+                                        )}
+                                      />
+                                    </div>
+
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() => removeSubstitution(index)}
+                                      className="h-8 w-8">
+                                      <Trash2 className="h-4 w-4 text-muted-foreground" />
+                                      <span className="sr-only">Remove</span>
+                                    </Button>
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
+
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => appendSubstitution({ original: '', substitute: '' })}
+                      size="sm">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add Substitution
+                    </Button>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="tips">
+                <AccordionTrigger>Tips & Tricks</AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-4">
+                    <p className="text-sm text-muted-foreground">
+                      Share helpful tips to make this recipe a success
+                    </p>
+
+                    <DragDropContext onDragEnd={handleTipsDragEnd}>
+                      <Droppable droppableId="tips">
+                        {(provided) => (
+                          <div
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                            className="space-y-2">
+                            {tipFields.map((field, index) => (
+                              <Draggable key={field.id} draggableId={field.id} index={index}>
+                                {(provided) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    className="flex items-start gap-2 rounded-md border p-2">
+                                    <div {...provided.dragHandleProps} className="mt-2 cursor-grab">
+                                      <GripVertical className="h-4 w-4 text-muted-foreground" />
+                                    </div>
+
+                                    <FormField
+                                      control={control}
+                                      name={`tipsAndTricks.${index}.description`}
+                                      render={({ field }) => (
+                                        <FormItem className="w-full">
+                                          <FormControl>
+                                            <Textarea
+                                              {...field}
+                                              placeholder="e.g., For best results, let the dough rest for at least 30 minutes."
+                                              className="min-h-[100px] w-full resize-y"
+                                            />
+                                          </FormControl>
+
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
+                                    />
+
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() => removeTip(index)}
+                                      className="h-8 w-8">
+                                      <Trash2 className="h-4 w-4 text-muted-foreground" />
+                                      <span className="sr-only">Remove</span>
+                                    </Button>
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
+
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => appendTip({ description: '' })}
+                      size="sm">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add Tip
+                    </Button>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion> */}
+          </div>
+        </CardContent>
+      </Card>
     </>
   );
 }
