@@ -1,21 +1,58 @@
 'use server';
 
 import { currentUser } from '@clerk/nextjs/server';
-import { desc, eq } from 'drizzle-orm';
+import { and, asc, desc, eq } from 'drizzle-orm';
 
-import { handleError } from '@/utils';
+import { createCommentSqlFilters, handleError } from '@/utils';
 
-import { comments, commentsReplies } from '@/db';
+import { GetCommentsParams, comments } from '@/db';
 import { db } from '@/db/drizzle';
 
-export async function getMadeComments() {
+export async function getMadeComments(params: GetCommentsParams) {
+  const {
+    // limit,
+    // offset,
+    sortBy,
+    status,
+    ...rest
+  } = params;
+
   try {
     const user = await currentUser();
 
     if (!user) throw new Error('User not found');
 
+    const baseFilter = eq(comments.authorId, user.id);
+
+    const additionalFilters = createCommentSqlFilters(rest);
+
+    const countResult = await db.query.comments.findMany({
+      where: and(baseFilter, ...additionalFilters),
+      columns: {
+        id: true,
+      },
+    });
+
+    const totalCount = countResult.length;
+
+    let orderByClause;
+    switch (sortBy) {
+      case 'oldest':
+        orderByClause = [asc(comments.createdAt)];
+        break;
+      case 'highest':
+        orderByClause = [desc(comments.rating)];
+        break;
+      case 'lowest':
+        orderByClause = [asc(comments.rating)];
+        break;
+      case 'newest':
+      default:
+        orderByClause = [desc(comments.createdAt)];
+    }
+
     const madeComments = await db.query.comments.findMany({
-      where: eq(comments.authorId, user.id),
+      where: and(baseFilter, ...additionalFilters),
       with: {
         recipe: {
           columns: {
@@ -40,7 +77,6 @@ export async function getMadeComments() {
           },
         },
         replies: {
-          where: eq(commentsReplies.authorId, user.id),
           columns: {
             id: true,
             content: true,
@@ -57,12 +93,22 @@ export async function getMadeComments() {
           },
         },
       },
-      orderBy: desc(comments.createdAt),
+      orderBy: orderByClause,
+      // limit: limit || DATA_PER_PAGE,
+      // offset: offset || 0,
     });
 
+    let filteredComments = madeComments;
+    if (status && status !== 'all') {
+      filteredComments = madeComments.filter((comment) => {
+        const hasReplies = comment.replies.length > 0;
+        return (status === 'replied' && hasReplies) || (status === 'unanswered' && !hasReplies);
+      });
+    }
+
     return {
-      success: true,
-      data: madeComments,
+      count: totalCount,
+      data: filteredComments,
     };
   } catch (error) {
     handleError(error);

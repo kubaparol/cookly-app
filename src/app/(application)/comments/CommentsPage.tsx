@@ -5,20 +5,31 @@ import { getMadeComments, getReceivedComments } from '@/db';
 import Search from '@/components/base/Search';
 import { CommentsMade } from '@/components/modules/comments/CommentsMade';
 import { CommentsReceived } from '@/components/modules/comments/CommentsReceived';
+import CommentsFilters from '@/components/modules/recipes/CommentsFilters';
 import { CommentsSkeleton } from '@/components/shared/skeletons';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-async function CommentsLoader() {
-  const [made, received] = await Promise.all([getMadeComments(), getReceivedComments()]);
+import { PageProps } from '@/types';
+
+async function CommentsLoader({ searchParams }: PageProps) {
+  const [made, received] = await Promise.all([
+    getMadeComments({
+      query: searchParams?.query as string,
+      rating: searchParams?.rating as string,
+      timePeriod: searchParams?.timePeriod as string,
+      sortBy: searchParams?.sortBy as string,
+      status: searchParams?.status as string,
+    }),
+    getReceivedComments({
+      query: searchParams?.query as string,
+      rating: searchParams?.rating as string,
+      timePeriod: searchParams?.timePeriod as string,
+      sortBy: searchParams?.sortBy as string,
+      status: searchParams?.status as string,
+    }),
+  ]);
 
   const totalReceived = received?.data.length;
   const totalMade = made?.data.length;
@@ -70,57 +81,7 @@ async function CommentsLoader() {
           </div>
         </div>
 
-        <div className="mb-6 flex flex-wrap gap-2">
-          <Select>
-            <SelectTrigger className="h-8 w-[150px]">
-              <SelectValue placeholder="Filter by Rating" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Ratings</SelectItem>
-              <SelectItem value="5">5 Stars</SelectItem>
-              <SelectItem value="4">4 Stars</SelectItem>
-              <SelectItem value="3">3 Stars</SelectItem>
-              <SelectItem value="2">2 Stars</SelectItem>
-              <SelectItem value="1">1 Star</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select>
-            <SelectTrigger className="h-8 w-[150px]">
-              <SelectValue placeholder="Sort By" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="newest">Newest First</SelectItem>
-              <SelectItem value="oldest">Oldest First</SelectItem>
-              <SelectItem value="highest">Highest Rating</SelectItem>
-              <SelectItem value="lowest">Lowest Rating</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select>
-            <SelectTrigger className="h-8 w-[150px]">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Comments</SelectItem>
-              <SelectItem value="replied">Replied</SelectItem>
-              <SelectItem value="unanswered">Unanswered</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select>
-            <SelectTrigger className="h-8 w-[150px]">
-              <SelectValue placeholder="Time Period" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Time</SelectItem>
-              <SelectItem value="week">Last Week</SelectItem>
-              <SelectItem value="month">Last Month</SelectItem>
-              <SelectItem value="quarter">Last 3 Months</SelectItem>
-              <SelectItem value="year">Last Year</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <CommentsFilters />
 
         <TabsContent value="received">
           <Card>
@@ -154,10 +115,10 @@ async function CommentsLoader() {
   );
 }
 
-export default function CommentsPage() {
+export default function CommentsPage({ searchParams }: PageProps) {
   return (
     <Suspense fallback={<CommentsSkeleton />}>
-      <CommentsLoader />
+      <CommentsLoader searchParams={searchParams} />
     </Suspense>
   );
 }

@@ -1,14 +1,16 @@
 'use server';
 
 import { currentUser } from '@clerk/nextjs/server';
-import { desc, eq, inArray } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray } from 'drizzle-orm';
 
-import { handleError } from '@/utils';
+import { createCommentSqlFilters, handleError } from '@/utils';
 
-import { comments, commentsReplies, recipes } from '@/db';
+import { GetCommentsParams, comments, commentsReplies, recipes } from '@/db';
 import { db } from '@/db/drizzle';
 
-export async function getReceivedComments() {
+export async function getReceivedComments(params: GetCommentsParams) {
+  const { sortBy, status, ...rest } = params;
+
   try {
     const user = await currentUser();
 
@@ -27,11 +29,40 @@ export async function getReceivedComments() {
       return {
         success: true,
         data: [],
+        count: 0,
       };
     }
 
+    const baseFilter = inArray(comments.recipeId, recipeIds);
+    const additionalFilters = createCommentSqlFilters(rest);
+
+    const countResult = await db.query.comments.findMany({
+      where: and(baseFilter, ...additionalFilters),
+      columns: {
+        id: true,
+      },
+    });
+
+    const totalCount = countResult.length;
+
+    let orderByClause;
+    switch (sortBy) {
+      case 'oldest':
+        orderByClause = [asc(comments.createdAt)];
+        break;
+      case 'highest':
+        orderByClause = [desc(comments.rating)];
+        break;
+      case 'lowest':
+        orderByClause = [asc(comments.rating)];
+        break;
+      case 'newest':
+      default:
+        orderByClause = [desc(comments.createdAt)];
+    }
+
     const receivedComments = await db.query.comments.findMany({
-      where: inArray(comments.recipeId, recipeIds),
+      where: and(baseFilter, ...additionalFilters),
       with: {
         recipe: {
           columns: {
@@ -56,12 +87,21 @@ export async function getReceivedComments() {
           },
         },
       },
-      orderBy: desc(comments.createdAt),
+      orderBy: orderByClause,
     });
+
+    let filteredComments = receivedComments;
+    if (status && status !== 'all') {
+      filteredComments = receivedComments.filter((comment) => {
+        const hasReplies = comment.replies.length > 0;
+        return (status === 'replied' && hasReplies) || (status === 'unanswered' && !hasReplies);
+      });
+    }
 
     return {
       success: true,
-      data: receivedComments,
+      data: filteredComments,
+      count: totalCount,
     };
   } catch (error) {
     handleError(error);

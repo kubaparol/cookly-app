@@ -29,7 +29,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 
-interface FiltersProps {
+interface RecipeFiltersProps {
   pathPattern?: string;
 }
 
@@ -40,7 +40,7 @@ const maxCookingTimeOptions = [
   { label: 'Up to 120 minutes total', value: '120' },
 ];
 
-export default function Filters({ pathPattern }: FiltersProps) {
+export default function RecipeFilters({ pathPattern }: RecipeFiltersProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();

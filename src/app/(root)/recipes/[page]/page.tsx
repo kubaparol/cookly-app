@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 import Search from '@/components/base/Search';
-import Filters from '@/components/modules/recipes/Filters';
+import RecipeFilters from '@/components/modules/recipes/RecipeFilters';
 
 import { PageProps } from '@/types';
 
@@ -20,7 +20,7 @@ export default function RecipesPage({ params, searchParams }: PageProps) {
             <Search placeholder="Search recipes..." pathPattern="/recipes/:page" />
           </div>
 
-          <Filters pathPattern="/recipes/:page" />
+          <RecipeFilters pathPattern="/recipes/:page" />
         </div>
       </div>
 
