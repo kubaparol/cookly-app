@@ -1,4 +1,13 @@
-import { CalendarClock, ChefHat, Coffee, DollarSign, Save, Upload } from 'lucide-react';
+import {
+  CalendarClock,
+  ChefHat,
+  Coffee,
+  DollarSign,
+  ImageIcon,
+  Save,
+  Upload,
+  XIcon,
+} from 'lucide-react';
 import {
   AlertCircle,
   BookOpen,
@@ -17,14 +26,8 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { getTotalCookingTime } from '@/utils';
+import { cn, getTotalCookingTime } from '@/utils';
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -41,11 +44,96 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { Checkbox } from '../../ui/checkbox';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form';
+import { useRecipeFormSteps } from './hooks/use-recipe-form-steps';
 import { RecipeFormValues } from './schemas';
+
+// Add this mapper function after the import statements and before the checkStepValidation function
+const errorPathMapper = (path: string): string => {
+  const mapping: Record<string, string> = {
+    // Basic info
+    title: 'Recipe Title',
+    imageUrl: 'Recipe Image',
+    description: 'Description',
+    categories: 'Categories',
+    cuisineType: 'Cuisine Type',
+    mealType: 'Meal Type',
+    servings: 'Servings',
+    servingSize: 'Serving Size',
+    difficulty: 'Difficulty Level',
+
+    // Times
+    preparationTime: 'Preparation Time',
+    cookingTime: 'Cooking Time',
+    restTime: 'Rest Time',
+    activeTime: 'Active Time',
+    totalTime: 'Total Time',
+
+    // Ingredients and equipment
+    ingredients: 'Ingredients',
+    equipment: 'Equipment',
+    substitutions: 'Substitutions',
+
+    // Instructions
+    steps: 'Cooking Steps',
+
+    // Dietary info
+    dietaryTags: 'Dietary Tags',
+    allergens: 'Allergens',
+
+    // Nutrition
+    calories: 'Calories',
+    protein: 'Protein',
+    carbs: 'Carbohydrates',
+    fat: 'Fat',
+
+    // Additional info
+    notes: 'Recipe Notes',
+    tipsAndTricks: 'Tips and Tricks',
+    storageInstructions: 'Storage Instructions',
+    reheatingInstructions: 'Reheating Instructions',
+    makeAheadInstructions: 'Make Ahead Instructions',
+
+    // Other
+    costLevel: 'Cost Level',
+    seasonality: 'Seasonality',
+    yield: 'Yield',
+    termsAccepted: 'Terms Acceptance',
+  };
+
+  return mapping[path] || path;
+};
+
+export const checkStepValidation = (formValues: RecipeFormValues, schema: any) => {
+  try {
+    schema.parse(formValues);
+    return { isValid: true, errors: null };
+  } catch (error: any) {
+    // Format zod errors if they exist
+    const formattedErrors = error.errors
+      ? error.errors
+      : error.format
+        ? error.format()
+        : [{ message: 'Validation failed' }];
+
+    return {
+      isValid: false,
+      errors: {
+        errors: Array.isArray(formattedErrors)
+          ? formattedErrors
+          : Object.entries(formattedErrors)
+              .filter(([key]) => key !== '_errors')
+              .flatMap(
+                ([key, value]: [string, any]) =>
+                  value._errors?.map((msg: string) => ({ path: key, message: msg })) || [],
+              ),
+      },
+    };
+  }
+};
 
 export default function ReviewSubmitStepForm() {
   const { control, watch } = useFormContext<RecipeFormValues>();
-
+  const { steps } = useRecipeFormSteps();
   const [publishOption, setPublishOption] = useState<'public' | 'draft'>('public');
 
   const formValues = watch();
@@ -56,7 +144,15 @@ export default function ReviewSubmitStepForm() {
     restTime: formValues.restTime,
   });
 
-  // const user = useUser();
+  const stepValidations = steps.map((step) => {
+    return {
+      name: step.name,
+      ...checkStepValidation(formValues, step.schema),
+    };
+  });
+
+  const validStepsCount = stepValidations.filter((step) => step.isValid).length;
+  const completionPercentage = Math.round((validStepsCount / steps.length) * 100);
 
   return (
     <>
@@ -71,45 +167,59 @@ export default function ReviewSubmitStepForm() {
             {/* Recipe Header */}
             <div className="flex flex-col gap-6 md:flex-row">
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md md:w-1/3">
-                <Image
-                  src={formValues.imageUrl}
-                  alt={formValues.title}
-                  fill
-                  className="object-cover"
-                />
+                {formValues.imageUrl ? (
+                  <Image
+                    src={formValues.imageUrl}
+                    alt={formValues.title || 'Recipe image'}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-muted">
+                    <ImageIcon className="h-12 w-12 text-muted-foreground" />
+                  </div>
+                )}
               </div>
 
               <div className="flex-1 space-y-3">
                 <div className="flex flex-wrap gap-2">
-                  {formValues.categories.map((category) => (
-                    <Badge key={category} variant="secondary">
-                      {category}
-                    </Badge>
-                  ))}
+                  {formValues.categories && formValues.categories.length > 0 ? (
+                    formValues.categories.map((category) => (
+                      <Badge key={category} variant="secondary">
+                        {category}
+                      </Badge>
+                    ))
+                  ) : (
+                    <span className="text-xs text-muted-foreground">No categories selected</span>
+                  )}
                 </div>
 
-                <h2 className="text-xl font-semibold">{formValues.title}</h2>
+                <h2 className="text-xl font-semibold">{formValues.title || 'Untitled Recipe'}</h2>
 
-                {formValues.description && (
+                {formValues.description ? (
                   <p className="text-muted-foreground">{formValues.description}</p>
+                ) : (
+                  <p className="text-xs text-muted-foreground">No description provided</p>
                 )}
 
                 <div className="grid grid-cols-2 gap-2 pt-2 sm:grid-cols-4">
                   <div className="flex flex-col items-center rounded-md bg-muted/30 p-2 text-center">
                     <Clock className="mb-1 h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">{totalTime} min</span>
+                    <span className="text-sm font-medium">
+                      {totalTime ? `${totalTime} min` : '-'}
+                    </span>
                     <span className="text-xs text-muted-foreground">Total Time</span>
                   </div>
 
                   <div className="flex flex-col items-center rounded-md bg-muted/30 p-2 text-center">
                     <ChefHat className="mb-1 h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">{formValues.difficulty}</span>
+                    <span className="text-sm font-medium">{formValues.difficulty || '-'}</span>
                     <span className="text-xs text-muted-foreground">Difficulty</span>
                   </div>
 
                   <div className="flex flex-col items-center rounded-md bg-muted/30 p-2 text-center">
                     <Users className="mb-1 h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">{formValues.servings}</span>
+                    <span className="text-sm font-medium">{formValues.servings || '-'}</span>
                     <span className="text-xs text-muted-foreground">Servings</span>
                   </div>
 
@@ -122,31 +232,39 @@ export default function ReviewSubmitStepForm() {
                   ) : (
                     <div className="flex flex-col items-center rounded-md bg-muted/30 p-2 text-center">
                       <Timer className="mb-1 h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm font-medium">{formValues.preparationTime} min</span>
+                      <span className="text-sm font-medium">
+                        {formValues.preparationTime ? `${formValues.preparationTime} min` : '-'}
+                      </span>
                       <span className="text-xs text-muted-foreground">Prep Time</span>
                     </div>
                   )}
                 </div>
 
                 <div className="flex flex-wrap gap-1.5 pt-2">
-                  {formValues.dietaryTags?.map((tag) => (
-                    <Badge
-                      key={tag}
-                      className="border-0 bg-green-950/30 text-xs text-green-700 hover:bg-green-950/50">
-                      <Leaf className="mr-1 h-3 w-3" />
-                      {tag}
-                    </Badge>
-                  ))}
+                  {formValues.dietaryTags && formValues.dietaryTags.length > 0 ? (
+                    formValues.dietaryTags.map((tag) => (
+                      <Badge
+                        key={tag}
+                        className="border-0 bg-green-950/30 text-xs text-green-700 hover:bg-green-950/50">
+                        <Leaf className="mr-1 h-3 w-3" />
+                        {tag}
+                      </Badge>
+                    ))
+                  ) : (
+                    <span className="text-xs text-muted-foreground">No dietary tags</span>
+                  )}
 
-                  {formValues.allergens?.map((allergen) => (
-                    <Badge
-                      key={allergen}
-                      variant="outline"
-                      className="border-red-900/30 bg-red-950/30 text-xs text-red-300 hover:bg-red-950/50">
-                      <AlertCircle className="mr-1 h-3 w-3" />
-                      {allergen}
-                    </Badge>
-                  ))}
+                  {formValues.allergens && formValues.allergens.length > 0
+                    ? formValues.allergens.map((allergen) => (
+                        <Badge
+                          key={allergen}
+                          variant="outline"
+                          className="border-red-900/30 bg-red-950/30 text-xs text-red-300 hover:bg-red-950/50">
+                          <AlertCircle className="mr-1 h-3 w-3" />
+                          {allergen}
+                        </Badge>
+                      ))
+                    : null}
                 </div>
               </div>
             </div>
@@ -182,19 +300,23 @@ export default function ReviewSubmitStepForm() {
                       {formValues.servingSize ? ` (${formValues.servingSize} per serving)` : ''}
                     </p>
                     <ul className="space-y-2">
-                      {formValues.ingredients.map((ingredient, index) => (
-                        <li key={index} className="flex items-start">
-                          <div className="mr-2 mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border border-primary/30">
-                            <div className="h-2.5 w-2.5 rounded-full bg-primary/30"></div>
-                          </div>
-                          <span className="text-sm">
-                            <span className="font-medium">
-                              {ingredient.quantity} {ingredient.unit}
-                            </span>{' '}
-                            {ingredient.name}
-                          </span>
-                        </li>
-                      ))}
+                      {formValues.ingredients && formValues.ingredients.length > 0 ? (
+                        formValues.ingredients.map((ingredient, index) => (
+                          <li key={index} className="flex items-start">
+                            <div className="mr-2 mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border border-primary/30">
+                              <div className="h-2.5 w-2.5 rounded-full bg-primary/30"></div>
+                            </div>
+                            <span className="text-sm">
+                              <span className="font-medium">
+                                {ingredient.quantity || '-'} {ingredient.unit || ''}
+                              </span>{' '}
+                              {ingredient.name || 'Unnamed ingredient'}
+                            </span>
+                          </li>
+                        ))
+                      ) : (
+                        <li className="text-sm text-muted-foreground">No ingredients added yet</li>
+                      )}
                     </ul>
                   </div>
 
@@ -204,14 +326,18 @@ export default function ReviewSubmitStepForm() {
                       Equipment
                     </h3>
                     <ul className="space-y-2">
-                      {formValues.equipment.map((item, index) => (
-                        <li key={index} className="flex items-start">
-                          <div className="mr-2 mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border border-primary/30">
-                            <div className="h-2.5 w-2.5 rounded-full bg-primary/30"></div>
-                          </div>
-                          <span className="text-sm">{item.name}</span>
-                        </li>
-                      ))}
+                      {formValues.equipment && formValues.equipment.length > 0 ? (
+                        formValues.equipment.map((item, index) => (
+                          <li key={index} className="flex items-start">
+                            <div className="mr-2 mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border border-primary/30">
+                              <div className="h-2.5 w-2.5 rounded-full bg-primary/30"></div>
+                            </div>
+                            <span className="text-sm">{item.name || 'Unnamed equipment'}</span>
+                          </li>
+                        ))
+                      ) : (
+                        <li className="text-sm text-muted-foreground">No equipment added yet</li>
+                      )}
                     </ul>
 
                     {formValues.substitutions.length > 0 && (
@@ -237,18 +363,22 @@ export default function ReviewSubmitStepForm() {
                 </h3>
 
                 <div className="space-y-4">
-                  {formValues.steps.map((step, index) => (
-                    <div key={index} className="group flex">
-                      <div className="mr-3 flex-shrink-0">
-                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 font-semibold text-foreground">
-                          {index + 1}
+                  {formValues.steps && formValues.steps.length > 0 ? (
+                    formValues.steps.map((step, index) => (
+                      <div key={index} className="group flex">
+                        <div className="mr-3 flex-shrink-0">
+                          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 font-semibold text-foreground">
+                            {index + 1}
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-sm">{step.description || 'No description provided'}</p>
                         </div>
                       </div>
-                      <div>
-                        <p className="text-sm">{step.description}</p>
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <p className="text-sm text-muted-foreground">No instructions added yet</p>
+                  )}
                 </div>
               </TabsContent>
 
@@ -344,142 +474,209 @@ export default function ReviewSubmitStepForm() {
           </CardContent>
         </Card>
 
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="nutrition">
-            <AccordionTrigger>
-              <div className="flex items-center">
-                <Flame className="mr-2 h-4 w-4" />
-                Nutrition Information
-              </div>
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="grid grid-cols-2 gap-4 p-2 sm:grid-cols-4">
-                {formValues.calories && (
-                  <div className="flex flex-col items-center rounded-md bg-muted/30 p-2 text-center">
-                    <span className="text-xs text-muted-foreground">Calories</span>
-                    <span className="text-lg font-semibold">{formValues.calories}</span>
-                  </div>
-                )}
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="flex flex-col items-center rounded-md bg-muted/30 p-2 text-center">
+            <span className="text-xs text-muted-foreground">Calories</span>
+            <span className="text-lg font-semibold">{formValues.calories || '-'}</span>
+          </div>
 
-                {formValues.protein && (
-                  <div className="flex flex-col items-center rounded-md bg-muted/30 p-2 text-center">
-                    <span className="text-xs text-muted-foreground">Protein</span>
-                    <span className="text-lg font-semibold">{formValues.protein}g</span>
-                  </div>
-                )}
+          <div className="flex flex-col items-center rounded-md bg-muted/30 p-2 text-center">
+            <span className="text-xs text-muted-foreground">Protein</span>
+            <span className="text-lg font-semibold">
+              {formValues.protein ? `${formValues.protein}g` : '-'}
+            </span>
+          </div>
 
-                {formValues.carbs && (
-                  <div className="flex flex-col items-center rounded-md bg-muted/30 p-2 text-center">
-                    <span className="text-xs text-muted-foreground">Carbs</span>
-                    <span className="text-lg font-semibold">{formValues.carbs}g</span>
-                  </div>
-                )}
+          <div className="flex flex-col items-center rounded-md bg-muted/30 p-2 text-center">
+            <span className="text-xs text-muted-foreground">Carbs</span>
+            <span className="text-lg font-semibold">
+              {formValues.carbs ? `${formValues.carbs}g` : '-'}
+            </span>
+          </div>
 
-                {formValues.fat && (
-                  <div className="flex flex-col items-center rounded-md bg-muted/30 p-2 text-center">
-                    <span className="text-xs text-muted-foreground">Fat</span>
-                    <span className="text-lg font-semibold">{formValues.fat}g</span>
-                  </div>
-                )}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
+          <div className="flex flex-col items-center rounded-md bg-muted/30 p-2 text-center">
+            <span className="text-xs text-muted-foreground">Fat</span>
+            <span className="text-lg font-semibold">
+              {formValues.fat ? `${formValues.fat}g` : '-'}
+            </span>
+          </div>
+        </div>
 
-          <AccordionItem value="metadata">
-            <AccordionTrigger>
-              <div className="flex items-center">
-                <Info className="mr-2 h-4 w-4" />
-                Recipe Metadata
-              </div>
-            </AccordionTrigger>
-            <AccordionContent>
-              <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                <div className="col-span-1">
-                  <dt className="flex items-center text-muted-foreground">
-                    <Coffee className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
-                    Cuisine:
-                  </dt>
-                  <dd className="font-medium">{formValues.cuisineType}</dd>
-                </div>
+        <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+          <div className="col-span-1">
+            <dt className="flex items-center text-muted-foreground">
+              <Coffee className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
+              Cuisine:
+            </dt>
+            <dd className="font-medium">{formValues.cuisineType || '-'}</dd>
+          </div>
 
-                <div className="col-span-1">
-                  <dt className="flex items-center text-muted-foreground">
-                    <Utensils className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
-                    Meal Type:
-                  </dt>
-                  <dd className="font-medium">{formValues.mealType}</dd>
-                </div>
+          <div className="col-span-1">
+            <dt className="flex items-center text-muted-foreground">
+              <Utensils className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
+              Meal Type:
+            </dt>
+            <dd className="font-medium">{formValues.mealType || '-'}</dd>
+          </div>
 
-                <div className="col-span-1">
-                  <dt className="flex items-center text-muted-foreground">
-                    <Clock className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
-                    Prep Time:
-                  </dt>
-                  <dd className="font-medium">{formValues.preparationTime} min</dd>
-                </div>
+          <div className="col-span-1">
+            <dt className="flex items-center text-muted-foreground">
+              <Clock className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
+              Prep Time:
+            </dt>
+            <dd className="font-medium">
+              {formValues.preparationTime ? `${formValues.preparationTime} min` : '-'}
+            </dd>
+          </div>
 
-                <div className="col-span-1">
-                  <dt className="flex items-center text-muted-foreground">
-                    <Flame className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
-                    Cook Time:
-                  </dt>
-                  <dd className="font-medium">{formValues.cookingTime} min</dd>
-                </div>
+          <div className="col-span-1">
+            <dt className="flex items-center text-muted-foreground">
+              <Flame className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
+              Cook Time:
+            </dt>
+            <dd className="font-medium">
+              {formValues.cookingTime ? `${formValues.cookingTime} min` : '-'}
+            </dd>
+          </div>
 
-                {formValues.restTime && (
-                  <div className="col-span-1">
-                    <dt className="flex items-center text-muted-foreground">
-                      <Timer className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
-                      Rest Time:
-                    </dt>
-                    <dd className="font-medium">{formValues.restTime} min</dd>
-                  </div>
-                )}
+          {formValues.restTime && (
+            <div className="col-span-1">
+              <dt className="flex items-center text-muted-foreground">
+                <Timer className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
+                Rest Time:
+              </dt>
+              <dd className="font-medium">{formValues.restTime} min</dd>
+            </div>
+          )}
 
-                {formValues.activeTime && (
-                  <div className="col-span-1">
-                    <dt className="flex items-center text-muted-foreground">
-                      <Clock className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
-                      Active Time:
-                    </dt>
-                    <dd className="font-medium">{formValues.activeTime} min</dd>
-                  </div>
-                )}
+          {formValues.activeTime && (
+            <div className="col-span-1">
+              <dt className="flex items-center text-muted-foreground">
+                <Clock className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
+                Active Time:
+              </dt>
+              <dd className="font-medium">{formValues.activeTime} min</dd>
+            </div>
+          )}
 
-                {formValues.yield && (
-                  <div className="col-span-1">
-                    <dt className="flex items-center text-muted-foreground">
-                      <Scale className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
-                      Yield:
-                    </dt>
-                    <dd className="font-medium">{formValues.yield}</dd>
-                  </div>
-                )}
+          {formValues.yield && (
+            <div className="col-span-1">
+              <dt className="flex items-center text-muted-foreground">
+                <Scale className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
+                Yield:
+              </dt>
+              <dd className="font-medium">{formValues.yield}</dd>
+            </div>
+          )}
 
-                {formValues.costLevel && (
-                  <div className="col-span-1">
-                    <dt className="flex items-center text-muted-foreground">
-                      <DollarSign className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
-                      Cost Level:
-                    </dt>
-                    <dd className="font-medium">{formValues.costLevel}</dd>
-                  </div>
-                )}
+          {formValues.costLevel && (
+            <div className="col-span-1">
+              <dt className="flex items-center text-muted-foreground">
+                <DollarSign className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
+                Cost Level:
+              </dt>
+              <dd className="font-medium">{formValues.costLevel}</dd>
+            </div>
+          )}
 
-                {formValues.seasonality && (
-                  <div className="col-span-1">
-                    <dt className="flex items-center text-muted-foreground">
-                      <CalendarClock className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
-                      Seasonality:
-                    </dt>
-                    <dd className="font-medium">{formValues.seasonality}</dd>
-                  </div>
-                )}
-              </dl>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+          {formValues.seasonality && (
+            <div className="col-span-1">
+              <dt className="flex items-center text-muted-foreground">
+                <CalendarClock className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
+                Seasonality:
+              </dt>
+              <dd className="font-medium">{formValues.seasonality}</dd>
+            </div>
+          )}
+        </dl>
       </div>
+
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle>Recipe Checklist</CardTitle>
+          <CardDescription>Validation status: {completionPercentage}% complete</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-4">
+            {stepValidations.slice(0, -1).map((step, index) => (
+              <li key={index} className="flex items-start">
+                <div
+                  className={cn(
+                    'mr-2 mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full',
+                    step.isValid &&
+                      'border border-green-400/30 bg-green-400/10 text-xs text-green-400 dark:border-green-300/50 dark:bg-green-300/20 dark:text-green-300',
+                    !step.isValid &&
+                      'border border-red-400/30 bg-red-400/10 text-xs text-red-400 dark:border-red-300/50 dark:bg-red-300/20 dark:text-red-300',
+                  )}>
+                  {step.isValid ? <Check className="h-3 w-3" /> : <XIcon className="h-3 w-3" />}
+                </div>
+
+                <div className="flex w-full flex-col space-y-1">
+                  <span className="text-sm font-medium">{step.name}</span>
+
+                  {!step.isValid && (
+                    <div className="space-y-1">
+                      <div className="ml-0 mt-1 space-y-1.5 rounded-md bg-red-50 p-2 text-xs text-red-600 dark:bg-red-950/20">
+                        {step.errors && (
+                          <>
+                            {step.errors.errors && step.errors.errors.length > 0 ? (
+                              (() => {
+                                // Group errors by path and display only the first error for each path
+                                const errorsByPath: Record<string, string> = {};
+
+                                step.errors.errors.forEach((error) => {
+                                  if (error.path && !errorsByPath[error.path]) {
+                                    errorsByPath[error.path] = error.message;
+                                  }
+                                });
+
+                                return Object.entries(errorsByPath).map(([path, message], i) => (
+                                  <div key={i} className="flex items-start">
+                                    <span className="mr-1">•</span>
+                                    <span>{`${errorPathMapper(path)}: ${message}`}</span>
+                                  </div>
+                                ));
+                              })()
+                            ) : (
+                              <div className="flex items-start">
+                                <span className="mr-1">•</span>
+                                <span>Validation failed. Please review this section.</span>
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </li>
+            ))}
+
+            <li className="flex items-start">
+              <div
+                className={cn(
+                  'mr-2 mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full',
+                  formValues.termsAccepted &&
+                    'border border-green-400/30 bg-green-400/10 text-xs text-green-400 dark:border-green-300/50 dark:bg-green-300/20 dark:text-green-300',
+                  !formValues.termsAccepted &&
+                    'border border-yellow-400/30 bg-yellow-400/10 text-xs text-yellow-400 dark:border-yellow-300/50 dark:bg-yellow-300/20 dark:text-yellow-300',
+                )}>
+                {formValues.termsAccepted ? (
+                  <Check className="h-3 w-3" />
+                ) : (
+                  <AlertCircle className="h-3 w-3" />
+                )}
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm font-medium">Terms Acceptance</span>
+                {!formValues.termsAccepted && (
+                  <span className="text-xs text-amber-600">Please accept the terms to publish</span>
+                )}
+              </div>
+            </li>
+          </ul>
+        </CardContent>
+      </Card>
 
       {/* Submission Panel */}
       <div className="space-y-6">
@@ -490,7 +687,7 @@ export default function ReviewSubmitStepForm() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label>Visibility</Label>
+              <Label>I want to:</Label>
               <div className="grid grid-cols-2 gap-2">
                 <div
                   className={`cursor-pointer rounded-md border p-3 transition-colors ${
@@ -498,10 +695,12 @@ export default function ReviewSubmitStepForm() {
                   }`}
                   onClick={() => setPublishOption('public')}>
                   <div className="mb-1 flex items-center justify-between">
-                    <span className="font-medium">Public</span>
+                    <span className="font-medium">Publish Now</span>
                     {publishOption === 'public' && <Check className="h-4 w-4 text-primary" />}
                   </div>
-                  <p className="text-xs text-muted-foreground">Visible to everyone on Recipe Hub</p>
+                  <p className="text-xs text-muted-foreground">
+                    Make it visible to everyone on Recipe Hub
+                  </p>
                 </div>
 
                 <div
@@ -510,7 +709,7 @@ export default function ReviewSubmitStepForm() {
                   }`}
                   onClick={() => setPublishOption('draft')}>
                   <div className="mb-1 flex items-center justify-between">
-                    <span className="font-medium">draft</span>
+                    <span className="font-medium">Save as Draft</span>
                     {publishOption === 'draft' && <Check className="h-4 w-4 text-primary" />}
                   </div>
                   <p className="text-xs text-muted-foreground">Only visible to you</p>
@@ -518,20 +717,22 @@ export default function ReviewSubmitStepForm() {
               </div>
             </div>
 
-            {/* {completenessPercentage < 100 && (
-                <div className="bg-amber-50 border border-amber-200 rounded-md p-3 text-amber-800">
-                  <div className="flex items-start">
-                    <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0 text-amber-500" />
-                    <div>
-                      <h4 className="text-sm font-medium">Recipe Incomplete</h4>
-                      <p className="text-xs mt-1">
-                        Your recipe is missing some recommended information. You can still publish it, but completing
-                        all fields will improve discoverability.
-                      </p>
-                    </div>
+            {completionPercentage < 100 && (
+              <div className="rounded-md border border-yellow-400/30 bg-yellow-400/10 p-3 text-xs text-yellow-400 dark:border-yellow-300/50 dark:bg-yellow-300/20 dark:text-yellow-300">
+                <div className="flex items-start">
+                  <AlertCircle className="mr-2 h-5 w-5 flex-shrink-0 text-yellow-400 dark:text-yellow-300" />
+                  <div>
+                    <h4 className="text-sm font-medium">
+                      Recipe Incomplete ({completionPercentage}% complete)
+                    </h4>
+                    <p className="mt-1 text-xs">
+                      Your recipe is missing some required information. You can still save as draft,
+                      but you need to complete all required fields to publish.
+                    </p>
                   </div>
                 </div>
-              )} */}
+              </div>
+            )}
 
             <div className="space-y-2">
               <FormField
@@ -564,109 +765,27 @@ export default function ReviewSubmitStepForm() {
               />
             </div>
           </CardContent>
-          <CardFooter className="flex flex-col space-y-2">
-            <Button className="w-full">
-              <Upload className="mr-2 h-4 w-4" />
-              Publish Recipe
-            </Button>
-
-            <Button variant="outline" className="w-full">
-              <Save className="mr-2 h-4 w-4" />
-              Save as Draft
+          <CardFooter>
+            <Button
+              className="w-full"
+              variant={publishOption === 'public' ? 'default' : 'outline'}
+              disabled={
+                publishOption === 'public' &&
+                (completionPercentage < 100 || !formValues.termsAccepted)
+              }>
+              {publishOption === 'public' ? (
+                <>
+                  <Upload className="mr-2 h-4 w-4" />
+                  Publish Recipe
+                </>
+              ) : (
+                <>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save as Draft
+                </>
+              )}
             </Button>
           </CardFooter>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle>Recipe Checklist</CardTitle>
-            <CardDescription>Ensure your recipe is complete</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-2">
-              <li className="flex items-start">
-                <div
-                  className={`mr-2 mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full ${
-                    formValues.title
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-muted text-muted-foreground'
-                  }`}>
-                  {formValues.title ? <Check className="h-3 w-3" /> : '1'}
-                </div>
-                <span className="text-sm">Basic information (title, description, image)</span>
-              </li>
-
-              <li className="flex items-start">
-                <div
-                  className={`mr-2 mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full ${
-                    formValues.ingredients.length > 0
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-muted text-muted-foreground'
-                  }`}>
-                  {formValues.ingredients.length > 0 ? <Check className="h-3 w-3" /> : '2'}
-                </div>
-                <span className="text-sm">
-                  Ingredients list ({formValues.ingredients.length} items)
-                </span>
-              </li>
-
-              <li className="flex items-start">
-                <div
-                  className={`mr-2 mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full ${
-                    formValues.steps.length > 0
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-muted text-muted-foreground'
-                  }`}>
-                  {formValues.steps.length > 0 ? <Check className="h-3 w-3" /> : '3'}
-                </div>
-                <span className="text-sm">Instructions ({formValues.steps.length} steps)</span>
-              </li>
-
-              <li className="flex items-start">
-                <div
-                  className={`mr-2 mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full ${
-                    formValues.preparationTime && formValues.cookingTime
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-muted text-muted-foreground'
-                  }`}>
-                  {formValues.preparationTime && formValues.cookingTime ? (
-                    <Check className="h-3 w-3" />
-                  ) : (
-                    '4'
-                  )}
-                </div>
-                <span className="text-sm">Timing information</span>
-              </li>
-
-              <li className="flex items-start">
-                <div
-                  className={`mr-2 mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full ${
-                    formValues.servings
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-muted text-muted-foreground'
-                  }`}>
-                  {formValues.servings ? <Check className="h-3 w-3" /> : '5'}
-                </div>
-                <span className="text-sm">Servings information</span>
-              </li>
-
-              <li className="flex items-start">
-                <div
-                  className={`mr-2 mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full ${
-                    formValues.cuisineType && formValues.mealType
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-muted text-muted-foreground'
-                  }`}>
-                  {formValues.cuisineType && formValues.mealType ? (
-                    <Check className="h-3 w-3" />
-                  ) : (
-                    '6'
-                  )}
-                </div>
-                <span className="text-sm">Cuisine and meal type</span>
-              </li>
-            </ul>
-          </CardContent>
         </Card>
       </div>
     </>

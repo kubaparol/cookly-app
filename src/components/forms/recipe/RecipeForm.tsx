@@ -156,7 +156,8 @@ export default function RecipeForm(props: RecipeFormProps) {
         nextStep={nextStep}
         onBackStep={handleBackStep}
         onNextStep={handleNextStep}
-        onGoToStep={goToStep}>
+        onGoToStep={goToStep}
+        formMethods={methods}>
         <CurrentStepComponent />
       </RecipeFormLayout>
     </FormProvider>

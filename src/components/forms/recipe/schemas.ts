@@ -42,27 +42,31 @@ export const timeServingsStepFormSchema = z.object({
 });
 
 export const ingredientsStepFormSchema = z.object({
-  ingredients: z.array(
-    z.object({
-      quantity: z
-        .string()
-        .min(0.1, 'Quantity is required')
-        .regex(/^\d+(\.\d+)?$/, 'Must be a valid number')
-        .refine((value) => value === '' || Number(value) >= 0.1, {
-          message: 'Must be at least 0.1',
-        }),
-      unit: z.string().min(1, 'Unit is required'),
-      name: z.string().min(1, 'Ingredient name is required'),
-    }),
-  ),
+  ingredients: z
+    .array(
+      z.object({
+        quantity: z
+          .string()
+          .min(0.1, 'Quantity is required')
+          .regex(/^\d+(\.\d+)?$/, 'Must be a valid number')
+          .refine((value) => value === '' || Number(value) >= 0.1, {
+            message: 'Must be at least 0.1',
+          }),
+        unit: z.string().min(1, 'Unit is required'),
+        name: z.string().min(1, 'Ingredient name is required'),
+      }),
+    )
+    .min(1, 'At least one ingredient is required'),
 });
 
 export const preparationStepsFormSchema = z.object({
-  steps: z.array(
-    z.object({
-      description: z.string().min(1, 'Step description is required'),
-    }),
-  ),
+  steps: z
+    .array(
+      z.object({
+        description: z.string().min(1, 'Step description is required'),
+      }),
+    )
+    .min(1, 'At least one step is required'),
 });
 
 export const additionalDetailsStepFormSchema = z.object({

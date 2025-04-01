@@ -1,6 +1,7 @@
-import { ArrowLeft, ArrowRight, Check, ChevronRight, Save } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, ChevronRight, Save, XIcon } from 'lucide-react';
 import Link from 'next/link';
-import { ReactNode } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { UseFormReturn } from 'react-hook-form';
 
 import { cn } from '@/utils';
 
@@ -19,6 +20,7 @@ import {
 } from '@/components/ui/alert-dialog';
 
 import { RecipeFormStep } from '../forms/recipe/hooks/use-recipe-form-steps';
+import { RecipeFormValues } from '../forms/recipe/schemas';
 import { Button } from '../ui/button';
 import { Progress } from '../ui/progress';
 
@@ -32,6 +34,7 @@ interface RecipeFormLayoutProps {
   onBackStep: () => void;
   onNextStep: () => void;
   onGoToStep: (stepIndex: number) => void;
+  formMethods: UseFormReturn<RecipeFormValues>;
 }
 
 export default function RecipeFormLayout(props: RecipeFormLayoutProps) {
@@ -45,9 +48,63 @@ export default function RecipeFormLayout(props: RecipeFormLayoutProps) {
     onBackStep,
     onNextStep,
     onGoToStep,
+    formMethods,
   } = props;
 
-  const progress = Math.round(((currentStepIndex + 1) / steps.length) * 100);
+  const [completionPercentage, setCompletionPercentage] = useState<number>(0);
+  const [stepValidations, setStepValidations] = useState<Array<{ name: string; isValid: boolean }>>(
+    [],
+  );
+
+  const checkStepValidation = useCallback(
+    (step: RecipeFormStep) => {
+      const formValues = formMethods.getValues();
+
+      try {
+        step.schema.parse(formValues);
+        return { isValid: true, errors: null };
+      } catch (error) {
+        return { isValid: false, errors: error };
+      }
+    },
+    [formMethods],
+  );
+
+  useEffect(() => {
+    const subscription = formMethods.watch(() => {
+      const validations = steps.map((step) => {
+        const validation = checkStepValidation(step);
+        return {
+          name: step.name,
+          isValid: validation.isValid,
+        };
+      });
+
+      setStepValidations(validations);
+
+      const validStepsCount = validations.filter((step) => step.isValid).length;
+      const percentage = Math.round((validStepsCount / steps.length) * 100);
+      setCompletionPercentage(percentage);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [checkStepValidation, formMethods, steps]);
+
+  useEffect(() => {
+    const validations = steps.map((step) => {
+      const validation = checkStepValidation(step);
+      return {
+        name: step.name,
+        isValid: validation.isValid,
+      };
+    });
+
+    setStepValidations(validations);
+
+    const validStepsCount = validations.filter((step) => step.isValid).length;
+    const percentage = Math.round((validStepsCount / steps.length) * 100);
+    setCompletionPercentage(percentage);
+  }, [checkStepValidation, steps]);
 
   return (
     <div className="flex flex-col">
@@ -67,9 +124,9 @@ export default function RecipeFormLayout(props: RecipeFormLayoutProps) {
             <div className="flex-1 sm:w-40">
               <div className="mb-1 flex justify-between text-xs">
                 <span>Progress</span>
-                <span>{progress}%</span>
+                <span>{completionPercentage}%</span>
               </div>
-              <Progress value={progress} className="h-2" />
+              <Progress value={completionPercentage} className="h-2" />
             </div>
 
             <Button variant="outline" size="sm" disabled>
@@ -87,6 +144,8 @@ export default function RecipeFormLayout(props: RecipeFormLayoutProps) {
             {steps.map((step, index) => {
               const isActive = step.name === currentStep.name;
               const isCompleted = index < currentStepIndex;
+              const stepValidation = stepValidations.find((v) => v.name === step.name);
+              const hasErrors = stepValidation ? !stepValidation.isValid : false;
 
               return (
                 <div className="grid gap-2" key={index}>
@@ -98,10 +157,15 @@ export default function RecipeFormLayout(props: RecipeFormLayoutProps) {
                         className={cn(
                           'flex size-6 items-center justify-center rounded-full',
                           isActive && 'bg-primary-foreground text-primary',
-                          isCompleted && 'bg-primary/25 text-primary',
+                          isCompleted && !hasErrors && 'bg-primary/25 text-primary',
+                          isCompleted && hasErrors && 'bg-destructive/25 text-destructive',
                         )}>
                         {isCompleted ? (
-                          <Check className="!size-4" />
+                          hasErrors ? (
+                            <XIcon className="!size-4" />
+                          ) : (
+                            <Check className="!size-4" />
+                          )
                         ) : (
                           <step.icon className="!size-4" />
                         )}
@@ -169,34 +233,11 @@ export default function RecipeFormLayout(props: RecipeFormLayoutProps) {
               </AlertDialog>
             )}
 
-            {nextStep ? (
+            {nextStep && (
               <Button onClick={onNextStep}>
                 Next: {nextStep.name}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-            ) : (
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="ghost" className="text-muted-foreground">
-                    Cancel
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure you want to cancel?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Your recipe progress will be saved as a draft, but you&apos;ll exit the recipe
-                      creation flow.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Continue Editing</AlertDialogCancel>
-                    <AlertDialogAction asChild>
-                      <Link href={ProjectUrls.myRecipes}>Exit to Dashboard</Link>
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
             )}
           </div>
         </div>
