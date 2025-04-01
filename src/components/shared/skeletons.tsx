@@ -1,6 +1,6 @@
 import { BookOpen, Info, Scale } from 'lucide-react';
 
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -15,7 +15,7 @@ export function StatisticCardsSkeleton() {
 
 export function RecipesSkeleton() {
   return (
-    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       <Skeleton className="aspect-square" />
       <Skeleton className="aspect-square" />
       <Skeleton className="aspect-square" />
@@ -347,6 +347,76 @@ export function RecipeViewSkeleton() {
             </Card>
           </div>
         </div>
+      </div>
+    </>
+  );
+}
+
+export function CommentsSkeleton() {
+  return (
+    <>
+      <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <Skeleton className="mb-2 h-10 w-48" />
+          <Skeleton className="h-5 w-72" />
+        </div>
+        <div className="flex gap-2">
+          <Skeleton className="h-6 w-24" />
+          <Skeleton className="h-6 w-24" />
+        </div>
+      </div>
+
+      <div className="space-y-6">
+        <div className="mb-6 flex items-center justify-between">
+          <Skeleton className="h-10 w-48" />
+          <Skeleton className="h-10 w-64" />
+        </div>
+
+        <div className="mb-6 flex gap-2">
+          <Skeleton className="h-8 w-32" />
+          <Skeleton className="h-8 w-32" />
+          <Skeleton className="h-8 w-32" />
+        </div>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle>
+              <Skeleton className="h-6 w-48" />
+            </CardTitle>
+            <Skeleton className="mt-1 h-4 w-72" />
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-6">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="space-y-4 rounded-lg border p-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start gap-3">
+                      <Skeleton className="h-10 w-10 rounded-full" />
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <Skeleton className="h-5 w-32" />
+                          <Skeleton className="h-4 w-24" />
+                        </div>
+                        <Skeleton className="mt-1 h-4 w-24" />
+                        <Skeleton className="mt-2 h-4 w-full" />
+                        <Skeleton className="mt-1 h-4 w-5/6" />
+                      </div>
+                    </div>
+                    <Skeleton className="h-8 w-8 rounded-full" />
+                  </div>
+
+                  <div className="flex items-center gap-3 rounded-md bg-muted/30 p-2">
+                    <Skeleton className="h-10 w-10 rounded-md" />
+                    <div>
+                      <Skeleton className="h-4 w-48" />
+                      <Skeleton className="mt-1 h-3 w-24" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </>
   );

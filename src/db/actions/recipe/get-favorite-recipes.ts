@@ -74,8 +74,6 @@ export async function getFavoriteRecipes(params: PaginationRequest) {
       .limit(limit || DATA_PER_PAGE)
       .offset(offset || 0);
 
-    console.dir(recipesResult, { depth: null });
-
     return {
       count: totalCount,
       data: recipesResult,

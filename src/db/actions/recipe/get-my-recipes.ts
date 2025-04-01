@@ -8,7 +8,7 @@ import { createRecipeSqlFilters, handleError } from '@/utils';
 import { DATA_PER_PAGE } from '@/constants';
 
 import { db } from '@/db/drizzle';
-import { favorites, recipes } from '@/db/schema';
+import { comments, favorites, recipes } from '@/db/schema';
 
 import { GetMyRecipesParams } from './types';
 
@@ -42,9 +42,11 @@ export async function getMyRecipes(params: GetMyRecipesParams) {
         favoritesCount: sql<number>`cast(count(distinct ${favorites.userId}) as int)`.as(
           'favoritesCount',
         ),
+        commentsCount: sql<number>`cast(count(distinct ${comments.id}) as int)`.as('commentsCount'),
       })
       .from(recipes)
       .leftJoin(favorites, eq(favorites.recipeId, recipes.id))
+      .leftJoin(comments, eq(comments.recipeId, recipes.id))
       .where(and(...filters, eq(recipes.authorId, user.id)))
       .groupBy(recipes.id)
       .limit(limit || DATA_PER_PAGE)

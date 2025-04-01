@@ -1,6 +1,7 @@
 import { relations } from 'drizzle-orm';
 import { integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
+import { commentsReplies } from './comments-replies';
 import { recipes } from './recipes';
 import { users } from './users';
 
@@ -17,7 +18,7 @@ export const comments = pgTable('comments', {
   createdAt: timestamp().defaultNow().notNull(),
 });
 
-export const commentsRelations = relations(comments, ({ one }) => ({
+export const commentsRelations = relations(comments, ({ one, many }) => ({
   recipe: one(recipes, {
     fields: [comments.recipeId],
     references: [recipes.id],
@@ -26,4 +27,5 @@ export const commentsRelations = relations(comments, ({ one }) => ({
     fields: [comments.authorId],
     references: [users.clerkId],
   }),
+  replies: many(commentsReplies),
 }));
