@@ -10,8 +10,10 @@ import {
   Calendar,
   CircleCheck,
   Edit,
+  ExternalLink,
   Eye,
   Loader2,
+  MessageCircle,
   MoreHorizontal,
   Trash2,
 } from 'lucide-react';
@@ -66,6 +68,7 @@ interface UserRecipesTableProps {
     status: RecipeStatus;
     updatedAt: Date;
     favoritesCount: number;
+    commentsCount: number;
   }[];
   hasSearchTerm: boolean;
 }
@@ -244,6 +247,10 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
                         {/* {recipe.views || 0} */}0
                       </div>
                       <div className="flex items-center text-sm">
+                        <MessageCircle className="mr-1 size-4 text-muted-foreground" />
+                        {recipe.commentsCount}
+                      </div>
+                      <div className="flex items-center text-sm">
                         <Bookmark className="mr-1 size-4 text-muted-foreground" />
                         {recipe.favoritesCount}
                       </div>
@@ -265,8 +272,8 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
                         {recipe.status !== 'archived' && (
                           <>
                             <DropdownMenuItem asChild>
-                              <Link href={ProjectUrls.recipe(recipe.id)}>
-                                <Eye className="mr-2 h-4 w-4" />
+                              <Link href={ProjectUrls.recipe(recipe.id)} target="_blank">
+                                <ExternalLink className="mr-2 h-4 w-4" />
                                 View
                               </Link>
                             </DropdownMenuItem>
