@@ -23,11 +23,6 @@ export async function createRecipe(recipe: RecipeFormValues): Promise<ServerActi
       .values({
         ...recipe,
         authorId: user.id,
-        preparationTime: parseInt(recipe.preparationTime),
-        cookingTime: parseInt(recipe.cookingTime),
-        restTime: recipe.restTime ? parseInt(recipe.restTime) : null,
-        activeTime: recipe.activeTime ? parseInt(recipe.activeTime) : null,
-        servings: parseInt(recipe.servings),
         calories: recipe.calories ? parseInt(recipe.calories) : null,
         protein: recipe.protein ? parseInt(recipe.protein) : null,
         carbs: recipe.carbs ? parseInt(recipe.carbs) : null,

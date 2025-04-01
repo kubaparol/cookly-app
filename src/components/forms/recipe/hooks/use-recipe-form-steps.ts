@@ -1,4 +1,6 @@
+import { Check, FileText, Info, ListChecks, LucideIcon, Timer, Utensils } from 'lucide-react';
 import { useCallback, useState } from 'react';
+import { ZodSchema } from 'zod';
 
 import AdditionalDetailsStepForm from '../AdditionalDetailsStepForm';
 import BasicInformationStepForm from '../BasicInformationStepForm';
@@ -15,46 +17,67 @@ import {
   timeServingsStepFormSchema,
 } from '../schemas';
 
+export interface RecipeFormStep {
+  name: string;
+  description: string;
+  icon: LucideIcon;
+  schema: ZodSchema;
+  Component: () => JSX.Element;
+}
+
 export const useRecipeFormSteps = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
-  const steps = [
+  const steps: RecipeFormStep[] = [
     {
-      label: 'Basic Information',
+      name: 'Basic Information',
+      description: 'Add the basic information to your recipe',
+      icon: FileText,
       schema: basicInformationStepFormSchema,
       Component: BasicInformationStepForm,
     },
     {
-      label: 'Time & Servings',
+      name: 'Time & Servings',
+      description: 'Add the time and servings to your recipe',
+      icon: Timer,
       schema: timeServingsStepFormSchema,
       Component: TimeServingsStepForm,
     },
     {
-      label: 'Ingredients',
+      name: 'Ingredients',
+      description: 'Add the ingredients to your recipe',
+      icon: Utensils,
       schema: ingredientsStepFormSchema,
       Component: IngredientsStepForm,
     },
     {
-      label: 'Preparation Steps',
+      name: 'Preparation Steps',
+      description: 'Add the steps to prepare your recipe',
+      icon: ListChecks,
       schema: preparationStepsFormSchema,
       Component: PreparationStepsForm,
     },
     {
-      label: 'Additional Details',
+      name: 'Additional Details',
+      description: 'Add additional details to your recipe',
+      icon: Info,
       schema: additionalDetailsStepFormSchema,
       Component: AdditionalDetailsStepForm,
     },
     {
-      label: 'Review & Submit',
+      name: 'Review & Submit',
+      description: 'Review your recipe details before publishing',
+      icon: Check,
       schema: reviewSubmitStepFormSchema,
       Component: ReviewSubmitStepForm,
     },
   ] as const;
 
-  const stepsLength = steps.length;
   const currentStep = steps[currentStepIndex];
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === steps.length - 1;
+  const nextStep = steps[currentStepIndex + 1];
+  const prevStep = steps[currentStepIndex - 1];
 
   const goToNextStep = useCallback(() => {
     if (currentStepIndex < steps.length - 1) {
@@ -68,13 +91,20 @@ export const useRecipeFormSteps = () => {
     }
   }, [currentStepIndex]);
 
+  const goToStep = useCallback((stepIndex: number) => {
+    setCurrentStepIndex(stepIndex);
+  }, []);
+
   return {
     currentStepIndex,
-    stepsLength,
     currentStep,
     isFirstStep,
     isLastStep,
+    nextStep,
+    prevStep,
+    steps,
     goToNextStep,
     goToPreviousStep,
+    goToStep,
   };
 };

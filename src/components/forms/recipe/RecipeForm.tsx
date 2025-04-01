@@ -10,12 +10,11 @@ import { ProjectUrls } from '@/constants';
 
 import { createRecipe, updateRecipe } from '@/db';
 
-import Stepper from '@/components/base/Stepper';
+import RecipeFormLayout from '@/components/layouts/RecipeFormLayout';
 import StatusCard from '@/components/shared/StatusCard';
 
 import { useRecipeFormSteps } from './hooks/use-recipe-form-steps';
 import { RecipeFormValues, recipeFormSchema } from './schemas';
-import FormNavigation from './ui/FormNavigation';
 
 interface RecipeFormProps {
   type: 'Create' | 'Update';
@@ -28,19 +27,22 @@ export default function RecipeForm(props: RecipeFormProps) {
   const { type, id, defaultValues, isSuccess = false } = props;
 
   const [isCreationSuccess, setIsCreationSuccess] = useState(isSuccess);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
 
   const {
     currentStepIndex,
-    stepsLength,
     currentStep,
     isFirstStep,
     isLastStep,
+    nextStep,
+    prevStep,
+    steps,
     goToNextStep,
     goToPreviousStep,
+    goToStep,
   } = useRecipeFormSteps();
 
   const methods = useForm<RecipeFormValues>({
@@ -52,9 +54,9 @@ export default function RecipeForm(props: RecipeFormProps) {
       cuisineType: '',
       mealType: '',
       categories: [],
-      preparationTime: '',
-      cookingTime: '',
-      servings: '',
+      preparationTime: 0,
+      cookingTime: 0,
+      servings: 0,
       ingredients: [{ name: '', quantity: '', unit: '' }],
       steps: [{ description: '' }],
       difficulty: '',
@@ -85,7 +87,7 @@ export default function RecipeForm(props: RecipeFormProps) {
       goToNextStep();
     } else {
       const formData = methods.getValues();
-      setIsSubmitting(true);
+      // setIsSubmitting(true);
 
       try {
         if (type === 'Create') {
@@ -117,12 +119,11 @@ export default function RecipeForm(props: RecipeFormProps) {
           }
         }
       } finally {
-        setIsSubmitting(false);
+        // setIsSubmitting(false);
       }
     }
   }, [goToNextStep, id, isLastStep, methods, pathname, router, type]);
 
-  const currentStepSchema = currentStep.schema;
   const CurrentStepComponent = currentStep.Component;
 
   if (isCreationSuccess) {
@@ -147,26 +148,18 @@ export default function RecipeForm(props: RecipeFormProps) {
 
   return (
     <FormProvider {...methods}>
-      <div className="flex flex-1 flex-col gap-3 xs:gap-6 lg:gap-12">
-        <Stepper
-          currentStepLabel={currentStep.label}
-          currentStepIndex={currentStepIndex}
-          stepsLength={stepsLength}
-        />
-
-        <div className="flex-1 pb-8">
-          <CurrentStepComponent />
-        </div>
-
-        <FormNavigation
-          onNextStep={handleNextStep}
-          onBackStep={handleBackStep}
-          isFirstStep={isFirstStep}
-          isLastStep={isLastStep}
-          currentStepSchema={currentStepSchema}
-          isSubmitting={isSubmitting}
-        />
-      </div>
+      <RecipeFormLayout
+        currentStepIndex={currentStepIndex}
+        currentStep={currentStep}
+        steps={steps}
+        prevStep={prevStep}
+        nextStep={nextStep}
+        onBackStep={handleBackStep}
+        onNextStep={handleNextStep}
+        onGoToStep={goToStep}
+        formMethods={methods}>
+        <CurrentStepComponent />
+      </RecipeFormLayout>
     </FormProvider>
   );
 }
