@@ -122,7 +122,7 @@ export function CommentsReceived({ comments }: CommentsReceivedProps) {
             {comment.replies?.length === 0 && (
               <Badge
                 variant="outline"
-                className="self-start border-amber-200 bg-amber-50 text-amber-700 sm:self-center">
+                className="w-fit border border-orange-400/30 bg-orange-400/10 text-xs text-orange-400 hover:bg-orange-500/20 dark:border-orange-300/50 dark:bg-orange-300/20 dark:text-orange-300">
                 Needs Reply
               </Badge>
             )}

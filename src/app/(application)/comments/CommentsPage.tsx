@@ -7,7 +7,6 @@ import { CommentsMade } from '@/components/modules/comments/CommentsMade';
 import { CommentsReceived } from '@/components/modules/comments/CommentsReceived';
 import CommentsFilters from '@/components/modules/recipes/CommentsFilters';
 import { CommentsSkeleton } from '@/components/shared/skeletons';
-import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -31,8 +30,6 @@ async function CommentsLoader({ searchParams }: PageProps) {
     }),
   ]);
 
-  const totalReceived = received?.data.length;
-  const totalMade = made?.data.length;
   const unansweredCount =
     received?.data.filter((comment) => comment.replies.length === 0).length || 0;
 
@@ -45,25 +42,10 @@ async function CommentsLoader({ searchParams }: PageProps) {
             Manage comments on your recipes and track your feedback
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="outline" className="bg-primary/10 text-xs text-primary">
-            {totalReceived} Received
-          </Badge>
-          <Badge variant="outline" className="bg-primary/10 text-xs text-primary">
-            {totalMade} Made
-          </Badge>
-          {unansweredCount && unansweredCount > 0 && (
-            <Badge
-              variant="outline"
-              className="border-amber-200 bg-amber-100 text-xs text-amber-700">
-              {unansweredCount} Unanswered
-            </Badge>
-          )}
-        </div>
       </div>
 
       <Tabs defaultValue="received" className="space-y-6">
-        <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+        <div className="mb-6 flex flex-col items-start justify-between gap-4 lg:flex-row lg:items-center">
           <TabsList>
             <TabsTrigger value="received" className="relative">
               Comments Received

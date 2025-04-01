@@ -121,68 +121,66 @@ export default function CommentsFilters({ pathPattern }: CommentsFiltersProps) {
   };
 
   return (
-    <div>
-      <div className="mb-4 flex flex-wrap gap-2">
-        <Select value={draftValues.rating} onValueChange={(value) => applyFilters('rating', value)}>
-          <SelectTrigger className="h-8 w-[150px]">
-            <SelectValue placeholder="Filter by Rating" />
-          </SelectTrigger>
-          <SelectContent>
-            {ratingOptions.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+    <div className="mb-4 grid grid-cols-1 gap-2 md:grid-cols-2 lg:flex">
+      <Select value={draftValues.rating} onValueChange={(value) => applyFilters('rating', value)}>
+        <SelectTrigger className="lg:w-[150px]">
+          <SelectValue placeholder="Filter by Rating" />
+        </SelectTrigger>
+        <SelectContent>
+          {ratingOptions.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
 
-        <Select value={draftValues.sortBy} onValueChange={(value) => applyFilters('sortBy', value)}>
-          <SelectTrigger className="h-8 w-[150px]">
-            <SelectValue placeholder="Sort By" />
-          </SelectTrigger>
-          <SelectContent>
-            {sortOptions.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      <Select value={draftValues.sortBy} onValueChange={(value) => applyFilters('sortBy', value)}>
+        <SelectTrigger className="lg:w-[150px]">
+          <SelectValue placeholder="Sort By" />
+        </SelectTrigger>
+        <SelectContent>
+          {sortOptions.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
 
-        <Select value={draftValues.status} onValueChange={(value) => applyFilters('status', value)}>
-          <SelectTrigger className="h-8 w-[150px]">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            {statusOptions.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      <Select value={draftValues.status} onValueChange={(value) => applyFilters('status', value)}>
+        <SelectTrigger className="lg:w-[150px]">
+          <SelectValue placeholder="Status" />
+        </SelectTrigger>
+        <SelectContent>
+          {statusOptions.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
 
-        <Select
-          value={draftValues.timePeriod}
-          onValueChange={(value) => applyFilters('timePeriod', value)}>
-          <SelectTrigger className="h-8 w-[150px]">
-            <SelectValue placeholder="Time Period" />
-          </SelectTrigger>
-          <SelectContent>
-            {timePeriodOptions.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      <Select
+        value={draftValues.timePeriod}
+        onValueChange={(value) => applyFilters('timePeriod', value)}>
+        <SelectTrigger className="lg:w-[150px]">
+          <SelectValue placeholder="Time Period" />
+        </SelectTrigger>
+        <SelectContent>
+          {timePeriodOptions.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
 
-        {hasActiveFilters() && (
-          <Button variant="outline" size="sm" onClick={clearAllFilters} className="h-8">
-            Clear Filters
-          </Button>
-        )}
-      </div>
+      {hasActiveFilters() && (
+        <Button variant="outline" size="sm" onClick={clearAllFilters} className="h-8">
+          Clear Filters
+        </Button>
+      )}
     </div>
   );
 }
