@@ -19,8 +19,16 @@ import { db } from '@/db/drizzle';
 
 import { ServerActionResponse } from '@/types';
 
-export async function updateRecipe(recipe: UpdateRecipeParams): Promise<ServerActionResponse> {
+interface UpdateRecipeParamsExtended extends UpdateRecipeParams {
+  status: 'draft' | 'published' | 'archived';
+  canBePublished: boolean;
+}
+
+export async function updateRecipe(
+  params: UpdateRecipeParamsExtended,
+): Promise<ServerActionResponse> {
   try {
+    const { status, canBePublished, ...recipe } = params;
     const user = await currentUser();
 
     if (!user) throw new Error('User not found');
@@ -34,6 +42,8 @@ export async function updateRecipe(recipe: UpdateRecipeParams): Promise<ServerAc
         protein: recipe.protein ? parseInt(recipe.protein) : null,
         carbs: recipe.carbs ? parseInt(recipe.carbs) : null,
         fat: recipe.fat ? parseInt(recipe.fat) : null,
+        status,
+        canBePublished,
       })
       .where(eq(recipes.id, recipe.id))
       .returning();

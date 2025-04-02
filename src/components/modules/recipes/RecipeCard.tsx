@@ -1,5 +1,5 @@
 import { Users } from 'lucide-react';
-import { ChefHat, Clock } from 'lucide-react';
+import { ChefHat, Clock, ImageIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -15,15 +15,15 @@ import { AddToFavoritesButton } from './AddToFavoritesButton';
 const MAX_DIETARY_TAGS = 2;
 interface RecipeCardProps {
   id: string;
-  title: string;
-  description: string;
-  imageUrl: string;
+  title: string | null;
+  description?: string;
+  imageUrl: string | null;
   cookingTime?: number;
-  difficulty?: string;
-  servings?: number;
-  dietaryTags?: string[];
+  difficulty: string | null;
+  servings: number | null;
+  dietaryTags: string[] | null;
   averageRating?: number;
-  cuisineType?: string;
+  cuisineType: string | null;
   isAuthor?: boolean;
   openInNewTab?: boolean;
   isFavorite?: boolean;
@@ -32,7 +32,7 @@ interface RecipeCardProps {
 export function RecipeCard({
   id,
   title,
-  description,
+  description = '',
   imageUrl,
   cookingTime = 0,
   difficulty = 'medium',
@@ -46,12 +46,18 @@ export function RecipeCard({
     <Link href={ProjectUrls.recipe(id)}>
       <Card className="group h-full overflow-hidden transition-all hover:shadow-lg">
         <div className="relative aspect-[4/3] w-full overflow-hidden">
-          <Image
-            src={imageUrl}
-            alt={`${title} picture`}
-            fill
-            className="object-cover transition-transform group-hover:scale-105"
-          />
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt={`${title} picture`}
+              fill
+              className="object-cover transition-transform group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-muted">
+              <ImageIcon className="h-12 w-12 text-muted-foreground" />
+            </div>
+          )}
 
           <AddToFavoritesButton recipeId={id} isFavorite={isFavorite} />
 
@@ -66,18 +72,18 @@ export function RecipeCard({
 
         <CardContent className="p-4">
           <div className="space-y-2">
-            <h3 className="line-clamp-1 text-lg font-semibold group-hover:underline">{title}</h3>
+            <h3 className="line-clamp-1 text-lg font-semibold group-hover:underline">
+              {title || 'Untitled Recipe'}
+            </h3>
 
             {description && (
               <p className="line-clamp-2 text-sm text-muted-foreground">{description}</p>
             )}
 
-            {averageRating !== undefined && (
-              <div className="flex items-center gap-1">
-                <StarRating rating={averageRating} size="sm" />
-                <span className="text-xs text-muted-foreground">{averageRating.toFixed(1)}</span>
-              </div>
-            )}
+            <div className="flex items-center gap-1">
+              <StarRating rating={averageRating} size="sm" />
+              <span className="text-xs text-muted-foreground">{averageRating.toFixed(1)}</span>
+            </div>
 
             <div className="flex flex-wrap gap-3 pt-1 text-xs text-muted-foreground">
               {cookingTime > 0 && (
@@ -94,7 +100,7 @@ export function RecipeCard({
                 </div>
               )}
 
-              {servings && (
+              {servings && servings > 0 && (
                 <div className="flex items-center gap-1">
                   <Users className="h-3.5 w-3.5" />
                   <span>{servings} servings</span>

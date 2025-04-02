@@ -22,7 +22,7 @@ export interface RecipeFormStep {
   description: string;
   icon: LucideIcon;
   schema: ZodSchema;
-  Component: () => JSX.Element;
+  Component: React.ComponentType<any>;
 }
 
 export const useRecipeFormSteps = () => {

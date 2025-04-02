@@ -1,18 +1,12 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { usePathname, useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-
-import { ProjectUrls } from '@/constants';
-
-import { createRecipe, updateRecipe } from '@/db';
 
 import RecipeFormLayout from '@/components/layouts/RecipeFormLayout';
-import StatusCard from '@/components/shared/StatusCard';
 
+import ReviewSubmitStepForm from './ReviewSubmitStepForm';
 import { useRecipeFormSteps } from './hooks/use-recipe-form-steps';
 import { RecipeFormValues, recipeFormSchema } from './schemas';
 
@@ -20,17 +14,10 @@ interface RecipeFormProps {
   type: 'Create' | 'Update';
   id?: string;
   defaultValues?: Partial<RecipeFormValues>;
-  isSuccess?: boolean;
 }
 
 export default function RecipeForm(props: RecipeFormProps) {
-  const { type, id, defaultValues, isSuccess = false } = props;
-
-  const [isCreationSuccess, setIsCreationSuccess] = useState(isSuccess);
-  // const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const router = useRouter();
-  const pathname = usePathname();
+  const { type, id, defaultValues } = props;
 
   const {
     currentStepIndex,
@@ -85,66 +72,12 @@ export default function RecipeForm(props: RecipeFormProps) {
   const handleNextStep = useCallback(async () => {
     if (!isLastStep) {
       goToNextStep();
-    } else {
-      const formData = methods.getValues();
-      // setIsSubmitting(true);
-
-      try {
-        if (type === 'Create') {
-          const result = await createRecipe(formData);
-
-          if (result.success) {
-            const params = new URLSearchParams();
-            params.set('success', 'true');
-
-            router.replace(`${pathname}?${params.toString()}`);
-            methods.reset();
-          } else {
-            toast.error(result.message);
-          }
-        }
-
-        if (type === 'Update') {
-          const result = await updateRecipe({
-            id: id!,
-            ...formData,
-          });
-
-          if (result.success) {
-            router.push(ProjectUrls.myRecipes);
-            toast.success('Recipe updated successfully');
-            methods.reset();
-          } else {
-            toast.error(result.message);
-          }
-        }
-      } finally {
-        // setIsSubmitting(false);
-      }
     }
-  }, [goToNextStep, id, isLastStep, methods, pathname, router, type]);
+  }, [goToNextStep, isLastStep]);
 
   const CurrentStepComponent = currentStep.Component;
 
-  if (isCreationSuccess) {
-    return (
-      <div className="flex flex-1 flex-col items-center justify-center">
-        <StatusCard
-          type="success"
-          title="Success!"
-          message="Your recipe has been created successfully"
-          primaryAction={{
-            label: 'Create Another Recipe',
-            onClick: () => {
-              setIsCreationSuccess(false);
-              router.replace(`${pathname}`);
-            },
-          }}
-          secondaryAction={{ label: 'See My Recipes', href: ProjectUrls.myRecipes }}
-        />
-      </div>
-    );
-  }
+  const isReviewStepForm = currentStep.name === 'Review & Submit';
 
   return (
     <FormProvider {...methods}>
@@ -158,7 +91,11 @@ export default function RecipeForm(props: RecipeFormProps) {
         onNextStep={handleNextStep}
         onGoToStep={goToStep}
         formMethods={methods}>
-        <CurrentStepComponent />
+        {isReviewStepForm ? (
+          <ReviewSubmitStepForm formType={type} recipeId={id} />
+        ) : (
+          <CurrentStepComponent />
+        )}
       </RecipeFormLayout>
     </FormProvider>
   );

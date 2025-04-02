@@ -28,7 +28,17 @@ export default async function EditRecipePage(props: PageProps) {
           type="Update"
           defaultValues={{
             ...recipe,
+            title: recipe.title || undefined,
             description: recipe.description || '',
+            imageUrl: recipe.imageUrl || undefined,
+            cuisineType: recipe.cuisineType || undefined,
+            mealType: recipe.mealType || undefined,
+            categories: recipe.categories || [],
+            preparationTime: recipe.preparationTime || undefined,
+            cookingTime: recipe.cookingTime || undefined,
+            servings: recipe.servings || undefined,
+            difficulty: recipe.difficulty || undefined,
+            dietaryTags: recipe.dietaryTags || [],
             notes: recipe.notes || undefined,
             servingSize: recipe.servingSize || undefined,
             yield: recipe.yield || undefined,
@@ -45,15 +55,12 @@ export default async function EditRecipePage(props: PageProps) {
             allergens: recipe.allergens || undefined,
             seasonality: recipe.seasonality || undefined,
             costLevel: recipe.costLevel || undefined,
-            preparationTime: recipe.preparationTime || undefined,
-            cookingTime: recipe.cookingTime || undefined,
-            servings: recipe.servings || undefined,
+            restTime: recipe.restTime || undefined,
+            activeTime: recipe.activeTime || undefined,
             ingredients: recipe.ingredients?.map((ingredient) => ({
               ...ingredient,
               quantity: ingredient.quantity.toString(),
             })),
-            restTime: recipe.restTime || undefined,
-            activeTime: recipe.activeTime || undefined,
           }}
         />
       )}

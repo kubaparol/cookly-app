@@ -30,8 +30,8 @@ interface Comment {
   createdAt: Date;
   recipe: {
     id: string;
-    title: string;
-    imageUrl: string;
+    title: string | null;
+    imageUrl: string | null;
   };
   author: {
     firstName: string | null;
@@ -130,19 +130,21 @@ export function CommentsReceived({ comments }: CommentsReceivedProps) {
 
           <div className="flex items-center gap-3 rounded-md bg-muted/30 p-2">
             <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-md">
-              <Image
-                src={comment.recipe.imageUrl}
-                alt={comment.recipe.title}
-                fill
-                className="object-cover"
-              />
+              {comment.recipe.imageUrl && (
+                <Image
+                  src={comment.recipe.imageUrl}
+                  alt={comment.recipe.title ? comment.recipe.title : 'Recipe image'}
+                  fill
+                  className="object-cover"
+                />
+              )}
             </div>
             <div className="min-w-0 flex-1">
               <Link
                 href={ProjectUrls.recipe(comment.recipe.id)}
                 target="_blank"
                 className="flex items-center gap-1 truncate text-sm font-medium hover:underline">
-                {comment.recipe.title}
+                {comment.recipe.title ? comment.recipe.title : 'Untitled Recipe'}
                 <ExternalLink className="h-3 w-3 flex-shrink-0" />
               </Link>
               <p className="text-xs text-muted-foreground">Your Recipe</p>

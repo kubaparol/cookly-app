@@ -12,6 +12,7 @@ import {
   Edit,
   ExternalLink,
   Eye,
+  ImageIcon,
   Loader2,
   MessageCircle,
   MoreHorizontal,
@@ -62,8 +63,8 @@ import {
 interface UserRecipesTableProps {
   recipes: {
     id: string;
-    title: string;
-    imageUrl: string;
+    title: string | null;
+    imageUrl: string | null;
     averageRating: number;
     status: RecipeStatus;
     updatedAt: Date;
@@ -207,18 +208,26 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
                   className={cn(recipe.status === 'archived' && 'opacity-60')}>
                   <TableCell>
                     <div className="relative h-10 w-10 overflow-hidden rounded-md">
-                      <Image
-                        src={recipe.imageUrl}
-                        alt={recipe.title}
-                        fill
-                        sizes="100px"
-                        className="object-cover"
-                      />
+                      {recipe.imageUrl ? (
+                        <Image
+                          src={recipe.imageUrl}
+                          alt={recipe.title ? recipe.title : 'Recipe image'}
+                          fill
+                          sizes="100px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-muted">
+                          <ImageIcon className="h-10 w-10 text-muted-foreground" />
+                        </div>
+                      )}
                     </div>
                   </TableCell>
 
                   <TableCell>
-                    <div className="font-medium">{recipe.title}</div>
+                    <div className="font-medium">
+                      {recipe.title ? recipe.title : 'Untitled Recipe'}
+                    </div>
 
                     <div className="mt-1 flex items-center">
                       <StarRating rating={recipe.averageRating} size="sm" />
