@@ -140,13 +140,19 @@ export function CommentsReceived({ comments }: CommentsReceivedProps) {
               )}
             </div>
             <div className="min-w-0 flex-1">
-              <Link
-                href={ProjectUrls.recipe(comment.recipe.id)}
-                target="_blank"
-                className="flex items-center gap-1 truncate text-sm font-medium hover:underline">
-                {comment.recipe.title ? comment.recipe.title : 'Untitled Recipe'}
-                <ExternalLink className="h-3 w-3 flex-shrink-0" />
-              </Link>
+              {comment.recipe.title ? (
+                <Link
+                  href={ProjectUrls.recipe(comment.recipe.id)}
+                  target="_blank"
+                  className="flex items-center gap-1 truncate text-sm font-medium hover:underline">
+                  {comment.recipe.title}
+                  <ExternalLink className="h-3 w-3 flex-shrink-0" />
+                </Link>
+              ) : (
+                <div className="flex items-center gap-1 truncate text-sm font-medium">
+                  Untitled Recipe
+                </div>
+              )}
               <p className="text-xs text-muted-foreground">Your Recipe</p>
             </div>
           </div>
