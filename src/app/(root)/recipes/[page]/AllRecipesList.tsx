@@ -66,8 +66,8 @@ async function AllRecipesLoader(props: PageProps) {
             description={recipe.description || ''}
             imageUrl={recipe.imageUrl}
             cookingTime={getTotalCookingTime({
-              preparationTime: recipe.preparationTime,
-              cookingTime: recipe.cookingTime,
+              preparationTime: recipe.preparationTime || 0,
+              cookingTime: recipe.cookingTime || 0,
               restTime: recipe.restTime || 0,
             })}
             servings={recipe.servings}

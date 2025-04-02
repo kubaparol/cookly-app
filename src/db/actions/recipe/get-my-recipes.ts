@@ -44,6 +44,7 @@ export async function getMyRecipes(params: GetMyRecipesParams) {
         ),
         commentsCount: sql<number>`cast(count(distinct ${comments.id}) as int)`.as('commentsCount'),
         viewsCount: sql<number>`cast(count(distinct ${views.id}) as int)`.as('viewsCount'),
+        canBePublished: recipes.canBePublished,
       })
       .from(recipes)
       .leftJoin(favorites, eq(favorites.recipeId, recipes.id))

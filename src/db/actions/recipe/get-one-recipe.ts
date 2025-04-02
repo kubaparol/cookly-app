@@ -58,9 +58,7 @@ export async function getOneRecipe(id: string) {
   try {
     const user = await currentUser();
 
-    await addView(id);
-
-    return await db.query.recipes.findFirst({
+    const recipe = await db.query.recipes.findFirst({
       where: and(eq(recipes.id, id), eq(recipes.status, 'published')),
       with: {
         author: {
@@ -113,6 +111,12 @@ export async function getOneRecipe(id: string) {
         },
       },
     });
+
+    if (recipe) {
+      await addView(id);
+    }
+
+    return recipe;
   } catch (error) {
     handleError(error);
   }

@@ -12,8 +12,14 @@ import { RecipeFormValues } from '@/components/forms/recipe/schemas';
 
 import { ServerActionResponse } from '@/types';
 
-export async function createRecipe(recipe: RecipeFormValues): Promise<ServerActionResponse> {
+interface CreateRecipeParams extends RecipeFormValues {
+  status: 'draft' | 'published';
+  canBePublished: boolean;
+}
+
+export async function createRecipe(params: CreateRecipeParams): Promise<ServerActionResponse> {
   try {
+    const { status, canBePublished, ...recipe } = params;
     const user = await currentUser();
 
     if (!user) throw new Error('User not found');
@@ -27,24 +33,30 @@ export async function createRecipe(recipe: RecipeFormValues): Promise<ServerActi
         protein: recipe.protein ? parseInt(recipe.protein) : null,
         carbs: recipe.carbs ? parseInt(recipe.carbs) : null,
         fat: recipe.fat ? parseInt(recipe.fat) : null,
+        status,
+        canBePublished,
       })
       .returning();
 
-    await db.insert(ingredients).values(
-      recipe.ingredients.map((ingredient) => ({
-        ...ingredient,
-        recipeId: newRecipe.id,
-        quantity: parseFloat(ingredient.quantity),
-      })),
-    );
+    if (recipe.ingredients && recipe.ingredients.length > 0) {
+      await db.insert(ingredients).values(
+        recipe.ingredients.map((ingredient) => ({
+          ...ingredient,
+          recipeId: newRecipe.id,
+          quantity: parseFloat(ingredient.quantity),
+        })),
+      );
+    }
 
-    await db.insert(steps).values(
-      recipe.steps.map((step, index) => ({
-        ...step,
-        recipeId: newRecipe.id,
-        order: index + 1,
-      })),
-    );
+    if (recipe.steps && recipe.steps.length > 0) {
+      await db.insert(steps).values(
+        recipe.steps.map((step, index) => ({
+          ...step,
+          recipeId: newRecipe.id,
+          order: index + 1,
+        })),
+      );
+    }
 
     if (recipe.equipment && recipe.equipment.length > 0) {
       await db.insert(equipment).values(

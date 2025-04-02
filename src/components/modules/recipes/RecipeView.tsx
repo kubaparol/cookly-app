@@ -7,6 +7,7 @@ import {
   Coffee,
   DollarSign,
   Flame,
+  ImageIcon,
   Info,
   Leaf,
   MessageSquare,
@@ -122,7 +123,7 @@ export default function RecipeView(props: RecipeViewProps) {
       <div className="mb-8 grid grid-cols-1 gap-6 md:mb-12 md:gap-8 lg:grid-cols-2">
         <div className="space-y-4 sm:space-y-5 md:space-y-6">
           <div className="flex flex-wrap items-center gap-2">
-            {recipe.categories.map((category) => (
+            {recipe.categories?.map((category) => (
               <Badge key={category} variant="secondary" className="text-xs sm:text-sm">
                 {category}
               </Badge>
@@ -130,7 +131,7 @@ export default function RecipeView(props: RecipeViewProps) {
           </div>
 
           <h1 className="text-2xl font-bold leading-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl">
-            {recipe.title}
+            {recipe.title ? recipe.title : 'Untitled Recipe'}
           </h1>
 
           {recipe.description && (
@@ -241,13 +242,19 @@ export default function RecipeView(props: RecipeViewProps) {
         </div>
 
         <div className="relative aspect-[4/3] overflow-hidden rounded-xl border-4 border-card shadow-lg sm:rounded-2xl">
-          <Image
-            src={recipe.imageUrl || '/placeholder.svg'}
-            alt={recipe.title}
-            fill
-            className="object-cover"
-            priority
-          />
+          {recipe.imageUrl ? (
+            <Image
+              src={recipe.imageUrl}
+              alt={recipe.title ? recipe.title : 'Recipe image'}
+              fill
+              className="object-cover"
+              priority
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-muted">
+              <ImageIcon className="h-12 w-12 text-muted-foreground" />
+            </div>
+          )}
           <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-black/60 to-transparent"></div>
           <AddToFavoritesButton recipeId={recipe.id} isFavorite={recipe.favorites.length > 0} />
         </div>

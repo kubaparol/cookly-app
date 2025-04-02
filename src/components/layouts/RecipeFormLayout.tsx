@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, Check, ChevronRight, Save, XIcon } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, ChevronRight, XIcon } from 'lucide-react';
 import Link from 'next/link';
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
@@ -128,11 +128,6 @@ export default function RecipeFormLayout(props: RecipeFormLayoutProps) {
               </div>
               <Progress value={completionPercentage} className="h-2" />
             </div>
-
-            <Button variant="outline" size="sm" disabled>
-              <Save className="mr-2 h-4 w-4" />
-              Save Draft
-            </Button>
           </div>
         </div>
       </header>

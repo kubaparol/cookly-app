@@ -38,8 +38,8 @@ async function FavoriteRecipesLoader(props: PageProps) {
             description={recipe.recipes.description || ''}
             imageUrl={recipe.recipes.imageUrl}
             cookingTime={getTotalCookingTime({
-              preparationTime: recipe.recipes.preparationTime,
-              cookingTime: recipe.recipes.cookingTime,
+              preparationTime: recipe.recipes.preparationTime || 0,
+              cookingTime: recipe.recipes.cookingTime || 0,
               restTime: recipe.recipes.restTime || 0,
             })}
             servings={recipe.recipes.servings}

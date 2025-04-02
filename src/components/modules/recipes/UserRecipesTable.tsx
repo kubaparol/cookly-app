@@ -12,6 +12,7 @@ import {
   Edit,
   ExternalLink,
   Eye,
+  ImageIcon,
   Loader2,
   MessageCircle,
   MoreHorizontal,
@@ -58,14 +59,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface UserRecipesTableProps {
   recipes: {
     id: string;
-    title: string;
-    imageUrl: string;
+    title: string | null;
+    imageUrl: string | null;
     averageRating: number;
     status: RecipeStatus;
+    canBePublished?: boolean;
     updatedAt: Date;
     viewsCount: number;
     favoritesCount: number;
@@ -207,18 +210,26 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
                   className={cn(recipe.status === 'archived' && 'opacity-60')}>
                   <TableCell>
                     <div className="relative h-10 w-10 overflow-hidden rounded-md">
-                      <Image
-                        src={recipe.imageUrl}
-                        alt={recipe.title}
-                        fill
-                        sizes="100px"
-                        className="object-cover"
-                      />
+                      {recipe.imageUrl ? (
+                        <Image
+                          src={recipe.imageUrl}
+                          alt={recipe.title ? recipe.title : 'Recipe image'}
+                          fill
+                          sizes="100px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-muted">
+                          <ImageIcon className="h-10 w-10 text-muted-foreground" />
+                        </div>
+                      )}
                     </div>
                   </TableCell>
 
                   <TableCell>
-                    <div className="font-medium">{recipe.title}</div>
+                    <div className="font-medium">
+                      {recipe.title ? recipe.title : 'Untitled Recipe'}
+                    </div>
 
                     <div className="mt-1 flex items-center">
                       <StarRating rating={recipe.averageRating} size="sm" />
@@ -272,12 +283,42 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
 
                         {recipe.status !== 'archived' && (
                           <>
-                            <DropdownMenuItem asChild>
-                              <Link href={ProjectUrls.recipe(recipe.id)} target="_blank">
-                                <ExternalLink className="mr-2 h-4 w-4" />
-                                View
-                              </Link>
-                            </DropdownMenuItem>
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <div>
+                                    <DropdownMenuItem
+                                      asChild={recipe.canBePublished !== false}
+                                      onSelect={(e) => !recipe.canBePublished && e.preventDefault()}
+                                      className={cn(
+                                        recipe.canBePublished === false &&
+                                          'cursor-not-allowed opacity-60',
+                                      )}>
+                                      {recipe.canBePublished === false ? (
+                                        <>
+                                          <AlertTriangle className="mr-2 h-4 w-4 text-amber-500" />
+                                          View
+                                        </>
+                                      ) : (
+                                        <Link href={ProjectUrls.recipe(recipe.id)} target="_blank">
+                                          <ExternalLink className="mr-2 h-4 w-4" />
+                                          View
+                                        </Link>
+                                      )}
+                                    </DropdownMenuItem>
+                                  </div>
+                                </TooltipTrigger>
+                                {recipe.canBePublished === false && (
+                                  <TooltipContent side="right">
+                                    <p>
+                                      Recipe is incomplete
+                                      <br />
+                                      and cannot be viewed publicly
+                                    </p>
+                                  </TooltipContent>
+                                )}
+                              </Tooltip>
+                            </TooltipProvider>
 
                             <DropdownMenuItem asChild>
                               <Link href={ProjectUrls.editRecipe(recipe.id)}>
@@ -298,10 +339,37 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
                                 setShowSetStatusDialog(open ? 'publish' : null)
                               }>
                               <AlertDialogTrigger asChild>
-                                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                                  <CircleCheck className="mr-2 h-4 w-4" />
-                                  Publish
-                                </DropdownMenuItem>
+                                <TooltipProvider delayDuration={100}>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <div>
+                                        <DropdownMenuItem
+                                          onSelect={(e) => e.preventDefault()}
+                                          disabled={recipe.canBePublished === false}
+                                          className={cn(
+                                            recipe.canBePublished === false &&
+                                              'cursor-not-allowed opacity-60',
+                                          )}>
+                                          {recipe.canBePublished === false ? (
+                                            <AlertTriangle className="mr-2 h-4 w-4 text-amber-500" />
+                                          ) : (
+                                            <CircleCheck className="mr-2 h-4 w-4" />
+                                          )}
+                                          Publish
+                                        </DropdownMenuItem>
+                                      </div>
+                                    </TooltipTrigger>
+                                    {recipe.canBePublished === false && (
+                                      <TooltipContent side="right">
+                                        <p>
+                                          Recipe is missing required information
+                                          <br />
+                                          and cannot be published
+                                        </p>
+                                      </TooltipContent>
+                                    )}
+                                  </Tooltip>
+                                </TooltipProvider>
                               </AlertDialogTrigger>
 
                               <AlertDialogContent>

@@ -4,6 +4,7 @@ import {
   Coffee,
   DollarSign,
   ImageIcon,
+  Loader2,
   Save,
   Upload,
   XIcon,
@@ -23,10 +24,16 @@ import {
 import { Clock } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { cn, getTotalCookingTime } from '@/utils';
+
+import { ProjectUrls } from '@/constants';
+
+import { createRecipe, updateRecipe } from '@/db';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -48,95 +55,31 @@ import { useRecipeFormSteps } from './hooks/use-recipe-form-steps';
 import { RecipeFormValues } from './schemas';
 
 // Add this mapper function after the import statements and before the checkStepValidation function
-const errorPathMapper = (path: string): string => {
-  const mapping: Record<string, string> = {
-    // Basic info
-    title: 'Recipe Title',
-    imageUrl: 'Recipe Image',
-    description: 'Description',
-    categories: 'Categories',
-    cuisineType: 'Cuisine Type',
-    mealType: 'Meal Type',
-    servings: 'Servings',
-    servingSize: 'Serving Size',
-    difficulty: 'Difficulty Level',
-
-    // Times
-    preparationTime: 'Preparation Time',
-    cookingTime: 'Cooking Time',
-    restTime: 'Rest Time',
-    activeTime: 'Active Time',
-    totalTime: 'Total Time',
-
-    // Ingredients and equipment
-    ingredients: 'Ingredients',
-    equipment: 'Equipment',
-    substitutions: 'Substitutions',
-
-    // Instructions
-    steps: 'Cooking Steps',
-
-    // Dietary info
-    dietaryTags: 'Dietary Tags',
-    allergens: 'Allergens',
-
-    // Nutrition
-    calories: 'Calories',
-    protein: 'Protein',
-    carbs: 'Carbohydrates',
-    fat: 'Fat',
-
-    // Additional info
-    notes: 'Recipe Notes',
-    tipsAndTricks: 'Tips and Tricks',
-    storageInstructions: 'Storage Instructions',
-    reheatingInstructions: 'Reheating Instructions',
-    makeAheadInstructions: 'Make Ahead Instructions',
-
-    // Other
-    costLevel: 'Cost Level',
-    seasonality: 'Seasonality',
-    yield: 'Yield',
-    termsAccepted: 'Terms Acceptance',
-  };
-
-  return mapping[path] || path;
-};
-
 export const checkStepValidation = (formValues: RecipeFormValues, schema: any) => {
   try {
     schema.parse(formValues);
-    return { isValid: true, errors: null };
-  } catch (error: any) {
-    // Format zod errors if they exist
-    const formattedErrors = error.errors
-      ? error.errors
-      : error.format
-        ? error.format()
-        : [{ message: 'Validation failed' }];
+    return true;
 
-    return {
-      isValid: false,
-      errors: {
-        errors: Array.isArray(formattedErrors)
-          ? formattedErrors
-          : Object.entries(formattedErrors)
-              .filter(([key]) => key !== '_errors')
-              .flatMap(
-                ([key, value]: [string, any]) =>
-                  value._errors?.map((msg: string) => ({ path: key, message: msg })) || [],
-              ),
-      },
-    };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
+    return false;
   }
 };
 
-export default function ReviewSubmitStepForm() {
+interface ReviewSubmitStepFormProps {
+  formType: 'Create' | 'Update';
+  recipeId?: string;
+}
+
+export default function ReviewSubmitStepForm({ formType, recipeId }: ReviewSubmitStepFormProps) {
   const { control, watch } = useFormContext<RecipeFormValues>();
   const { steps } = useRecipeFormSteps();
+
   const [publishOption, setPublishOption] = useState<'public' | 'draft'>('public');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formValues = watch();
+  const router = useRouter();
 
   const totalTime = getTotalCookingTime({
     preparationTime: formValues.preparationTime,
@@ -147,12 +90,59 @@ export default function ReviewSubmitStepForm() {
   const stepValidations = steps.map((step) => {
     return {
       name: step.name,
-      ...checkStepValidation(formValues, step.schema),
+      isValid: checkStepValidation(formValues, step.schema),
     };
   });
 
   const validStepsCount = stepValidations.filter((step) => step.isValid).length;
   const completionPercentage = Math.round((validStepsCount / steps.length) * 100);
+
+  const handleSubmitRecipe = async () => {
+    const formData = watch();
+
+    setIsSubmitting(true);
+
+    try {
+      let result;
+
+      if (formType === 'Create') {
+        result = await createRecipe({
+          ...formData,
+          status: publishOption === 'public' ? 'published' : 'draft',
+          canBePublished: completionPercentage === 100,
+        });
+      } else if (formType === 'Update' && recipeId) {
+        result = await updateRecipe({
+          ...formData,
+          id: recipeId,
+          status: publishOption === 'public' ? 'published' : 'draft',
+          canBePublished: completionPercentage === 100,
+        });
+      } else {
+        throw new Error('Invalid form type or missing recipe ID for update');
+      }
+
+      if (result.success) {
+        toast.success(
+          formType === 'Create'
+            ? publishOption === 'public'
+              ? 'Recipe published successfully!'
+              : 'Recipe saved as draft'
+            : publishOption === 'public'
+              ? 'Recipe updated and published!'
+              : 'Recipe updated as draft',
+        );
+
+        router.push(ProjectUrls.myRecipes);
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      toast.error(`Failed to ${formType.toLowerCase()} recipe: ${error}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <>
@@ -616,35 +606,11 @@ export default function ReviewSubmitStepForm() {
 
                   {!step.isValid && (
                     <div className="space-y-1">
-                      <div className="ml-0 mt-1 space-y-1.5 rounded-md bg-red-50 p-2 text-xs text-red-600 dark:bg-red-950/20">
-                        {step.errors && (
-                          <>
-                            {step.errors.errors && step.errors.errors.length > 0 ? (
-                              (() => {
-                                // Group errors by path and display only the first error for each path
-                                const errorsByPath: Record<string, string> = {};
-
-                                step.errors.errors.forEach((error) => {
-                                  if (error.path && !errorsByPath[error.path]) {
-                                    errorsByPath[error.path] = error.message;
-                                  }
-                                });
-
-                                return Object.entries(errorsByPath).map(([path, message], i) => (
-                                  <div key={i} className="flex items-start">
-                                    <span className="mr-1">•</span>
-                                    <span>{`${errorPathMapper(path)}: ${message}`}</span>
-                                  </div>
-                                ));
-                              })()
-                            ) : (
-                              <div className="flex items-start">
-                                <span className="mr-1">•</span>
-                                <span>Validation failed. Please review this section.</span>
-                              </div>
-                            )}
-                          </>
-                        )}
+                      <div className="ml-0 mt-1 rounded-md bg-red-50 p-2 text-xs text-red-600 dark:bg-red-950/20">
+                        <div className="flex items-start">
+                          <span className="mr-1">•</span>
+                          <span>Required fields are missing. Please complete this section.</span>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -718,9 +684,9 @@ export default function ReviewSubmitStepForm() {
             </div>
 
             {completionPercentage < 100 && (
-              <div className="rounded-md border border-yellow-400/30 bg-yellow-400/10 p-3 text-xs text-yellow-400 dark:border-yellow-300/50 dark:bg-yellow-300/20 dark:text-yellow-300">
+              <div className="rounded-md border border-orange-400 bg-orange-400/10 p-3 text-xs text-orange-900 dark:border-orange-300/50 dark:bg-orange-300/20 dark:text-orange-300">
                 <div className="flex items-start">
-                  <AlertCircle className="mr-2 h-5 w-5 flex-shrink-0 text-yellow-400 dark:text-yellow-300" />
+                  <AlertCircle className="mr-2 h-5 w-5 flex-shrink-0 text-orange-400 dark:text-orange-300" />
                   <div>
                     <h4 className="text-sm font-medium">
                       Recipe Incomplete ({completionPercentage}% complete)
@@ -748,11 +714,11 @@ export default function ReviewSubmitStepForm() {
                       <FormLabel>
                         I confirm that this recipe is my own creation or I have permission to share
                         it, and I accept the{' '}
-                        <Link href="#" className="text-primary underline underline-offset-2">
+                        <Link href="#" className="underline underline-offset-2">
                           Terms of Service
                         </Link>{' '}
                         and{' '}
-                        <Link href="#" className="text-primary underline underline-offset-2">
+                        <Link href="#" className="underline underline-offset-2">
                           Content Guidelines
                         </Link>
                         .
@@ -769,19 +735,26 @@ export default function ReviewSubmitStepForm() {
             <Button
               className="w-full"
               variant={publishOption === 'public' ? 'default' : 'outline'}
+              onClick={handleSubmitRecipe}
               disabled={
-                publishOption === 'public' &&
-                (completionPercentage < 100 || !formValues.termsAccepted)
+                (publishOption === 'public' &&
+                  (completionPercentage < 100 || !formValues.termsAccepted)) ||
+                isSubmitting
               }>
-              {publishOption === 'public' ? (
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {formType === 'Create' ? 'Creating...' : 'Updating...'}
+                </>
+              ) : publishOption === 'public' ? (
                 <>
                   <Upload className="mr-2 h-4 w-4" />
-                  Publish Recipe
+                  {formType === 'Create' ? 'Publish Recipe' : 'Update & Publish Recipe'}
                 </>
               ) : (
                 <>
                   <Save className="mr-2 h-4 w-4" />
-                  Save as Draft
+                  {formType === 'Create' ? 'Save as Draft' : 'Update as Draft'}
                 </>
               )}
             </Button>

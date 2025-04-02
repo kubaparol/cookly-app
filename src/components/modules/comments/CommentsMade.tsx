@@ -23,8 +23,8 @@ interface Comment {
   createdAt: Date;
   recipe: {
     id: string;
-    title: string;
-    imageUrl: string;
+    title: string | null;
+    imageUrl: string | null;
     author: {
       firstName: string | null;
       lastName: string | null;
@@ -97,21 +97,29 @@ export function CommentsMade({ comments }: CommentsMadeProps) {
 
           <div className="flex items-center gap-3 rounded-md bg-muted/30 p-2">
             <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-md">
-              <Image
-                src={comment.recipe.imageUrl}
-                alt={comment.recipe.title}
-                fill
-                className="object-cover"
-              />
+              {comment.recipe.imageUrl && (
+                <Image
+                  src={comment.recipe.imageUrl}
+                  alt={comment.recipe.title ? comment.recipe.title : 'Recipe image'}
+                  fill
+                  className="object-cover"
+                />
+              )}
             </div>
             <div className="min-w-0 flex-1">
-              <Link
-                href={ProjectUrls.recipe(comment.recipe.id)}
-                target="_blank"
-                className="flex items-center gap-1 truncate text-sm font-medium hover:underline">
-                {comment.recipe.title}
-                <ExternalLink className="h-3 w-3 flex-shrink-0" />
-              </Link>
+              {comment.recipe.title ? (
+                <Link
+                  href={ProjectUrls.recipe(comment.recipe.id)}
+                  target="_blank"
+                  className="flex items-center gap-1 truncate text-sm font-medium hover:underline">
+                  {comment.recipe.title}
+                  <ExternalLink className="h-3 w-3 flex-shrink-0" />
+                </Link>
+              ) : (
+                <div className="flex items-center gap-1 truncate text-sm font-medium">
+                  Untitled Recipe
+                </div>
+              )}
               <p className="text-xs text-muted-foreground">
                 By {comment.recipe.author.firstName} {comment.recipe.author.lastName}
               </p>

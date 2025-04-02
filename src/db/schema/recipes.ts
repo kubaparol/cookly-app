@@ -20,24 +20,24 @@ import { users } from './users';
 
 export const recipes = pgTable('recipes', {
   id: uuid().primaryKey().defaultRandom(),
-  title: text().notNull(),
+  title: text(),
   description: text(),
-  imageUrl: text().notNull(),
+  imageUrl: text(),
   authorId: text()
     .notNull()
     .references(() => users.clerkId),
-  cuisineType: text().notNull(),
-  mealType: text().notNull(),
-  categories: text().array().notNull(),
-  preparationTime: integer().notNull(),
-  cookingTime: integer().notNull(),
+  cuisineType: text(),
+  mealType: text(),
+  categories: text().array(),
+  preparationTime: integer(),
+  cookingTime: integer(),
   restTime: integer(),
   activeTime: integer(),
-  servings: integer().notNull(),
+  servings: integer(),
   servingSize: text(),
   yield: text(),
-  difficulty: text().notNull(),
-  dietaryTags: text().array().notNull(),
+  difficulty: text(),
+  dietaryTags: text().array(),
   storageInstructions: text(),
   reheatingInstructions: text(),
   makeAheadInstructions: text(),
@@ -53,7 +53,8 @@ export const recipes = pgTable('recipes', {
   averageRating: doublePrecision().notNull().default(0),
   status: text({ enum: ['draft', 'published', 'archived'] })
     .notNull()
-    .default('published'),
+    .default('draft'),
+  canBePublished: boolean().notNull().default(false),
   createdAt: timestamp().defaultNow().notNull(),
   updatedAt: timestamp()
     .defaultNow()

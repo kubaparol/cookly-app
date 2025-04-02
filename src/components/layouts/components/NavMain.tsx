@@ -3,6 +3,7 @@
 import { ChevronRight, PlusCircleIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Fragment } from 'react';
 
 import { AppSidebarGroup, AppSidebarItem } from '@/hooks';
 
@@ -52,9 +53,11 @@ export function NavMain({
 
         <SidebarMenu>
           {items.map((item) => (
-            <>
+            <Fragment key={item.title}>
               {'items' in item ? (
-                <Collapsible defaultOpen={item.items.some((item) => isActive(item.url))}>
+                <Collapsible
+                  defaultOpen={item.items.some((item) => isActive(item.url))}
+                  key={item.title}>
                   <SidebarMenuItem>
                     <CollapsibleTrigger asChild>
                       <SidebarMenuButton className="group">
@@ -65,7 +68,7 @@ export function NavMain({
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
 
-                    <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down overflow-hidden">
+                    <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
                       <SidebarMenuSub>
                         {item.items.map((item) => (
                           <SidebarMenuSubItem key={item.title}>
@@ -98,7 +101,7 @@ export function NavMain({
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               )}
-            </>
+            </Fragment>
           ))}
         </SidebarMenu>
       </SidebarGroupContent>
