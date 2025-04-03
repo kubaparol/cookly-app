@@ -12,7 +12,7 @@ async function EngagementCardsLoader({ period }: { period: string }) {
   if (!stats) return null;
 
   return (
-    <div className="grid gap-6 md:grid-cols-2">
+    <div className="grid gap-6 lg:grid-cols-2">
       <EngagementCard
         title="Comments"
         count={stats.comments.count}

@@ -12,6 +12,7 @@ import { PageProps } from '@/types';
 
 import EngagementCards from './EngagementCards';
 import MetricCards from './MetricCards';
+import SentimentCard from './SentimentCard';
 import TopRecipesTable from './TopRecipesTable';
 
 export const metadata: Metadata = {
@@ -51,7 +52,6 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
 
         <TabsContent value="overview" className="space-y-6">
           <MetricCards period={period} />
-
           <TopRecipesTable period={period} />
         </TabsContent>
 
@@ -61,6 +61,7 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
 
         <TabsContent value="engagement" className="space-y-6">
           <EngagementCards period={period} />
+          <SentimentCard period={period} />
         </TabsContent>
       </Tabs>
     </PageWrapper>
