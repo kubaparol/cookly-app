@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PageProps } from '@/types';
 
 import MetricCards from './MetricCards';
+import TopRecipesTable from './TopRecipesTable';
 
 export const metadata: Metadata = {
   title: 'Analytics',
@@ -34,6 +35,7 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
             <Download className="mr-2 h-4 w-4" />
             Export Data
           </Button>
+
           <PeriodSelect defaultValue={period} />
         </div>
       }>
@@ -48,6 +50,8 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
 
         <TabsContent value="overview" className="space-y-6">
           <MetricCards period={period} />
+
+          <TopRecipesTable period={period} />
         </TabsContent>
 
         <TabsContent value="recipes" className="space-y-6">
