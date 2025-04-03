@@ -17,7 +17,7 @@ export interface AnalyticsData {
   commentsChange: number;
 }
 
-export async function getAnalytics(period: string = '30days'): Promise<AnalyticsData | undefined> {
+export async function getMetrics(period: string = '30days'): Promise<AnalyticsData | undefined> {
   try {
     const user = await currentUser();
     if (!user) throw new Error('User not found');

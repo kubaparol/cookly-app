@@ -4,6 +4,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+export function EngagementCardsSkeleton() {
+  return (
+    <div className="grid gap-6 md:grid-cols-2">
+      <Skeleton className="h-[180px] w-full" />
+      <Skeleton className="h-[180px] w-full" />
+    </div>
+  );
+}
+
 export function TopRecipesTableSkeleton() {
   return <Skeleton className="h-[520px] w-full" />;
 }

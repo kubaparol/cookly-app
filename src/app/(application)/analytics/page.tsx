@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { PageProps } from '@/types';
 
+import EngagementCards from './EngagementCards';
 import MetricCards from './MetricCards';
 import TopRecipesTable from './TopRecipesTable';
 
@@ -58,8 +59,8 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
           recipes
         </TabsContent>
 
-        <TabsContent value="audience" className="space-y-6">
-          audience
+        <TabsContent value="engagement" className="space-y-6">
+          <EngagementCards period={period} />
         </TabsContent>
       </Tabs>
     </PageWrapper>
