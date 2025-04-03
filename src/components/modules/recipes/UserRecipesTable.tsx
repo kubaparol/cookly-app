@@ -5,7 +5,6 @@ import {
   AlertTriangle,
   Archive,
   ArchiveRestore,
-  ArrowUpDown,
   Bookmark,
   Calendar,
   CircleCheck,
@@ -159,28 +158,28 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
               <TableHead>
                 <div className="flex cursor-pointer items-center" onClick={() => {}}>
                   Title
-                  <ArrowUpDown className="ml-2 h-4 w-4" />
+                  {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
                 </div>
               </TableHead>
 
               <TableHead className="hidden lg:table-cell">
                 <div className="flex cursor-pointer items-center" onClick={() => {}}>
                   Status
-                  <ArrowUpDown className="ml-2 h-4 w-4" />
+                  {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
                 </div>
               </TableHead>
 
               <TableHead className="hidden lg:table-cell">
                 <div className="flex cursor-pointer items-center" onClick={() => {}}>
                   Last Updated
-                  <ArrowUpDown className="ml-2 h-4 w-4" />
+                  {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
                 </div>
               </TableHead>
 
               <TableHead className="hidden xl:table-cell">
                 <div className="flex cursor-pointer items-center" onClick={() => {}}>
                   Stats
-                  <ArrowUpDown className="ml-2 h-4 w-4" />
+                  {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
                 </div>
               </TableHead>
 
