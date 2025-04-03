@@ -1,23 +1,24 @@
-import { BarChart3, Calendar, Download } from 'lucide-react';
+import { BarChart3, Download } from 'lucide-react';
 import { Metadata } from 'next';
 
 import { ProjectUrls } from '@/constants';
 
 import { PageWrapper } from '@/components/layouts/components/PageWrapper';
+import PeriodSelect from '@/components/modules/analytics/PeriodSelect';
 import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+import { PageProps } from '@/types';
+
+import MetricCards from './MetricCards';
 
 export const metadata: Metadata = {
   title: 'Analytics',
 };
 
-export default function AnalyticsPage() {
+export default async function AnalyticsPage({ searchParams }: PageProps) {
+  const period = (searchParams?.period as string) || '30days';
+
   return (
     <PageWrapper
       title="Recipe Analytics"
@@ -28,27 +29,35 @@ export default function AnalyticsPage() {
       ]}
       icon={<BarChart3 className="text-muted-foreground" />}
       actions={
-        <>
+        <div className="flex gap-2 md:flex-col lg:flex-row">
           <Button variant="outline" size="sm">
             <Download className="mr-2 h-4 w-4" />
             Export Data
           </Button>
-          <Select defaultValue="30days">
-            <SelectTrigger className="w-[180px]">
-              <Calendar className="mr-2 h-4 w-4" />
-              <SelectValue placeholder="Select period" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="7days">Last 7 days</SelectItem>
-              <SelectItem value="30days">Last 30 days</SelectItem>
-              <SelectItem value="90days">Last 90 days</SelectItem>
-              <SelectItem value="year">Last 12 months</SelectItem>
-              <SelectItem value="all">All time</SelectItem>
-            </SelectContent>
-          </Select>
-        </>
+          <PeriodSelect defaultValue={period} />
+        </div>
       }>
-      <div className="grid grid-cols-1 gap-4">xD</div>
+      <Tabs defaultValue="overview" className="space-y-6">
+        <div className="flex items-center justify-between">
+          <TabsList>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="recipes">Recipes</TabsTrigger>
+            <TabsTrigger value="engagement">Engagement</TabsTrigger>
+          </TabsList>
+        </div>
+
+        <TabsContent value="overview" className="space-y-6">
+          <MetricCards period={period} />
+        </TabsContent>
+
+        <TabsContent value="recipes" className="space-y-6">
+          recipes
+        </TabsContent>
+
+        <TabsContent value="audience" className="space-y-6">
+          audience
+        </TabsContent>
+      </Tabs>
     </PageWrapper>
   );
 }
