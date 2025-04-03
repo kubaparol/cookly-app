@@ -502,7 +502,7 @@ export default function RecipeView(props: RecipeViewProps) {
         </div>
 
         <div>
-          <div className="sticky top-4">
+          <div className="sticky top-20">
             {(recipe.calories || recipe.protein || recipe.carbs || recipe.fat) && (
               <Card className="mb-4 overflow-hidden shadow-sm sm:mb-6">
                 <div className="bg-primary p-3 sm:p-4">

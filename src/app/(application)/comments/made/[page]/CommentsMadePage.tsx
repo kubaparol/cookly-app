@@ -29,15 +29,6 @@ async function CommentsLoader({ params, searchParams }: PageProps) {
 
   return (
     <div className="space-y-6">
-      <div className="mb-6 flex flex-col gap-4 md:mb-8 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold md:text-3xl">Comments</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Manage comments on your recipes and track your feedback
-          </p>
-        </div>
-      </div>
-
       <div className="mb-4 space-y-2">
         <div className="w-full sm:max-w-[400px]">
           <Search placeholder="Search comments..." />

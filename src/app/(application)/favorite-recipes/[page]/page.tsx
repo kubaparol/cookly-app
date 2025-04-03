@@ -1,5 +1,9 @@
+import { Heart } from 'lucide-react';
 import { Metadata } from 'next';
 
+import { ProjectUrls } from '@/constants';
+
+import { PageWrapper } from '@/components/layouts/components/PageWrapper';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { PageProps } from '@/types';
@@ -12,17 +16,26 @@ export const metadata: Metadata = {
 
 export default function FavoriteRecipesPage(props: PageProps) {
   return (
-    <section className="flex h-full flex-1 flex-col gap-6 pb-8">
-      <Card>
-        <CardHeader>
-          <CardTitle>Favorite Recipes</CardTitle>
-          <CardDescription>Your collection of favorite recipes</CardDescription>
-        </CardHeader>
+    <PageWrapper
+      title="Favorite Recipes"
+      description="View and manage all your favorite recipes."
+      breadcrumbs={[
+        { href: ProjectUrls.home, label: 'Home' },
+        { href: ProjectUrls.favoriteRecipes, label: 'Favorite Recipes', isCurrent: true },
+      ]}
+      icon={<Heart className="text-muted-foreground" />}>
+      <section className="flex h-full flex-1 flex-col gap-6 pb-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Favorite Recipes</CardTitle>
+            <CardDescription>Your collection of favorite recipes</CardDescription>
+          </CardHeader>
 
-        <CardContent className="space-y-4">
-          <FavoriteRecipesList {...props} />
-        </CardContent>
-      </Card>
-    </section>
+          <CardContent className="space-y-4">
+            <FavoriteRecipesList {...props} />
+          </CardContent>
+        </Card>
+      </section>
+    </PageWrapper>
   );
 }
