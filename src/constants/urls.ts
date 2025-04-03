@@ -17,6 +17,7 @@ export const ProjectUrls = Object.freeze({
   commentsReceived: '/comments/received',
   createRecipe: '/my-recipe/create',
   editRecipe: (id: string) => `/my-recipe/${id}/edit`,
+  analytics: '/analytics',
   settings: '/settings',
 });
 

@@ -1,4 +1,5 @@
 import {
+  BarChart3,
   Heart,
   LayoutDashboardIcon,
   LucideIcon,
@@ -39,6 +40,11 @@ export const useAppSidebarItems = () => {
         title: 'Favorite Recipes',
         url: ProjectUrls.favoriteRecipes,
         icon: Heart,
+      },
+      {
+        title: 'Analytics',
+        url: ProjectUrls.analytics,
+        icon: BarChart3,
       },
       {
         title: 'Comments',

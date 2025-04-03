@@ -25,7 +25,7 @@ export default function DashboardPage() {
       actions={
         <Button size="sm" variant="outline">
           <Download className="mr-2 h-4 w-4" />
-          Export
+          Export Data
         </Button>
       }>
       <div className="grid grid-cols-1 gap-4">
