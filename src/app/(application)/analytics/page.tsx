@@ -1,11 +1,11 @@
-import { BarChart3, Calendar, Download } from 'lucide-react';
+import { BarChart3, Calendar } from 'lucide-react';
 import { Metadata } from 'next';
 
 import { ProjectUrls } from '@/constants';
 
 import { ParamSelect } from '@/components/base/ParamSelect';
 import { PageWrapper } from '@/components/layouts/components/PageWrapper';
-import { Button } from '@/components/ui/button';
+import { ExportAnalyticsButton } from '@/components/modules/analytics/ExportAnalyticsButton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { PageProps } from '@/types';
@@ -52,10 +52,7 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
       icon={<BarChart3 className="text-muted-foreground" />}
       actions={
         <div className="flex gap-2 md:flex-col lg:flex-row">
-          <Button variant="outline" size="sm">
-            <Download className="mr-2 h-4 w-4" />
-            Export Data
-          </Button>
+          <ExportAnalyticsButton period={period} />
 
           <ParamSelect
             defaultValue={period}

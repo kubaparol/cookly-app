@@ -1,3 +1,4 @@
+export * from './export-analytics-data';
 export * from './get-engagements';
 export * from './get-metrics';
 export * from './get-recent-comments';
