@@ -4,6 +4,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+export function QuickStatsSkeleton() {
+  return (
+    <div className="grid gap-4 xxs:grid-cols-2 xs:grid-cols-3">
+      <Skeleton className="h-[108px] w-full" />
+      <Skeleton className="h-[108px] w-full" />
+      <Skeleton className="h-[108px] w-full xxs:col-span-full xs:col-span-1" />
+    </div>
+  );
+}
+
 export function RecipePerformanceCardsSkeleton() {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -44,15 +54,6 @@ export function MetricCardsSkeleton() {
       <Skeleton className="h-[130px] w-full" />
       <Skeleton className="h-[130px] w-full" />
       <Skeleton className="h-[130px] w-full" />
-    </div>
-  );
-}
-
-export function StatisticCardsSkeleton() {
-  return (
-    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-      <Skeleton className="h-[106px] w-full" />
-      <Skeleton className="h-[106px] w-full" />
     </div>
   );
 }
