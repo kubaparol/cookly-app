@@ -1,10 +1,10 @@
-import { BarChart3, Download } from 'lucide-react';
+import { BarChart3, Calendar, Download } from 'lucide-react';
 import { Metadata } from 'next';
 
 import { ProjectUrls } from '@/constants';
 
+import { ParamSelect } from '@/components/base/ParamSelect';
 import { PageWrapper } from '@/components/layouts/components/PageWrapper';
-import PeriodSelect from '@/components/modules/analytics/PeriodSelect';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -13,6 +13,7 @@ import { PageProps } from '@/types';
 import EngagementCards from './EngagementCards';
 import MetricCards from './MetricCards';
 import RecentComments from './RecentComments';
+import RecipePerformanceCards from './RecipePerformanceCards';
 import SentimentCard from './SentimentCard';
 import TopRecipesTable from './TopRecipesTable';
 
@@ -20,8 +21,25 @@ export const metadata: Metadata = {
   title: 'Analytics',
 };
 
+const periodOptions = [
+  { label: 'Last 7 days', value: '7days' },
+  { label: 'Last 30 days', value: '30days' },
+  { label: 'Last 90 days', value: '90days' },
+  { label: 'Last 12 months', value: 'year' },
+  { label: 'All time', value: 'all' },
+];
+
+const sortOptions = [
+  { label: 'Most Views', value: 'views' },
+  { label: 'Most Saves', value: 'saves' },
+  { label: 'Most Comments', value: 'comments' },
+  { label: 'Highest Rating', value: 'rating' },
+  { label: 'Newest First', value: 'newest' },
+];
+
 export default async function AnalyticsPage({ searchParams }: PageProps) {
   const period = (searchParams?.period as string) || '30days';
+  const sort = (searchParams?.sort as string) || 'views';
 
   return (
     <PageWrapper
@@ -39,7 +57,13 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
             Export Data
           </Button>
 
-          <PeriodSelect defaultValue={period} />
+          <ParamSelect
+            defaultValue={period}
+            paramName="period"
+            options={periodOptions}
+            icon={<Calendar className="mr-2 h-4 w-4" />}
+            className="w-[180px]"
+          />
         </div>
       }>
       <Tabs defaultValue="overview" className="space-y-6">
@@ -57,7 +81,18 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
         </TabsContent>
 
         <TabsContent value="recipes" className="space-y-6">
-          recipes
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold">Recipe Performance</h2>
+
+            <ParamSelect
+              defaultValue={sort}
+              paramName="sort"
+              options={sortOptions}
+              className="w-[180px]"
+            />
+          </div>
+
+          <RecipePerformanceCards period={period} sort={sort} />
         </TabsContent>
 
         <TabsContent value="engagement" className="space-y-6">

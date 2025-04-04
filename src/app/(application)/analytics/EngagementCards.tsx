@@ -1,7 +1,7 @@
 import { Heart, MessageSquare } from 'lucide-react';
 import { Suspense } from 'react';
 
-import { getEngagements } from '@/db/actions/analytics/get-engagements';
+import { getEngagements } from '@/db';
 
 import { EngagementCard } from '@/components/modules/analytics/EngagementCard';
 import { EngagementCardsSkeleton } from '@/components/shared/skeletons';
