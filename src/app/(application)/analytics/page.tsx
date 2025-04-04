@@ -12,6 +12,7 @@ import { PageProps } from '@/types';
 
 import EngagementCards from './EngagementCards';
 import MetricCards from './MetricCards';
+import RecentComments from './RecentComments';
 import SentimentCard from './SentimentCard';
 import TopRecipesTable from './TopRecipesTable';
 
@@ -62,6 +63,7 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
         <TabsContent value="engagement" className="space-y-6">
           <EngagementCards period={period} />
           <SentimentCard period={period} />
+          <RecentComments period={period} />
         </TabsContent>
       </Tabs>
     </PageWrapper>

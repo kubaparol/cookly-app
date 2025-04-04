@@ -4,6 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+export function RecentCommentsSkeleton() {
+  return <Skeleton className="h-[400px] w-full" />;
+}
+
 export function SentimentCardSkeleton() {
   return <Skeleton className="h-[180px] w-full" />;
 }
