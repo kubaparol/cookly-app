@@ -1,10 +1,8 @@
 import { ArrowDownRight } from 'lucide-react';
 import { ArrowUpRight } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface RecipePerformanceCardProps {
   title: string;
@@ -70,14 +68,6 @@ export function RecipePerformanceCard({
           </div>
         </div>
       </CardContent>
-
-      <CardFooter>
-        <Button variant="outline" size="sm" className="w-full" asChild>
-          <Link href={`/dashboard/analytics/recipes/${title.toLowerCase().replace(/\s+/g, '-')}`}>
-            View Details
-          </Link>
-        </Button>
-      </CardFooter>
     </Card>
   );
 }
