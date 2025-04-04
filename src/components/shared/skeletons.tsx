@@ -4,6 +4,50 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+export function RecipePerformanceCardsSkeleton() {
+  return (
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <Skeleton className="h-[300px] w-full" />
+      <Skeleton className="h-[300px] w-full" />
+      <Skeleton className="h-[300px] w-full" />
+      <Skeleton className="h-[300px] w-full" />
+      <Skeleton className="h-[300px] w-full" />
+      <Skeleton className="h-[300px] w-full" />
+    </div>
+  );
+}
+
+export function RecentCommentsSkeleton() {
+  return <Skeleton className="h-[400px] w-full" />;
+}
+
+export function SentimentCardSkeleton() {
+  return <Skeleton className="h-[180px] w-full" />;
+}
+
+export function EngagementCardsSkeleton() {
+  return (
+    <div className="grid gap-6 lg:grid-cols-2">
+      <Skeleton className="h-[180px] w-full" />
+      <Skeleton className="h-[180px] w-full" />
+    </div>
+  );
+}
+
+export function TopRecipesTableSkeleton() {
+  return <Skeleton className="h-[520px] w-full" />;
+}
+
+export function MetricCardsSkeleton() {
+  return (
+    <div className="grid gap-4 lg:grid-cols-3">
+      <Skeleton className="h-[130px] w-full" />
+      <Skeleton className="h-[130px] w-full" />
+      <Skeleton className="h-[130px] w-full" />
+    </div>
+  );
+}
+
 export function StatisticCardsSkeleton() {
   return (
     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
