@@ -60,11 +60,12 @@ export function HeroSection() {
         <div className="relative">
           <div className="relative z-10 overflow-hidden rounded-xl border shadow-2xl">
             <Image
-              src="/placeholder.svg?height=600&width=800&text=Dashboard+Preview"
+              src="/images/hero.webp"
               alt="Cookly Dashboard"
               width={800}
               height={600}
               className="h-auto w-full"
+              priority
             />
           </div>
 
