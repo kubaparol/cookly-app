@@ -16,14 +16,14 @@ export function CtaSection() {
           Join thousands of home chefs who are already enjoying the benefits of Recipe Hub.
         </p>
         <div className="flex flex-col justify-center gap-4 sm:flex-row">
-          <Button size="lg" variant="outline" asChild>
+          <Button asChild size="lg" variant="outline" className="dark:text-primary">
             <Link href={ProjectUrls.signUp}>
               Create Free Account
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
 
-          <Button size="lg" variant="outline" asChild>
+          <Button asChild size="lg" variant="outline" className="dark:text-primary">
             <Link href="#features">Learn More</Link>
           </Button>
         </div>
