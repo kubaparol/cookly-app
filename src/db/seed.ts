@@ -1,3 +1,4 @@
+import { createClerkClient } from '@clerk/backend';
 import { faker } from '@faker-js/faker';
 
 import {
@@ -11,8 +12,21 @@ import {
   seasons,
   units,
 } from '../constants';
+import { updateRecipeAverageScore } from './actions';
 import { db } from './drizzle';
-import { equipment, ingredients, recipes, steps, substitutions, tips, users } from './schema';
+import {
+  comments,
+  commentsReplies,
+  equipment,
+  ingredients,
+  recipes,
+  steps,
+  substitutions,
+  tips,
+  users,
+} from './schema';
+
+const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
 
 /**
  * Seeds the database with 50 elaborate recipes
@@ -21,19 +35,20 @@ import { equipment, ingredients, recipes, steps, substitutions, tips, users } fr
 export const seedRecipes = async () => {
   console.log('🌱 Starting recipe seeding process...');
 
-  // Get all users from the database to randomly assign as authors
   const allUsers = await db.select().from(users);
-
-  if (allUsers.length === 0) {
-    console.error('No users found in the database. Please create users first.');
-    return;
-  }
-
-  console.log(`Found ${allUsers.length} users to assign as recipe authors.`);
 
   // Generate 50 recipes
   for (let i = 0; i < 50; i++) {
     try {
+      const emailAddress = faker.internet.email();
+
+      const user = await clerkClient.users.createUser({
+        emailAddress: [emailAddress],
+        firstName: faker.person.firstName(),
+        lastName: faker.person.lastName(),
+        password: emailAddress,
+      });
+
       // 1. Create the recipe
       const randomMealType = faker.helpers.arrayElement(mealTypes).value;
       const randomCuisineType = faker.helpers.arrayElement(cuisineTypes).value;
@@ -42,21 +57,21 @@ export const seedRecipes = async () => {
       const randomCostLevel = faker.helpers.arrayElement(costLevels).value;
 
       // Generate random categories (2-5)
-      const randomCategoriesCount = faker.number.int({ min: 2, max: 5 });
+      const randomCategoriesCount = faker.number.int({ min: 1, max: 5 });
       const randomCategories = faker.helpers.arrayElements(
         categories.map((cat) => cat.value),
         randomCategoriesCount,
       );
 
       // Generate random dietary tags (0-3)
-      const randomDietaryTagsCount = faker.number.int({ min: 0, max: 3 });
+      const randomDietaryTagsCount = faker.number.int({ min: 1, max: 8 });
       const randomDietaryTags = faker.helpers.arrayElements(
         dietaryTags.map((tag) => tag.value),
         randomDietaryTagsCount,
       );
 
       // Generate random allergens (0-3)
-      const randomAllergensCount = faker.number.int({ min: 0, max: 3 });
+      const randomAllergensCount = faker.number.int({ min: 1, max: 8 });
       const randomAllergens = faker.helpers.arrayElements(
         allergens.map((allergen) => allergen.value),
         randomAllergensCount,
@@ -69,29 +84,38 @@ export const seedRecipes = async () => {
       const activeTime = preparationTime + cookingTime - restTime;
 
       // Nutrition info (optional)
-      const hasNutritionInfo = faker.datatype.boolean(0.7); // 70% chance to have nutrition info
-      const calories = hasNutritionInfo ? faker.number.int({ min: 150, max: 800 }) : null;
-      const protein = hasNutritionInfo ? faker.number.int({ min: 5, max: 50 }) : null;
-      const carbs = hasNutritionInfo ? faker.number.int({ min: 10, max: 100 }) : null;
-      const fat = hasNutritionInfo ? faker.number.int({ min: 5, max: 40 }) : null;
+      const calories = faker.number.int({ min: 150, max: 800 });
+      const protein = faker.number.int({ min: 5, max: 50 });
+      const carbs = faker.number.int({ min: 10, max: 100 });
+      const fat = faker.number.int({ min: 5, max: 40 });
+      const title = faker.food.adjective() + ' ' + faker.food.dish();
 
-      // Random user as author
-      const randomUser = faker.helpers.arrayElement(allUsers);
-
+      console.log('Waiting for 2 seconds to avoid hitting the rate limit...');
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       // Random picsum.photos image with appropriate dimensions for recipes
-      const imageWidth = 1200;
-      const imageHeight = 800;
-      const imageId = faker.number.int({ min: 1, max: 1000 });
-      const imageUrl = `https://picsum.photos/id/${imageId}/${imageWidth}/${imageHeight}`;
+      const imageResponse = await fetch(
+        `https://api.unsplash.com/photos/random/?client_id=${process.env.UNSPLASH_CLIENT_ID}&query=${title}`,
+        {
+          method: 'GET',
+        },
+      );
+
+      const image = await imageResponse.json();
+
+      const imageUrl = image.urls.regular;
+
+      console.log('Waiting for 2 seconds to receive Webhook from Clerk...');
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      console.log('Creating recipe...');
 
       // Create the recipe in the database
       const [newRecipe] = await db
         .insert(recipes)
         .values({
-          title: faker.commerce.productName(),
-          description: faker.lorem.paragraph(faker.number.int({ min: 3, max: 6 })),
+          title: title[0].toUpperCase() + title.slice(1).toLowerCase(),
+          description: faker.food.description(),
           imageUrl,
-          authorId: randomUser.clerkId,
+          authorId: user.id,
           cuisineType: randomCuisineType,
           mealType: randomMealType,
           categories: randomCategories,
@@ -127,6 +151,8 @@ export const seedRecipes = async () => {
           carbs,
           fat,
           termsAccepted: true,
+          canBePublished: true,
+          status: 'published',
         })
         .returning();
 
@@ -141,7 +167,7 @@ export const seedRecipes = async () => {
 
         await db.insert(ingredients).values({
           recipeId: newRecipe.id,
-          name: faker.commerce.productName(),
+          name: faker.food.ingredient(),
           quantity: faker.number.float({ min: 0.25, max: 5, fractionDigits: 2 }),
           unit: unitOption.value,
         });
@@ -171,8 +197,8 @@ export const seedRecipes = async () => {
       for (let j = 0; j < substitutionsCount; j++) {
         await db.insert(substitutions).values({
           recipeId: newRecipe.id,
-          original: faker.commerce.productName(),
-          substitute: faker.commerce.productName(),
+          original: faker.food.ingredient(),
+          substitute: faker.food.ingredient(),
         });
       }
 
@@ -183,6 +209,61 @@ export const seedRecipes = async () => {
           recipeId: newRecipe.id,
           description: faker.lorem.sentence(faker.number.int({ min: 10, max: 20 })),
         });
+      }
+
+      // 7. Create comments from real users with replies from the recipe author
+      // Only add comments if we have users in the database
+      if (allUsers.length > 0) {
+        const commentsCount = faker.number.int({ min: 2, max: 8 });
+
+        // Create comments from random existing users
+        for (let j = 0; j < commentsCount; j++) {
+          // Select a random user that isn't the author
+          let randomUser;
+          do {
+            randomUser = faker.helpers.arrayElement(allUsers);
+          } while (randomUser.clerkId === user.id);
+
+          // Create the comment
+          const [newComment] = await db
+            .insert(comments)
+            .values({
+              id: faker.string.uuid(),
+              recipeId: newRecipe.id,
+              authorId: randomUser.clerkId,
+              content: faker.helpers.arrayElement([
+                faker.lorem.paragraph(1),
+                `I ${faker.helpers.arrayElement(['loved', 'enjoyed', 'really liked'])} this recipe! ${faker.lorem.sentence()}`,
+                `${faker.helpers.arrayElement(['Tried this last night', 'Made this for dinner', 'Cooked this yesterday'])}. ${faker.lorem.sentence()}`,
+                `The ${faker.helpers.arrayElement(['flavors', 'texture', 'taste'])} was ${faker.helpers.arrayElement(['amazing', 'perfect', 'wonderful'])}! ${faker.lorem.sentence()}`,
+                `${faker.helpers.arrayElement(['Will definitely make again', 'Going into my regular rotation', 'My family loved it'])}. ${faker.lorem.sentence()}`,
+              ]),
+              rating: faker.number.int({ min: 1, max: 5 }),
+              createdAt: faker.date.recent({ days: 30 }),
+            })
+            .returning();
+
+          await updateRecipeAverageScore(newComment.recipeId);
+
+          // 50% chance to add a reply from the recipe author
+          if (faker.datatype.boolean(0.5)) {
+            await db.insert(commentsReplies).values({
+              id: faker.string.uuid(),
+              commentId: newComment.id,
+              authorId: user.id,
+              content: faker.helpers.arrayElement([
+                `Thank you, ${randomUser.firstName}! ${faker.lorem.sentence()}`,
+                `I'm glad you enjoyed it! ${faker.lorem.sentence()}`,
+                `Thanks for trying the recipe! ${faker.lorem.sentence()}`,
+                `I appreciate your feedback! ${faker.lorem.sentence()}`,
+                `${faker.helpers.arrayElement(['Happy to hear that', 'So glad you liked it', 'Thanks for sharing'])}. ${faker.lorem.sentence()}`,
+              ]),
+              createdAt: faker.date.recent({ days: 15 }),
+            });
+          }
+        }
+
+        console.log(`Added ${commentsCount} comments with replies to recipe #${i + 1}`);
       }
 
       console.log(
