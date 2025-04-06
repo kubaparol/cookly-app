@@ -39,7 +39,7 @@ export default function ForgotPasswordWrapper() {
         setStep('first_factor');
       }
     } catch (error) {
-      const message = (error as ClerkError).errors[0].long_message;
+      const message = (error as ClerkError).errors[0].message;
 
       toast.error(message);
     }
@@ -53,7 +53,7 @@ export default function ForgotPasswordWrapper() {
     try {
       await handleForgotPassword({ email: emailAddress });
     } catch (error) {
-      const message = (error as ClerkError).errors[0].long_message;
+      const message = (error as ClerkError).errors[0].message;
 
       toast.error(message);
     } finally {
@@ -82,7 +82,7 @@ export default function ForgotPasswordWrapper() {
         router.push(ProjectUrls.dashboard);
       }
     } catch (error) {
-      const message = (error as ClerkError).errors[0].long_message;
+      const message = (error as ClerkError).errors[0].message;
 
       toast.error(message);
     }

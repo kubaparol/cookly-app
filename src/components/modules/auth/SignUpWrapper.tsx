@@ -37,7 +37,7 @@ export default function SignUpWrapper() {
 
       setSignUpStatus('verifying');
     } catch (error) {
-      const message = (error as ClerkError).errors[0].long_message;
+      const message = (error as ClerkError).errors[0].message;
 
       toast.error(message);
     }
@@ -63,7 +63,7 @@ export default function SignUpWrapper() {
         router.push(ProjectUrls.dashboard);
       }
     } catch (error) {
-      const message = (error as ClerkError).errors[0].long_message;
+      const message = (error as ClerkError).errors[0].message;
 
       toast.error(message);
     }
@@ -77,7 +77,7 @@ export default function SignUpWrapper() {
     try {
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
     } catch (error) {
-      const message = (error as ClerkError).errors[0].long_message;
+      const message = (error as ClerkError).errors[0].message;
 
       toast.error(message);
     } finally {
