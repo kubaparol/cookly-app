@@ -8,6 +8,7 @@ import { useAppSidebarItems } from '@/hooks';
 
 import { ProjectUrls } from '@/constants';
 
+import { Logo } from '@/components/base/Logo';
 import { NavMain } from '@/components/layouts/components/NavMain';
 import { NavSecondary } from '@/components/layouts/components/NavSecondary';
 import { NavUser } from '@/components/layouts/components/NavUser';
@@ -32,9 +33,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
+            <SidebarMenuButton
+              asChild
+              className="h-12 w-fit py-4 data-[slot=sidebar-menu-button]:!p-1.5">
               <Link href={ProjectUrls.home} title="Cookly Home">
-                <span className="text-base font-semibold">Cookly</span>
+                <Logo />
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -49,8 +52,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
         <NavUser
           user={{
-            name: user?.fullName || '',
-            email: user?.emailAddresses?.[0]?.emailAddress || '',
+            // name: user?.fullName || '',
+            // email: user?.emailAddresses?.[0]?.emailAddress || '',
+            name: 'John Doe',
+            email: 'john.doe@example.com',
             avatar: user?.imageUrl || '',
           }}
           onSignOut={signOut}
