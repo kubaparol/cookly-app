@@ -123,6 +123,7 @@ export function UserRecipesTable({ recipes, hasSearchTerm }: UserRecipesTablePro
         toast.success('Recipe deleted successfully');
         setShowDeleteDialog(false);
       } else {
+        console.log(result.message);
         toast.error(result.message);
       }
     });

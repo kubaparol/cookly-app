@@ -9,7 +9,7 @@ export const views = pgTable(
     id: uuid().primaryKey().defaultRandom(),
     recipeId: uuid()
       .notNull()
-      .references(() => recipes.id),
+      .references(() => recipes.id, { onDelete: 'cascade' }),
     ipAddress: varchar({ length: 45 }).notNull(),
     createdAt: timestamp().defaultNow().notNull(),
   },

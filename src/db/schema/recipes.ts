@@ -17,7 +17,6 @@ import { steps } from './steps';
 import { substitutions } from './substitutions';
 import { tips } from './tips';
 import { users } from './users';
-import { views } from './views';
 
 export const recipes = pgTable('recipes', {
   id: uuid().primaryKey().defaultRandom(),
@@ -75,7 +74,6 @@ export const recipesRelations = relations(recipes, ({ one, many }) => ({
   tips: many(tips),
   comments: many(comments),
   favorites: many(favorites),
-  views: many(views),
 }));
 
 export type RecipeStatus = (typeof recipes.status.enumValues)[number];
