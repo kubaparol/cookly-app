@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { ProjectUrls } from '@/constants/urls';
 
 export interface NavLinkEntity {
@@ -8,19 +6,27 @@ export interface NavLinkEntity {
 }
 
 export const useNavLinks = () => {
-  const quickLinks = useMemo<NavLinkEntity[]>(
-    () => [
-      {
-        label: 'Home',
-        url: ProjectUrls.home,
-      },
-      {
-        label: 'Recipes',
-        url: ProjectUrls.recipes,
-      },
-    ],
-    [],
-  );
+  const navLinks: NavLinkEntity[] = [
+    {
+      label: 'Home',
+      url: ProjectUrls.home,
+    },
+    {
+      label: 'Recipes',
+      url: ProjectUrls.recipes,
+    },
+  ];
 
-  return { quickLinks };
+  const quickLinks: NavLinkEntity[] = [
+    {
+      label: 'Features',
+      url: `${ProjectUrls.home}#features`,
+    },
+    {
+      label: 'FAQ',
+      url: `${ProjectUrls.home}#faq`,
+    },
+  ];
+
+  return { navLinks, quickLinks };
 };

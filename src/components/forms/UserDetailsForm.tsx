@@ -69,7 +69,7 @@ export default function UserDetailsForm(props: UserDetailsFormProps) {
 
       toast.success('User details updated successfully');
     } catch (error) {
-      const message = (error as ClerkError).errors[0].long_message;
+      const message = (error as ClerkError).errors[0].message;
 
       toast.error(message);
     }
@@ -112,7 +112,7 @@ export default function UserDetailsForm(props: UserDetailsFormProps) {
               <FormItem className="w-full">
                 <FormLabel>First Name</FormLabel>
 
-                <FormControl className="bg-white">
+                <FormControl>
                   <Input placeholder="e.g., John" disabled={isSubmitting} {...field} />
                 </FormControl>
                 <FormMessage />
@@ -127,7 +127,7 @@ export default function UserDetailsForm(props: UserDetailsFormProps) {
               <FormItem className="w-full">
                 <FormLabel>Last Name</FormLabel>
 
-                <FormControl className="bg-white">
+                <FormControl>
                   <Input placeholder="e.g., Doe" disabled={isSubmitting} {...field} />
                 </FormControl>
                 <FormMessage />

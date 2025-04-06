@@ -1,3 +1,4 @@
+import { currentUser } from '@clerk/nextjs/server';
 import { type FileRouter, createUploadthing } from 'uploadthing/next';
 import { UploadThingError } from 'uploadthing/server';
 
@@ -13,9 +14,9 @@ export const ourFileRouter = {
   // Define as many FileRoutes as you like, each with a unique routeSlug
   imageUploader: f({ image: { maxFileSize: `${MAX_UPLOADTHING_FILE_SIZE_MB}MB` } })
     // Set permissions and file types for this FileRoute
-    .middleware(async ({ req }) => {
+    .middleware(async () => {
       // This code runs on your server before upload
-      const user = await auth(req);
+      const user = await currentUser();
 
       // If you throw, the user will not be able to upload
       if (!user) throw new UploadThingError('Unauthorized');

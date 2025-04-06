@@ -54,19 +54,19 @@ export default function DashboardPage() {
             title="My Recipes"
             icon={<ScrollText className="h-5 w-5" />}
             description="View and manage your recipes"
-            href="/dashboard/my-recipes"
+            href={ProjectUrls.myRecipes}
           />
           <QuickActionCard
             title="Saved Recipes"
             icon={<Heart className="h-5 w-5" />}
             description="Access your favorite recipes"
-            href="/dashboard/saved"
+            href={ProjectUrls.favoriteRecipes}
           />
           <QuickActionCard
             title="Analytics"
             icon={<BarChart3 className="h-5 w-5" />}
             description="Track recipe performance"
-            href="/dashboard/analytics"
+            href={ProjectUrls.analytics}
             className="xxs:col-span-full xs:col-span-1"
           />
         </div>

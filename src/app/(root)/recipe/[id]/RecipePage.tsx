@@ -14,11 +14,7 @@ async function RecipePageLoader({ id }: { id: string }) {
     notFound();
   }
 
-  return (
-    <div className="wrapper">
-      <RecipeView {...recipe} isLoggedIn={!!user} />
-    </div>
-  );
+  return <RecipeView {...recipe} isLoggedIn={!!user} />;
 }
 
 export default function RecipePage({ id }: { id: string }) {

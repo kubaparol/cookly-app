@@ -44,7 +44,7 @@ export default function UserPasswordForm(props: UserPasswordFormProps) {
       toast.success('User password updated successfully');
       form.reset();
     } catch (error) {
-      const message = (error as ClerkError).errors[0].long_message;
+      const message = (error as ClerkError).errors[0].message;
 
       toast.error(message);
     }
@@ -63,7 +63,7 @@ export default function UserPasswordForm(props: UserPasswordFormProps) {
               <FormItem className="w-full">
                 <FormLabel>Current Password</FormLabel>
 
-                <FormControl className="bg-white">
+                <FormControl>
                   <PasswordInput placeholder="********" {...field} />
                 </FormControl>
                 <FormMessage />
@@ -78,7 +78,7 @@ export default function UserPasswordForm(props: UserPasswordFormProps) {
               <FormItem className="w-full">
                 <FormLabel>New Password</FormLabel>
 
-                <FormControl className="bg-white">
+                <FormControl>
                   <PasswordInput placeholder="********" {...field} />
                 </FormControl>
                 <FormMessage />
