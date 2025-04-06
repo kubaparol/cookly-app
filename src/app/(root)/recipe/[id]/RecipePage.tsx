@@ -1,3 +1,4 @@
+import { currentUser } from '@clerk/nextjs/server';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
@@ -7,13 +8,17 @@ import RecipeView from '@/components/modules/recipes/RecipeView';
 import { RecipeViewSkeleton } from '@/components/shared/skeletons';
 
 async function RecipePageLoader({ id }: { id: string }) {
-  const recipe = await getOneRecipe(id);
+  const [recipe, user] = await Promise.all([getOneRecipe(id), currentUser()]);
 
   if (!recipe) {
     notFound();
   }
 
-  return <RecipeView {...recipe} />;
+  return (
+    <div className="wrapper">
+      <RecipeView {...recipe} isLoggedIn={!!user} />
+    </div>
+  );
 }
 
 export default function RecipePage({ id }: { id: string }) {

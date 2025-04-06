@@ -18,6 +18,7 @@ import {
   Utensils,
 } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { getTotalCookingTime } from '@/utils';
 
@@ -44,7 +45,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CommentReply } from '../comments/CommentReply';
 import { AddToFavoritesButton } from './AddToFavoritesButton';
 
-type RecipeViewProps =
+type RecipeViewProps = (
   | Recipe
   | {
       isFormData: true;
@@ -54,9 +55,12 @@ type RecipeViewProps =
         lastName: string | null;
         imageUrl: string | null;
       };
-    };
+    }
+) & {
+  isLoggedIn?: boolean;
+};
 
-export default function RecipeView(props: RecipeViewProps) {
+export default async function RecipeView(props: RecipeViewProps) {
   const isFormData = 'isFormData' in props && props.isFormData;
 
   const recipe = isFormData
@@ -695,8 +699,17 @@ export default function RecipeView(props: RecipeViewProps) {
           <CardHeader>
             <CardTitle className="text-lg">Share Your Experience</CardTitle>
           </CardHeader>
+
           <CardContent>
-            <CommentForm onFormSubmit={addCommentHandler} />
+            {props.isLoggedIn ? (
+              <CommentForm onFormSubmit={addCommentHandler} />
+            ) : (
+              <div className="flex flex-col gap-2">
+                <p className="text-sm text-muted-foreground">
+                  Please <Link href={ProjectUrls.signIn}>sign in</Link> to add a comment.
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
 

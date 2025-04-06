@@ -52,10 +52,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
         <NavUser
           user={{
-            // name: user?.fullName || '',
-            // email: user?.emailAddresses?.[0]?.emailAddress || '',
-            name: 'John Doe',
-            email: 'john.doe@example.com',
+            name: user?.fullName || '',
+            email: user?.emailAddresses?.[0]?.emailAddress || '',
             avatar: user?.imageUrl || '',
           }}
           onSignOut={signOut}

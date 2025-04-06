@@ -71,6 +71,7 @@ export function Header() {
               className={cn(
                 'text-sm font-medium transition-colors hover:text-primary',
                 pathname !== link.url && 'text-muted-foreground',
+                (link.url === pathname || pathname.startsWith(link.url + '/')) && 'text-primary',
               )}>
               {link.label}
             </Link>
