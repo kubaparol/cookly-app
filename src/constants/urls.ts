@@ -4,6 +4,11 @@ export const ProjectUrls = Object.freeze({
   recipes: '/recipes',
   recipe: (id: string) => `/recipe/${id}`,
 
+  // legals
+  termsOfService: '/legals/terms-of-service',
+  privacyPolicy: '/legals/privacy-policy',
+  cookiePolicy: '/legals/cookie-policy',
+
   // auth
   signIn: '/sign-in',
   signUp: '/sign-up',

@@ -92,7 +92,7 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">contact@example.com</span>
+                <span className="text-sm text-muted-foreground">contact@cookly.com</span>
               </li>
             </ul>
           </div>
@@ -119,17 +119,17 @@ export function Footer() {
           </p>
           <div className="flex gap-6">
             <Link
-              href="/terms"
+              href={ProjectUrls.termsOfService}
               className="text-sm text-muted-foreground transition-colors hover:text-primary">
               Terms of Service
             </Link>
             <Link
-              href="/privacy"
+              href={ProjectUrls.privacyPolicy}
               className="text-sm text-muted-foreground transition-colors hover:text-primary">
               Privacy Policy
             </Link>
             <Link
-              href="/cookies"
+              href={ProjectUrls.cookiePolicy}
               className="text-sm text-muted-foreground transition-colors hover:text-primary">
               Cookie Policy
             </Link>
