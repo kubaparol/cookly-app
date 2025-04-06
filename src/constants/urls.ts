@@ -21,4 +21,9 @@ export const ProjectUrls = Object.freeze({
   settings: '/settings',
 });
 
-export const ExternalUrls = Object.freeze({});
+export const ExternalUrls = Object.freeze({
+  facebook: 'https://www.facebook.com',
+  twitter: 'https://www.twitter.com',
+  instagram: 'https://www.instagram.com',
+  github: 'https://www.github.com',
+});

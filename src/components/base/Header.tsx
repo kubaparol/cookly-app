@@ -51,7 +51,7 @@ const AuthButtons = () => {
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  const { quickLinks } = useNavLinks();
+  const { navLinks } = useNavLinks();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -64,7 +64,7 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden gap-8 md:flex">
-          {quickLinks.map((link) => (
+          {navLinks.map((link) => (
             <Link
               key={link.url}
               href={link.url}
@@ -107,7 +107,7 @@ export function Header() {
               </div>
 
               <div className="flex flex-col gap-2">
-                {quickLinks.map((link) => (
+                {navLinks.map((link) => (
                   <Link
                     key={link.url}
                     href={link.url}

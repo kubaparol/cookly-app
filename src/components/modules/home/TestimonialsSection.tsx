@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/card';
 
 export function TestimonialsSection() {
   return (
-    <section id="testimonials" className="wrapper py-16 md:py-24">
+    <section className="wrapper py-16 md:py-24">
       <div className="container mx-auto max-w-7xl px-4">
         <div className="mx-auto mb-12 max-w-[800px] text-center md:mb-16">
           <Badge className="mb-4" variant="outline">

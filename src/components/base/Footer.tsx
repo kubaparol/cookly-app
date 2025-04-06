@@ -1,7 +1,11 @@
+'use client';
+
 import { Facebook, Github, Instagram, Mail, MapPin, Phone, Twitter } from 'lucide-react';
 import Link from 'next/link';
 
-import { ProjectUrls } from '@/constants/urls';
+import { useNavLinks } from '@/hooks';
+
+import { ExternalUrls, ProjectUrls } from '@/constants/urls';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +13,8 @@ import { Input } from '@/components/ui/input';
 import { Logo } from './Logo';
 
 export function Footer() {
+  const { quickLinks } = useNavLinks();
+
   return (
     <footer className="w-full border-t bg-background">
       <div className="container mx-auto px-4 py-12 md:px-6 md:py-16">
@@ -24,25 +30,29 @@ export function Footer() {
             </p>
             <div className="mt-2 flex items-center gap-4">
               <Link
-                href="#"
+                href={ExternalUrls.facebook}
+                target="_blank"
                 className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary">
                 <Facebook className="h-5 w-5" />
                 <span className="sr-only">Facebook</span>
               </Link>
               <Link
-                href="#"
+                href={ExternalUrls.twitter}
+                target="_blank"
                 className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary">
                 <Twitter className="h-5 w-5" />
                 <span className="sr-only">Twitter</span>
               </Link>
               <Link
-                href="#"
+                href={ExternalUrls.instagram}
+                target="_blank"
                 className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary">
                 <Instagram className="h-5 w-5" />
                 <span className="sr-only">Instagram</span>
               </Link>
               <Link
-                href="#"
+                href={ExternalUrls.github}
+                target="_blank"
                 className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary">
                 <Github className="h-5 w-5" />
                 <span className="sr-only">GitHub</span>
@@ -54,41 +64,15 @@ export function Footer() {
           <div className="flex flex-col gap-4">
             <h3 className="text-base font-semibold">Quick Links</h3>
             <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/features"
-                  className="text-sm text-muted-foreground transition-colors hover:text-primary">
-                  Features
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/pricing"
-                  className="text-sm text-muted-foreground transition-colors hover:text-primary">
-                  Pricing
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/about"
-                  className="text-sm text-muted-foreground transition-colors hover:text-primary">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
-                  className="text-sm text-muted-foreground transition-colors hover:text-primary">
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/blog"
-                  className="text-sm text-muted-foreground transition-colors hover:text-primary">
-                  Blog
-                </Link>
-              </li>
+              {quickLinks.map((link, index) => (
+                <li key={index}>
+                  <Link
+                    href={link.url}
+                    className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -131,7 +115,7 @@ export function Footer() {
         {/* Bottom Section */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 md:flex-row">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Your Company. All rights reserved.
+            &copy; {new Date().getFullYear()} Cookly. All rights reserved.
           </p>
           <div className="flex gap-6">
             <Link
