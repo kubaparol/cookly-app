@@ -60,7 +60,7 @@ export function HeroSection() {
         <div className="relative">
           <div className="relative z-10 overflow-hidden rounded-xl border shadow-2xl">
             <Image
-              src="/images/hero.webp"
+              src="/images/dashboard.webp"
               alt="Cookly Dashboard"
               width={800}
               height={600}

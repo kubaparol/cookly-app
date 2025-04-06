@@ -63,7 +63,7 @@ export function FeaturesSection() {
               <div className="relative order-1 lg:order-2">
                 <div className="overflow-hidden rounded-xl border shadow-xl">
                   <Image
-                    src="/placeholder.svg?height=500&width=700&text=Recipe+Builder"
+                    src="/images/recipe-builder.webp"
                     alt="Recipe Builder"
                     width={700}
                     height={500}
@@ -80,7 +80,7 @@ export function FeaturesSection() {
               <div className="relative">
                 <div className="overflow-hidden rounded-xl border shadow-xl">
                   <Image
-                    src="/placeholder.svg?height=500&width=700&text=Recipe+Organization"
+                    src="/images/recipe-organization.webp"
                     alt="Recipe Organization"
                     width={700}
                     height={500}
@@ -121,7 +121,7 @@ export function FeaturesSection() {
               <div className="relative order-2 lg:order-1">
                 <div className="overflow-hidden rounded-xl border shadow-xl">
                   <Image
-                    src="/placeholder.svg?height=500&width=700&text=Recipe+Analytics"
+                    src="/images/recipe-analytics.webp"
                     alt="Recipe Analytics"
                     width={700}
                     height={500}
@@ -151,7 +151,7 @@ export function FeaturesSection() {
                   ))}
                 </ul>
                 <Button className="mt-6" asChild>
-                  <Link href="/signup">Explore Analytics</Link>
+                  <Link href={ProjectUrls.signUp}>Explore Analytics</Link>
                 </Button>
               </div>
             </div>
