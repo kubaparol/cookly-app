@@ -44,7 +44,7 @@ export function HeroSection() {
                   key={i}
                   className="h-8 w-8 overflow-hidden rounded-full border-2 border-background bg-muted">
                   <Image
-                    src={`/placeholder.svg?height=32&width=32&text=${i + 1}`}
+                    src={`/avatars/avatar-${i + 1}.webp`}
                     alt="User avatar"
                     width={32}
                     height={32}

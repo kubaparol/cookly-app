@@ -27,21 +27,21 @@ export function TestimonialsSection() {
             quote="Cookly has completely transformed how I organize my recipes and plan meals. I've saved so much time and reduced my food waste significantly."
             author="Sarah Johnson"
             role="Home Chef"
-            avatar="/placeholder.svg?height=80&width=80&text=SJ"
+            avatar="/avatars/avatar-5.webp"
             rating={5}
           />
           <TestimonialCard
             quote="As someone who cooks for a family with different dietary needs, the meal planning and substitution features have been a game-changer. Highly recommend!"
             author="Michael Chen"
             role="Food Blogger"
-            avatar="/placeholder.svg?height=80&width=80&text=MC"
+            avatar="/avatars/avatar-6.webp"
             rating={5}
           />
           <TestimonialCard
             quote="The analytics feature helped me understand which of my recipes are most popular. Now my food blog is thriving thanks to the insights I've gained."
             author="Emily Rodriguez"
             role="Culinary Student"
-            avatar="/placeholder.svg?height=80&width=80&text=ER"
+            avatar="/avatars/avatar-7.webp"
             rating={4}
           />
         </div>
