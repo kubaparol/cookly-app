@@ -4,6 +4,9 @@ export const PAGE_TITLES: Record<string, string> = {
   settings: 'Settings',
   edit: 'Edit Recipe',
   create: 'Create Recipe',
+  'favorite-recipes': 'Favorite Recipes',
+  received: 'Comments Received',
+  made: 'Comments Made',
 } as const;
 
 export const getPageTitle = (pathname: string): string => {
