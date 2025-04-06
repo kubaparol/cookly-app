@@ -1,6 +1,6 @@
 # Cookly App
 
-:fire: Click to see live version: [Cookly App](https://cookly-app.vercel.app/)!
+🔥 Click to see live version: [Cookly App](https://cookly-app.vercel.app/)!
 
 ## Overview
 
