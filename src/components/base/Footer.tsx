@@ -1,8 +1,12 @@
 import { Facebook, Github, Instagram, Mail, MapPin, Phone, Twitter } from 'lucide-react';
 import Link from 'next/link';
 
+import { ProjectUrls } from '@/constants/urls';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+
+import { Logo } from './Logo';
 
 export function Footer() {
   return (
@@ -11,11 +15,8 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Company Info */}
           <div className="flex flex-col gap-4">
-            <Link href="/" className="flex items-center space-x-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground shadow-sm transition-transform hover:scale-105">
-                L
-              </span>
-              <span className="text-lg font-bold">Logo</span>
+            <Link href={ProjectUrls.home} className="flex items-center space-x-3">
+              <Logo />
             </Link>
             <p className="text-sm leading-relaxed text-muted-foreground">
               Making the world a better place through innovative solutions and exceptional user

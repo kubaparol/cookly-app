@@ -7,5 +7,7 @@ interface AuthLayoutProps {
 export default function AuthLayout(props: AuthLayoutProps) {
   const { children } = props;
 
-  return <div className="flex min-h-screen w-full items-center justify-center">{children}</div>;
+  return (
+    <div className="wrapper flex min-h-screen w-full items-center justify-center">{children}</div>
+  );
 }
