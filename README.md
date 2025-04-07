@@ -24,6 +24,8 @@ A modern recipe management application built with Next.js and TypeScript.
 
 Cookly is a comprehensive recipe management application that allows users to create, share, and discover recipes. Users can save favorites, comment on recipes, and organize their own recipe collections.
 
+![Cookly recipe builder](public/images/recipe-builder.webp)
+
 ## ✨ Features
 
 - 🔐 User authentication with custom flows
