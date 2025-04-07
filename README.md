@@ -1,101 +1,184 @@
-# Cookly App
+# 🍳 [Cookly App](https://cookly-app.vercel.app/)
 
-🔥 Click to see live version: [Cookly App](https://cookly-app.vercel.app/)!
+A modern recipe management application built with Next.js and TypeScript.
 
-## Overview
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![ShadcnUI](https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white)
+![Clerk](https://img.shields.io/badge/Clerk-6C47FF?style=for-the-badge&logo=clerk&logoColor=white)
+![Drizzle](https://img.shields.io/badge/Drizzle-000000?style=for-the-badge&logo=drizzle&logoColor=white)
+
+## 📝 Table of Contents
+
+- [About](#about)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Authentication](#authentication)
+- [Database](#database)
+- [Testing](#testing)
+
+## 🧐 About
+
+Cookly is a comprehensive recipe management application that allows users to create, share, and discover recipes. Users can save favorites, comment on recipes, and organize their own recipe collections.
 
 ![Cookly recipe builder](public/images/recipe-builder.webp)
 
-**Cookly App** is a recipe management platform that allows users to explore, add, edit, and delete recipes. The app provides a clean, user-friendly interface for discovering and managing recipes, along with user authentication and personalized dashboard.
+## ✨ Features
 
-## Key Features
+- 🔐 User authentication with custom flows
+- 📝 Create and edit your own recipes
+- ⭐ Save favorite recipes
+- 💬 Comment on recipes with nested replies
+- 🔍 Advanced search and filtering
+- 📱 Responsive design for all devices
+- 🌓 Light/dark mode support
 
-- **Next.js Features**:
+## 🛠️ Tech Stack
 
-  - **App Router**: Utilizes the new app directory structure for routing.
-  - **Suspense**: Implements React Suspense for loading states.
-  - **Promise.all**: Efficiently handles multiple asynchronous operations.
-  - **Skeletons**: Provides a better user experience during data fetching.
-  - **Route Groups**: Organizes routes for better maintainability.
-  - **API Routes**: Used to handle:
-    - **Webhooks** from UploadThing for managing image uploads
-    - **User creation** in the database after a new user registers with Clerk
+### Frontend
 
-- **Authentication**:
+- **Next.js 14** with App Router
+- **TypeScript**
+- **Tailwind CSS** for styling
+- **shadcn/ui** for UI components
+- **@hello-pangea/dnd** for drag-and-drop
+- **recharts** for data visualization
+- **React Hook Form** with **Zod** for form validation
 
-  - **Clerk**: Custom views for account creation, login, password reminders and OTP input for verification.
+### Backend
 
-- **Responsive Design**:
-  - Built with **Tailwind CSS** for a mobile-first approach.
+- **Next.js API Routes** with App Router
+- **Drizzle ORM** for database management
+- **NeonDB PostgreSQL** (serverless)
+- **Clerk** for authentication
+- **Uploadthing** for file uploads
 
-## Technologies Used
+## 📁 Project Structure
 
-- **Frontend**:
+The project follows a modular structure:
 
-  - React
-  - Next.js
-  - TypeScript
-  - Tailwind CSS
-  - Radix UI components for accessibility and design consistency.
+```
+src/
+├── app/                   # Next.js App Router
+│   ├── (application)/     # Route group for authenticated app routes
+│   ├── (auth)/            # Route group for authentication pages
+│   ├── (root)/            # Route group for public pages
+│   └── api/               # API routes
+├── components/            # React components
+│   ├── base/              # Base components like Logo, Header
+│   ├── forms/             # Form components
+│   ├── layouts/           # Layout components
+│   ├── modules/           # Feature-specific components
+│   ├── providers/         # Context providers
+│   ├── shared/            # Shared components
+│   └── ui/                # UI components (shadcn/ui)
+├── constants/             # Constants and configuration
+├── db/                    # Database related code
+│   ├── actions/           # Database actions/queries
+│   └── schema/            # Drizzle schema definitions
+├── hooks/                 # Custom React hooks
+├── lib/                   # Utility libraries
+├── styles/                # Global styles
+├── types/                 # TypeScript type definitions
+└── utils/                 # Utility functions
+```
 
-- **Backend**:
-  - Drizzle ORM for database interactions.
-  - Neon Database for serverless data storage.
+## 🚀 Getting Started
 
-## Server-Side Actions and Database Layer
+### Prerequisites
 
-The application uses **server-side actions** to manage database queries efficiently. These actions are organized in a dedicated folder called db, which separates the logic clearly:
+- Node.js 18+ and pnpm
+- PostgreSQL database (or NeonDB account)
+- Clerk account for authentication
+- Uploadthing account for file uploads
 
-- **Schema**: The `schema` folder contains the database table definitions (e.g., `recipes`, `ingredients`, `steps`, etc.), declared using **Drizzle ORM**.
-- **Actions**: The `actions` folder contains specific queries and operations that are grouped by functionality:
+### Installation
 
-## Getting Started
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+3. Copy `.env.example` to `.env` and fill in your environment variables
+4. Run database migrations:
+   ```bash
+   pnpm drizzle:migrate
+   ```
+5. Seed the database (optional):
+   ```bash
+   pnpm drizzle:seed
+   ```
+6. Start the development server:
+   ```bash
+   pnpm dev
+   ```
 
-To run the **Cookly App** locally, follow these steps:
+## 🔒 Authentication
 
-1. Clone the repository:
+Cookly uses Clerk for authentication with custom UI components:
+
+- **Custom sign-in flow** with email/password
+- **Custom sign-up flow** with email verification
+- **Password reset flow** with email code verification
+- **OTP input** for verification codes
+- **Profile management** integration
+
+## 💾 Database
+
+The application uses Drizzle ORM with a PostgreSQL database (NeonDB):
+
+- **Schema definitions** in `src/db/schema`
+- **Database actions** in `src/db/actions`
+- **Migrations** managed through Drizzle Kit
+
+### Main Database Entities:
+
+- Users
+- Recipes
+- Ingredients
+- Steps
+- Comments
+- Favorites
+- Equipment
+- Tips
+- Substitutions
+
+## 🧪 Testing
+
+The project includes end-to-end tests using Playwright:
 
 ```bash
-git clone https://github.com/kubaparol/cookly-app.git
+pnpm test:e2e
 ```
 
-2. Install the dependencies:
+## ⚡ Next.js Features Used
 
-```bash
-pnpm i
-```
+- **App Router** for file-based routing
+- **Route Groups** for organizing routes by functionality
+- **Server Components** for improved performance
+- **Suspense** for loading states
+- **Parallel Data Fetching** with `Promise.all`
+- **Streaming** for progressive rendering
+- **Metadata API** for SEO optimization
+- **Edge Runtime** support
+- **API Routes** for backend functionality
 
-3. Copy the `.env.example` file, rename it to `.env` and fill required credentials:
+## 🎨 UI Components
 
-```bash
-cp .env.example .env
-```
+The project uses shadcn/ui, a collection of accessible and customizable components built on:
 
-4. Run the development server:
+- **Radix UI** for accessible primitives
+- **Tailwind CSS** for styling
+- **class-variance-authority** for component variants
+- **Lucide Icons** for beautiful icons
 
-```bash
-pnpm dev
-```
+## 🌟 Contributing
 
-5. App is ready to go:
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-```
-http://localhost:3000/
-```
+## 📄 License
 
-## Roadmap
-
-- [x] User Authentication with Clerk
-- [x] Basic Recipe CRUD Functionality
-- [x] Dashboard with Recipe Statistics
-- [x] Favorite Recipes
-- [x] Recipe View Statistics
-- [ ] Paid Recipes and Monetization Features
-- [ ] AI-Generated Recipe Suggestions
-
-## Contact
-
-Feel free to contact me! You can find me here:
-
-- [LinkedIn](https://www.linkedin.com/in/jakub-parol/)
-- [GitHub](https://github.com/kubaparol)
+This project is licensed under the MIT License.
