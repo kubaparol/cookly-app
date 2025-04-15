@@ -9,7 +9,29 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 async function SentimentCardLoader({ period }: { period: string }) {
   const sentiment = await getSentiment(period);
 
-  if (!sentiment) return null;
+  if (
+    !sentiment ||
+    (sentiment.positive === 0 && sentiment.neutral === 0 && sentiment.negative === 0)
+  ) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Comment Sentiment Analysis</CardTitle>
+          <CardDescription>Analysis of comment tone and sentiment</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex h-40 items-center justify-center rounded-lg border border-dashed p-8 text-center">
+            <div>
+              <p className="text-sm font-medium">No sentiment data available</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                You need comments on your recipes to analyze sentiment
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>

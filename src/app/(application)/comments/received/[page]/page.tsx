@@ -23,7 +23,7 @@ export default function Page(props: PageProps) {
         { href: ProjectUrls.commentsReceived, label: 'Comments Received', isCurrent: true },
       ]}
       icon={<MessageCircle className="text-muted-foreground" />}>
-      <CommentsReceivedPage {...props} />;
+      <CommentsReceivedPage {...props} />
     </PageWrapper>
   );
 }

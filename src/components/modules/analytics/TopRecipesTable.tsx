@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowUpDown, ExternalLink } from 'lucide-react';
+import { AlertTriangle, ArrowUpDown, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -105,32 +105,47 @@ export function TopRecipesTable({ recipes }: TopRecipesTableProps) {
       </TableHeader>
 
       <TableBody>
-        {sortedData.map((recipe) => (
-          <TableRow key={recipe.id}>
-            <TableCell className="font-medium">
-              <div className="flex flex-col py-3">
-                <Link
-                  href={ProjectUrls.recipe(recipe.id)}
-                  className="flex items-center hover:underline">
-                  {recipe.title}
-                  <ExternalLink className="ml-1 h-3 w-3 text-muted-foreground" />
-                </Link>
+        {sortedData.length === 0 ? (
+          <TableRow>
+            <TableCell colSpan={6} className="h-72 text-center">
+              <div className="flex flex-col items-center justify-center text-muted-foreground">
+                <AlertTriangle className="mb-2 h-8 w-8" />
+                <p>No published recipes found</p>
+                <p className="text-sm">
+                  Publish your recipes to see their performance analytics here
+                </p>
               </div>
             </TableCell>
-
-            <TableCell>{recipe.views.toLocaleString()}</TableCell>
-
-            <TableCell>{recipe.saves.toLocaleString()}</TableCell>
-
-            <TableCell>{recipe.comments}</TableCell>
-
-            <TableCell>{recipe.rating.toFixed(1)}/5.0</TableCell>
-
-            <TableCell className={recipe.trend.startsWith('+') ? 'text-green-500' : 'text-red-500'}>
-              {recipe.trend}
-            </TableCell>
           </TableRow>
-        ))}
+        ) : (
+          sortedData.map((recipe) => (
+            <TableRow key={recipe.id}>
+              <TableCell className="font-medium">
+                <div className="flex flex-col py-3">
+                  <Link
+                    href={ProjectUrls.recipe(recipe.id)}
+                    className="flex items-center hover:underline">
+                    {recipe.title}
+                    <ExternalLink className="ml-1 h-3 w-3 text-muted-foreground" />
+                  </Link>
+                </div>
+              </TableCell>
+
+              <TableCell>{recipe.views.toLocaleString()}</TableCell>
+
+              <TableCell>{recipe.saves.toLocaleString()}</TableCell>
+
+              <TableCell>{recipe.comments}</TableCell>
+
+              <TableCell>{recipe.rating.toFixed(1)}/5.0</TableCell>
+
+              <TableCell
+                className={recipe.trend.startsWith('+') ? 'text-green-500' : 'text-red-500'}>
+                {recipe.trend}
+              </TableCell>
+            </TableRow>
+          ))
+        )}
       </TableBody>
     </Table>
   );
