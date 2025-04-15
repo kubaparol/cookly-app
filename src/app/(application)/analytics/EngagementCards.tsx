@@ -9,7 +9,18 @@ import { EngagementCardsSkeleton } from '@/components/shared/skeletons';
 async function EngagementCardsLoader({ period }: { period: string }) {
   const stats = await getEngagements(period);
 
-  if (!stats) return null;
+  if (!stats) {
+    return (
+      <div className="flex h-40 items-center justify-center rounded-lg border border-dashed p-8 text-center">
+        <div>
+          <p className="text-sm font-medium">No engagement data available</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Create and publish recipes to track user engagement
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">

@@ -1,6 +1,7 @@
 'use server';
 
-import { eq, sql } from 'drizzle-orm';
+import { currentUser } from '@clerk/nextjs/server';
+import { and, eq, sql } from 'drizzle-orm';
 
 import { handleError } from '@/utils';
 
@@ -26,6 +27,12 @@ export async function getRecipePerformance(
   sort: string = 'views',
 ): Promise<RecipePerformance[]> {
   try {
+    const user = await currentUser();
+
+    if (!user) {
+      return [];
+    }
+
     const intervalSQL =
       period === '7days'
         ? sql`interval '7 days'`
@@ -58,7 +65,7 @@ export async function getRecipePerformance(
       .from(recipes)
       .leftJoin(favorites, eq(favorites.recipeId, recipes.id))
       .leftJoin(comments, eq(comments.recipeId, recipes.id))
-      .where(eq(recipes.status, 'published'))
+      .where(and(eq(recipes.status, 'published'), eq(recipes.authorId, user.id)))
       .groupBy(recipes.id);
 
     let sortedRecipes = performingRecipes;

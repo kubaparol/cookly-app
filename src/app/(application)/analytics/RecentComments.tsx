@@ -24,7 +24,27 @@ dayjs.extend(relativeTime);
 async function RecentCommentsLoader({ period }: { period: string }) {
   const comments = await getRecentComments(period);
 
-  if (!comments || comments.length === 0) return null;
+  if (!comments || comments.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Comments</CardTitle>
+          <CardDescription>Latest feedback on your recipes</CardDescription>
+        </CardHeader>
+
+        <CardContent>
+          <div className="flex h-40 items-center justify-center rounded-lg border border-dashed p-8 text-center">
+            <div>
+              <p className="text-sm font-medium">No comments available</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                You&apos;ll see comments here when users leave feedback on your recipes
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>

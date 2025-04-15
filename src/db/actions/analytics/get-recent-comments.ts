@@ -1,6 +1,7 @@
 'use server';
 
-import { sql } from 'drizzle-orm';
+import { currentUser } from '@clerk/nextjs/server';
+import { and, eq, inArray, sql } from 'drizzle-orm';
 
 import { handleError } from '@/utils';
 
@@ -25,6 +26,26 @@ export async function getRecentComments(
   period: string = '30days',
 ): Promise<RecentComment[] | undefined> {
   try {
+    const user = await currentUser();
+
+    if (!user) {
+      return [];
+    }
+
+    // Get user's recipe ids
+    const userRecipes = await db.query.recipes.findMany({
+      where: eq(recipes.authorId, user.id),
+      columns: {
+        id: true,
+      },
+    });
+
+    const recipeIds = userRecipes.map((recipe) => recipe.id);
+
+    if (recipeIds.length === 0) {
+      return [];
+    }
+
     const intervalSQL =
       period === '7days'
         ? sql`interval '7 days'`
@@ -46,7 +67,12 @@ export async function getRecentComments(
       .from(comments)
       .innerJoin(users, sql`${comments.authorId} = ${users.clerkId}`)
       .innerJoin(recipes, sql`${comments.recipeId} = ${recipes.id}`)
-      .where(sql`${comments.createdAt} > now() - ${intervalSQL}`)
+      .where(
+        and(
+          sql`${comments.createdAt} > now() - ${intervalSQL}`,
+          inArray(comments.recipeId, recipeIds),
+        ),
+      )
       .orderBy(sql`${comments.createdAt} DESC`)
       .limit(5);
 
@@ -60,7 +86,7 @@ export async function getRecentComments(
     }));
   } catch (error) {
     handleError(error);
-    return undefined;
+    return [];
   }
 }
 
